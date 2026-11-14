@@ -46,26 +46,37 @@ type ActiveModal =
   | "contact"
   | null;
 
-// Animation Variants (inspired by Yoza's blur-reveal stagger)
+// Animation Variants (inspired by Yoza's blur-to-focus stagger choreography)
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.12,
       delayChildren: 0.05,
     },
   },
 };
 
+const subContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.02,
+    },
+  },
+};
+
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
+  hidden: { opacity: 0, y: 24, filter: "blur(10px)" },
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 0.6,
+      duration: 0.7,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -270,393 +281,428 @@ export function EditorialTheme() {
       {/* Background Page Content Wrapper with Spatial Depth Scale on Modal Open */}
       <div
         style={{
-          transform: activeModal ? "scale(0.975) translateY(-6px)" : "scale(1) translateY(0px)",
+          transform: activeModal
+            ? "scale(0.975) translateY(-6px)"
+            : "scale(1) translateY(0px)",
           filter: activeModal ? "blur(4px)" : "blur(0px)",
           opacity: activeModal ? 0.5 : 1,
-          transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
+          transition:
+            "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
           transformOrigin: "center top",
         }}
         className="w-full will-change-transform"
       >
-        {/* Top Editorial Ribbon */}
-        <header className="border-b border-[#2e2921]/90 bg-[#0d0c0a]/90 backdrop-blur-md sticky top-0 z-30">
-        <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
-          {/* Brand Identity: Cinzel Luxury Display */}
-          <div className="flex items-center gap-3">
-            <span className="font-cinzel tracking-[0.25em] text-base sm:text-lg font-black text-white">
-              REVWORKS
-            </span>
-            <span className="text-[#544837] font-serif">//</span>
-            <span className="text-[#aba392] font-serif italic text-xs hidden sm:inline">
-              Rev
-            </span>
-          </div>
-
-          {/* Quick Contact Actions */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleCopyEmail}
-              className="text-xs font-mono text-[#f7f4ec] hover:text-[#d4af37] border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 rounded-full px-4 py-2 transition-all duration-150 flex items-center gap-1.5"
-            >
-              {copiedEmail ? (
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-              ) : (
-                <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
-              )}
-              <span>{copiedEmail ? "Copied!" : "Copy Email"}</span>
-            </button>
-
-            <a
-              href={`mailto:${personal.email}`}
-              onClick={() => playUiClick(600)}
-              className="text-xs font-mono font-bold text-zinc-950 bg-[#d4af37] hover:bg-[#e8cb74] rounded-full px-4 py-2 transition-all duration-150 hover:scale-[1.02] shadow-md shadow-[#d4af37]/10"
-            >
-              Connect
-            </a>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content Flow with Staggered Blur-To-Focus Reveal */}
-      <motion.main
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-5xl mx-auto px-6 pt-12 sm:pt-18 space-y-16 relative z-10"
-      >
-        {/* HERO SECTION: PORTRAIT & MANIFESTO */}
-        <section
-          aria-label="Prologue"
-          className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start"
+        {/* Top Editorial Ribbon with Blur-To-Focus Stagger */}
+        <motion.header
+          initial="hidden"
+          animate="visible"
+          variants={subContainerVariants}
+          className="border-b border-[#2e2921]/90 bg-[#0d0c0a]/90 backdrop-blur-md sticky top-0 z-30"
         >
-          {/* Left Column: Pure Portrait & Dossier Stats */}
-          <motion.div
-            variants={itemVariants}
-            className="md:col-span-4 space-y-6"
-          >
-            {/* Pure Pristine Portrait Frame with Smooth Dissolve & Ambient Hover Glow */}
-            <div
-              className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-500 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 aspect-[4/5] w-full"
-              onMouseEnter={() => setIsHoveredAvatar(true)}
-              onMouseLeave={() => setIsHoveredAvatar(false)}
-              onClick={() => {
-                playUiClick(750);
-                setIsHoveredAvatar(!isHoveredAvatar);
-              }}
-            >
-              {/* Primary Focused Director Portrait (rev3.JPG) */}
-              <img
-                src={personal.avatar}
-                alt={`${personal.name} - Director`}
-                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${
-                  isHoveredAvatar ? "opacity-0" : "opacity-100"
-                }`}
-              />
-
-              {/* Alternate Playful Winking Portrait (rev2.JPG) */}
-              <img
-                src={personal.avatarHover}
-                alt={`${personal.name} - Alternate Pose`}
-                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${
-                  isHoveredAvatar ? "opacity-100" : "opacity-0"
-                }`}
-              />
-
-              {/* Luxury Film Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 pointer-events-none" />
-
-              {/* Shimmer Border Accent on Hover */}
-              <div className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-[#d4af37]/40 pointer-events-none transition-colors duration-500" />
-            </div>
-
-            {/* Quick Metadata Box */}
-            <div className="space-y-3 font-mono text-xs text-[#aba392] border-l-2 border-[#2e2921] pl-4">
-              <div>
-                <span className="text-[#7a7265] block text-[10px] uppercase">
-                  Identity
-                </span>
-                <span className="text-[#f7f4ec] font-bold">
-                  {personal.name} ({personal.alias})
-                </span>
-              </div>
-              <div>
-                <span className="text-[#7a7265] block text-[10px] uppercase">
-                  Roles
-                </span>
-                <span className="text-[#f7f4ec]">
-                  Head of Marketing · Fullstack Architect
-                </span>
-              </div>
-              <div>
-                <span className="text-[#7a7265] block text-[10px] uppercase">
-                  Base
-                </span>
-                <span className="text-[#f7f4ec]">{personal.location}</span>
-              </div>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center gap-3 pt-1">
-              <a
-                href={personal.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playUiClick(600)}
-                className="p-2.5 rounded-xl border border-[#2e2921] bg-[#161411]/60 hover:border-[#d4af37]/60 text-[#aba392] hover:text-white transition-all hover:scale-105"
-                aria-label="GitHub @revwrks"
-              >
-                <GithubIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={personal.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playUiClick(600)}
-                className="p-2.5 rounded-xl border border-[#2e2921] bg-[#161411]/60 hover:border-[#d4af37]/60 text-[#aba392] hover:text-pink-400 transition-all hover:scale-105"
-                aria-label="Instagram @itzrevv"
-              >
-                <InstagramIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={personal.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playUiClick(600)}
-                className="p-2.5 rounded-xl border border-[#2e2921] bg-[#161411]/60 hover:border-[#d4af37]/60 text-[#aba392] hover:text-blue-400 transition-all hover:scale-105"
-                aria-label="LinkedIn profile"
-              >
-                <LinkedinIcon className="w-4 h-4" />
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Right Column: Grand Manifesto & Core Metrics */}
-          <motion.div
-            variants={itemVariants}
-            className="md:col-span-8 space-y-8"
-          >
-            <div className="space-y-4">
-              <span className="text-[11px] font-mono tracking-widest text-[#d4af37] uppercase font-bold">
-                <CipherScrambleText text="// ARCHIVAL DOSSIER" />
+          <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
+            {/* Brand Identity: Cinzel Luxury Display */}
+            <motion.div variants={itemVariants} className="flex items-center gap-3">
+              <span className="font-cinzel tracking-[0.25em] text-base sm:text-lg font-black text-white">
+                REVWORKS
               </span>
-              <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-[#f7f4ec] leading-[1.18] font-serif">
-                Engineering high-throughput systems, creative software, and
-                cinematic visual media.
-              </h1>
-            </div>
+              <span className="text-[#544837] font-serif">//</span>
+              <span className="text-[#aba392] font-serif italic text-xs hidden sm:inline">
+                Rev
+              </span>
+            </motion.div>
 
-            <div className="space-y-4 text-base sm:text-lg text-[#aba392] leading-relaxed font-light">
-              <p>
-                Operating under the{" "}
-                <strong className="text-[#f7f4ec] font-semibold">
-                  REVWORKS
-                </strong>{" "}
-                imprint, I bridge technical rigor with creative direction. Over
-                five years of shipping code spanning asynchronous financial
-                webhook ledgers, real-time in-browser synthesizers, and live
-                multi-camera broadcast direction.
-              </p>
-              <p className="text-sm sm:text-base text-[#7a7265] leading-relaxed">
-                Currently serving as{" "}
-                <span className="text-[#f7f4ec] font-medium">
-                  Head of Marketing at Nusa Indah Tropika
-                </span>{" "}
-                while concurrently directing multimedia and streaming operations
-                for{" "}
-                <span className="text-[#f7f4ec] font-medium">
-                  GKJW (Gereja Kristen Jawi Wetan)
-                </span>{" "}
-                since August 2023.
-              </p>
-            </div>
-
-            {/* Quick Metrics Bar with Animated Smooth Counter */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-y border-[#2e2921] font-mono text-xs">
-              <div>
-                <span className="text-2xl sm:text-3xl font-bold text-[#f7f4ec] block">
-                  <AnimatedCounter value={5} suffix="+" />
-                </span>
-                <span className="text-[#7a7265] uppercase text-[10px]">
-                  Years Active
-                </span>
-              </div>
-              <div>
-                <span className="text-2xl sm:text-3xl font-bold text-[#f7f4ec] block">
-                  <AnimatedCounter value={4} />
-                </span>
-                <span className="text-[#7a7265] uppercase text-[10px]">
-                  Production Engines
-                </span>
-              </div>
-              <div>
-                <span className="text-2xl sm:text-3xl font-bold text-[#d4af37] block">
-                  <AnimatedCounter value={7} />
-                </span>
-                <span className="text-[#7a7265] uppercase text-[10px]">
-                  Verified Certs
-                </span>
-              </div>
-              <div>
-                <span className="text-2xl sm:text-3xl font-bold text-emerald-400 block">
-                  <AnimatedCounter value={100} suffix="%" />
-                </span>
-                <span className="text-[#7a7265] uppercase text-[10px]">
-                  On-Time Delivery
-                </span>
-              </div>
-            </div>
-
-            {/* Direct Contact Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-1">
-              <a
-                href={`mailto:${personal.email}`}
-                onClick={() => playUiClick(700)}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#d4af37] text-zinc-950 font-mono text-xs font-bold hover:bg-[#e8cb74] transition-all duration-150 hover:scale-[1.02] shadow-lg shadow-[#d4af37]/15"
-              >
-                <Mail className="w-4 h-4 text-zinc-950" />
-                <span>Initiate Conversation</span>
-              </a>
+            {/* Quick Contact Actions */}
+            <motion.div variants={itemVariants} className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 font-mono text-xs text-[#f7f4ec] transition-all duration-150 hover:scale-[1.02]"
+                className="text-xs font-mono text-[#f7f4ec] hover:text-[#d4af37] border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 rounded-full px-4 py-2 transition-all duration-150 flex items-center gap-1.5"
               >
-                <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
-                <span>{copiedEmail ? "Email Copied!" : "Copy Email"}</span>
+                {copiedEmail ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
+                )}
+                <span>{copiedEmail ? "Copied!" : "Copy Email"}</span>
               </button>
-            </div>
-          </motion.div>
-        </section>
 
-        {/* GRAND 2x2+1 FEATURE BENTO (3D TILT WITH BESPOKE INTERNAL ANIMATIONS) */}
-        <section
-          aria-label="Dossiers Navigation"
-          className="pt-6 border-t border-[#2e2921]"
+              <a
+                href={`mailto:${personal.email}`}
+                onClick={() => playUiClick(600)}
+                className="text-xs font-mono font-bold text-zinc-950 bg-[#d4af37] hover:bg-[#e8cb74] rounded-full px-4 py-2 transition-all duration-150 hover:scale-[1.02] shadow-md shadow-[#d4af37]/10"
+              >
+                Connect
+              </a>
+            </motion.div>
+          </div>
+        </motion.header>
+
+        {/* Main Content Flow with Staggered Blur-To-Focus Reveal */}
+        <motion.main
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-5xl mx-auto px-6 pt-12 sm:pt-18 space-y-16 relative z-10"
         >
-          <div className="flex items-center justify-between pb-6">
-            <div>
-              <span className="text-xs font-mono tracking-widest text-[#d4af37] uppercase font-bold block mb-1">
-                <CipherScrambleText text="// ARCHIVAL VAULT" />
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-serif text-[#f7f4ec]">
-                Explore Deep Dossiers & Case Studies
-              </h2>
-            </div>
-            <span className="text-xs font-mono text-[#7a7265] hidden sm:inline">
-              INTERACTIVE 3D · 5 INTERACTIVE MODULES
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* TILE 1: SELECTED WORKS & SYSTEMS (PROJECTS APP MARQUEE) */}
-            <EditorialTiltCard
-              onClick={() => {
-                playUiClick(800);
-                setActiveModal("works");
-              }}
-              visualSlot={<CardProjectsMarquee />}
-              icon={Layers}
-              title="Selected Works & Systems"
-              description="Production fintech transaction ledgers, digital key vaults, in-browser synthesizers & concert media."
-              actionText="Open Portfolio Index"
-            />
-
-            {/* TILE 2: DIRECT INQUIRY & CONTACT (CHAT BUBBLE ANIMATION) */}
-            <EditorialTiltCard
-              onClick={() => {
-                playUiClick(800);
-                setActiveModal("contact");
-              }}
-              visualSlot={<CardChatBubbles />}
-              icon={Send}
-              title="Contact & Collaboration"
-              description="Direct line for architectural contracts, technical advising, and multimedia creative direction."
-              actionText="Initiate Transmission"
-            />
-
-            {/* TILE 3: VERIFIED CREDENTIALS (FLOATING BADGES) */}
-            <EditorialTiltCard
-              onClick={() => {
-                playUiClick(800);
-                setActiveModal("credentials");
-              }}
-              visualSlot={<CardCredentialsBadges />}
-              icon={ShieldCheck}
-              title="Verified Pedigree & Proof"
-              description="Meta Database Engineer, Google Professional UX Design, IBM Python AI & HackerRank verified badges."
-              actionText="View Verified Badges"
-            />
-
-            {/* TILE 4: CAREER & STEWARDSHIP (LIVE BROADCAST WAVEFORM) */}
-            <EditorialTiltCard
-              onClick={() => {
-                playUiClick(800);
-                setActiveModal("career");
-              }}
-              visualSlot={<CardAudioWaveform />}
-              icon={Briefcase}
-              title="Career & Stewardship"
-              description="Head of Marketing at Nusa Indah Tropika & 3+ years directing multimedia operations at GKJW."
-              actionText="Examine Track Record"
-            />
-
-            {/* TILE 5: TECHNICAL ARSENAL (TERMINAL STREAM, FULL WIDTH) */}
-            <EditorialTiltCard
-              className="md:col-span-2"
-              onClick={() => {
-                playUiClick(800);
-                setActiveModal("stack");
-              }}
-              visualSlot={<CardTerminalStream />}
-              icon={Cpu}
-              title="Technical Arsenal"
-              description="Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API."
-              actionText="Inspect Architecture Matrix"
-            />
-          </div>
-        </section>
-
-        {/* INFINITE TECH MARQUEE TAPE (SLICK RUNNING MARQUEE) */}
-        <motion.section
-          variants={itemVariants}
-          aria-label="Core Competencies Ticker"
-          className="pt-2"
-        >
-          <div className="rounded-2xl border border-[#2e2921] bg-[#161411]/60 py-3.5 px-4 overflow-hidden relative backdrop-blur-md">
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
-
-            <div className="animate-marquee items-center gap-8 font-mono text-xs text-[#aba392]">
-              {marqueeItems.concat(marqueeItems).map((item, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 whitespace-nowrap hover:text-[#d4af37] transition-colors cursor-default"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/60" />
-                  <span className="font-semibold tracking-wide">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
-      </motion.main>
-
-      {/* Colophon Footer */}
-      <footer className="max-w-5xl mx-auto px-6 mt-32 pt-12 border-t border-[#2e2921] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[#7a7265] relative z-10">
-        <div>REVWORKS // DESIGNED & CRAFTED BY REV · 2026</div>
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={handleCopyEmail}
-            className="hover:text-white transition-colors"
+          {/* HERO SECTION: PORTRAIT & MANIFESTO */}
+          <section
+            aria-label="Prologue"
+            className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start"
           >
-            {personal.email}
-          </button>
-          <span>·</span>
-          <span>MALANG, EAST JAVA</span>
-        </div>
-      </footer>
+            {/* Left Column: Pure Portrait & Dossier Stats */}
+            <motion.div
+              variants={subContainerVariants}
+              className="md:col-span-4 space-y-6"
+            >
+              {/* Pure Pristine Portrait Frame with Smooth Dissolve & Ambient Hover Glow */}
+              <motion.div variants={itemVariants}>
+                <div
+                  className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-500 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 aspect-[4/5] w-full"
+                  onMouseEnter={() => setIsHoveredAvatar(true)}
+                  onMouseLeave={() => setIsHoveredAvatar(false)}
+                  onClick={() => {
+                    playUiClick(750);
+                    setIsHoveredAvatar(!isHoveredAvatar);
+                  }}
+                >
+                  {/* Primary Focused Director Portrait (rev3.JPG) */}
+                  <img
+                    src={personal.avatar}
+                    alt={`${personal.name} - Director`}
+                    className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${
+                      isHoveredAvatar ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+
+                  {/* Alternate Playful Winking Portrait (rev2.JPG) */}
+                  <img
+                    src={personal.avatarHover}
+                    alt={`${personal.name} - Alternate Pose`}
+                    className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${
+                      isHoveredAvatar ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+
+                  {/* Luxury Film Vignette Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 pointer-events-none" />
+
+                  {/* Shimmer Border Accent on Hover */}
+                  <div className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-[#d4af37]/40 pointer-events-none transition-colors duration-500" />
+                </div>
+              </motion.div>
+
+              {/* Quick Metadata Box */}
+              <motion.div
+                variants={itemVariants}
+                className="space-y-3 font-mono text-xs text-[#aba392] border-l-2 border-[#2e2921] pl-4"
+              >
+                <div>
+                  <span className="text-[#7a7265] block text-[10px] uppercase">
+                    Identity
+                  </span>
+                  <span className="text-[#f7f4ec] font-bold">
+                    {personal.name} ({personal.alias})
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[#7a7265] block text-[10px] uppercase">
+                    Roles
+                  </span>
+                  <span className="text-[#f7f4ec]">
+                    Head of Marketing · Fullstack Architect
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[#7a7265] block text-[10px] uppercase">
+                    Base
+                  </span>
+                  <span className="text-[#f7f4ec]">{personal.location}</span>
+                </div>
+              </motion.div>
+
+              {/* Social Links */}
+              <motion.div
+                variants={itemVariants}
+                className="flex items-center gap-3 pt-1"
+              >
+                <a
+                  href={personal.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playUiClick(600)}
+                  className="p-2.5 rounded-xl border border-[#2e2921] bg-[#161411]/60 hover:border-[#d4af37]/60 text-[#aba392] hover:text-white transition-all hover:scale-105"
+                  aria-label="GitHub @revwrks"
+                >
+                  <GithubIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href={personal.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playUiClick(600)}
+                  className="p-2.5 rounded-xl border border-[#2e2921] bg-[#161411]/60 hover:border-[#d4af37]/60 text-[#aba392] hover:text-pink-400 transition-all hover:scale-105"
+                  aria-label="Instagram @itzrevv"
+                >
+                  <InstagramIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href={personal.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playUiClick(600)}
+                  className="p-2.5 rounded-xl border border-[#2e2921] bg-[#161411]/60 hover:border-[#d4af37]/60 text-[#aba392] hover:text-blue-400 transition-all hover:scale-105"
+                  aria-label="LinkedIn profile"
+                >
+                  <LinkedinIcon className="w-4 h-4" />
+                </a>
+              </motion.div>
+            </motion.div>
+
+            {/* Right Column: Grand Manifesto & Core Metrics */}
+            <motion.div
+              variants={subContainerVariants}
+              className="md:col-span-8 space-y-8"
+            >
+              <motion.div variants={itemVariants} className="space-y-4">
+                <span className="text-[11px] font-mono tracking-widest text-[#d4af37] uppercase font-bold">
+                  <CipherScrambleText text="// ARCHIVAL DOSSIER" />
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-[#f7f4ec] leading-[1.18] font-serif">
+                  Engineering high-throughput systems, creative software, and
+                  cinematic visual media.
+                </h1>
+              </motion.div>
+
+              <motion.div
+                variants={itemVariants}
+                className="space-y-4 text-base sm:text-lg text-[#aba392] leading-relaxed font-light"
+              >
+                <p>
+                  Operating under the{" "}
+                  <strong className="text-[#f7f4ec] font-semibold">
+                    REVWORKS
+                  </strong>{" "}
+                  imprint, I bridge technical rigor with creative direction.
+                  Over five years of shipping code spanning asynchronous
+                  financial webhook ledgers, real-time in-browser synthesizers,
+                  and live multi-camera broadcast direction.
+                </p>
+                <p className="text-sm sm:text-base text-[#7a7265] leading-relaxed">
+                  Currently serving as{" "}
+                  <span className="text-[#f7f4ec] font-medium">
+                    Head of Marketing at Nusa Indah Tropika
+                  </span>{" "}
+                  while concurrently directing multimedia and streaming
+                  operations for{" "}
+                  <span className="text-[#f7f4ec] font-medium">GKJW</span> since
+                  August 2023.
+                </p>
+              </motion.div>
+
+              {/* Quick Metrics Bar with Animated Smooth Counter */}
+              <motion.div
+                variants={itemVariants}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-y border-[#2e2921] font-mono text-xs"
+              >
+                <div>
+                  <span className="text-2xl sm:text-3xl font-bold text-[#f7f4ec] block">
+                    <AnimatedCounter value={5} suffix="+" />
+                  </span>
+                  <span className="text-[#7a7265] uppercase text-[10px]">
+                    Years Active
+                  </span>
+                </div>
+                <div>
+                  <span className="text-2xl sm:text-3xl font-bold text-[#f7f4ec] block">
+                    <AnimatedCounter value={4} />
+                  </span>
+                  <span className="text-[#7a7265] uppercase text-[10px]">
+                    Production Engines
+                  </span>
+                </div>
+                <div>
+                  <span className="text-2xl sm:text-3xl font-bold text-[#d4af37] block">
+                    <AnimatedCounter value={7} />
+                  </span>
+                  <span className="text-[#7a7265] uppercase text-[10px]">
+                    Verified Certs
+                  </span>
+                </div>
+                <div>
+                  <span className="text-2xl sm:text-3xl font-bold text-emerald-400 block">
+                    <AnimatedCounter value={100} suffix="%" />
+                  </span>
+                  <span className="text-[#7a7265] uppercase text-[10px]">
+                    On-Time Delivery
+                  </span>
+                </div>
+              </motion.div>
+
+              {/* Direct Contact Buttons */}
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-wrap items-center gap-4 pt-1"
+              >
+                <a
+                  href={`mailto:${personal.email}`}
+                  onClick={() => playUiClick(700)}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#d4af37] text-zinc-950 font-mono text-xs font-bold hover:bg-[#e8cb74] transition-all duration-150 hover:scale-[1.02] shadow-lg shadow-[#d4af37]/15"
+                >
+                  <Mail className="w-4 h-4 text-zinc-950" />
+                  <span>Initiate Conversation</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 font-mono text-xs text-[#f7f4ec] transition-all duration-150 hover:scale-[1.02]"
+                >
+                  <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <span>{copiedEmail ? "Email Copied!" : "Copy Email"}</span>
+                </button>
+              </motion.div>
+            </motion.div>
+          </section>
+
+          {/* GRAND 2x2+1 FEATURE BENTO (3D TILT WITH BESPOKE INTERNAL ANIMATIONS) */}
+          <motion.section
+            variants={subContainerVariants}
+            aria-label="Dossiers Navigation"
+            className="pt-6 border-t border-[#2e2921]"
+          >
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center justify-between pb-6"
+            >
+              <div>
+                <span className="text-xs font-mono tracking-widest text-[#d4af37] uppercase font-bold block mb-1">
+                  <CipherScrambleText text="// ARCHIVAL VAULT" />
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-serif text-[#f7f4ec]">
+                  Explore Deep Dossiers & Case Studies
+                </h2>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={subContainerVariants}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {/* TILE 1: SELECTED WORKS & SYSTEMS (PROJECTS APP MARQUEE) */}
+              <EditorialTiltCard
+                onClick={() => {
+                  playUiClick(800);
+                  setActiveModal("works");
+                }}
+                visualSlot={<CardProjectsMarquee />}
+                icon={Layers}
+                title="Selected Works & Systems"
+                description="Production fintech transaction ledgers, digital key vaults, in-browser synthesizers & concert media."
+                actionText="Open Portfolio Index"
+              />
+
+              {/* TILE 2: DIRECT INQUIRY & CONTACT (CHAT BUBBLE ANIMATION) */}
+              <EditorialTiltCard
+                onClick={() => {
+                  playUiClick(800);
+                  setActiveModal("contact");
+                }}
+                visualSlot={<CardChatBubbles />}
+                icon={Send}
+                title="Contact & Collaboration"
+                description="Direct line for architectural contracts, technical advising, and multimedia creative direction."
+                actionText="Initiate Transmission"
+              />
+
+              {/* TILE 3: VERIFIED CREDENTIALS (FLOATING BADGES) */}
+              <EditorialTiltCard
+                onClick={() => {
+                  playUiClick(800);
+                  setActiveModal("credentials");
+                }}
+                visualSlot={<CardCredentialsBadges />}
+                icon={ShieldCheck}
+                title="Verified Pedigree & Proof"
+                description="Meta Database Engineer, Google Professional UX Design, IBM Python AI & HackerRank verified badges."
+                actionText="View Verified Badges"
+              />
+
+              {/* TILE 4: CAREER & STEWARDSHIP (LIVE BROADCAST WAVEFORM) */}
+              <EditorialTiltCard
+                onClick={() => {
+                  playUiClick(800);
+                  setActiveModal("career");
+                }}
+                visualSlot={<CardAudioWaveform />}
+                icon={Briefcase}
+                title="Career & Stewardship"
+                description="Head of Marketing at Nusa Indah Tropika & 3+ years directing multimedia operations at GKJW."
+                actionText="Examine Track Record"
+              />
+
+              {/* TILE 5: TECHNICAL ARSENAL (TERMINAL STREAM, FULL WIDTH) */}
+              <EditorialTiltCard
+                className="md:col-span-2"
+                onClick={() => {
+                  playUiClick(800);
+                  setActiveModal("stack");
+                }}
+                visualSlot={<CardTerminalStream />}
+                icon={Cpu}
+                title="Technical Arsenal"
+                description="Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API."
+                actionText="Inspect Architecture Matrix"
+              />
+            </motion.div>
+          </motion.section>
+
+          {/* INFINITE TECH MARQUEE TAPE (SLICK RUNNING MARQUEE) */}
+          <motion.section
+            variants={itemVariants}
+            aria-label="Core Competencies Ticker"
+            className="pt-2"
+          >
+            <div className="rounded-2xl border border-[#2e2921] bg-[#161411]/60 py-3.5 px-4 overflow-hidden relative backdrop-blur-md">
+              <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
+
+              <div className="animate-marquee items-center gap-8 font-mono text-xs text-[#aba392]">
+                {marqueeItems.concat(marqueeItems).map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-3 whitespace-nowrap hover:text-[#d4af37] transition-colors cursor-default"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/60" />
+                    <span className="font-semibold tracking-wide">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.section>
+        </motion.main>
+
+        {/* Colophon Footer with Staggered Reveal */}
+        <motion.footer
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          variants={subContainerVariants}
+          className="max-w-5xl mx-auto px-6 mt-32 pt-12 border-t border-[#2e2921] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[#7a7265] relative z-10"
+        >
+          <motion.div variants={itemVariants}>
+            REVWORKS // DESIGNED & CRAFTED BY REV · 2026
+          </motion.div>
+          <motion.div variants={itemVariants} className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={handleCopyEmail}
+              className="hover:text-white transition-colors"
+            >
+              {personal.email}
+            </button>
+            <span>·</span>
+            <span>MALANG, EAST JAVA</span>
+          </motion.div>
+        </motion.footer>
       </div>
 
       {/* ============================================================ */}
