@@ -313,30 +313,6 @@ export function EditorialTheme() {
                 Rev
               </span>
             </motion.div>
-
-            {/* Quick Contact Actions */}
-            <motion.div variants={itemVariants} className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={handleCopyEmail}
-                className="text-xs font-mono text-[#f7f4ec] hover:text-[#d4af37] border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 rounded-full px-4 py-2 transition-all duration-150 flex items-center gap-1.5 cursor-pointer"
-              >
-                {copiedEmail ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                ) : (
-                  <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
-                )}
-                <span>{copiedEmail ? "Copied!" : "Copy Email"}</span>
-              </button>
-
-              <a
-                href={`mailto:${personal.email}`}
-                onClick={() => playUiClick(600)}
-                className="text-xs font-mono font-bold text-zinc-950 bg-[#d4af37] hover:bg-[#e8cb74] rounded-full px-4 py-2 transition-all duration-150 hover:scale-[1.02] shadow-md shadow-[#d4af37]/10"
-              >
-                Connect
-              </a>
-            </motion.div>
           </div>
         </motion.header>
 
