@@ -14,7 +14,6 @@ import {
   Mail, 
   MapPin, 
   Palette, 
-  Pencil,
   ShieldCheck, 
   Sparkles, 
   Terminal, 
@@ -24,11 +23,10 @@ import {
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/ui/Icons";
 import { PORTFOLIO_DATA, Project, Certification } from "@/data/portfolio";
 import { StudioTelemetry } from "@/components/console/StudioTelemetry";
-import { CanvasScratchpad } from "@/components/console/CanvasScratchpad";
 import { ArchitectureInspector } from "@/components/console/ArchitectureInspector";
 import { playUiClick } from "@/lib/audio";
 
-type TabKey = "works" | "scratchpad" | "credentials" | "experience" | "stack";
+type TabKey = "works" | "credentials" | "experience" | "stack";
 
 export function StudioConsole() {
   const [activeTab, setActiveTab] = useState<TabKey>("works");
@@ -45,10 +43,9 @@ export function StudioConsole() {
 
   const navItems: { key: TabKey; num: string; label: string; icon: React.ElementType; count?: number | string; badge?: string }[] = [
     { key: "works", num: "01", label: "Selected Works", icon: Layers, count: projects.length },
-    { key: "scratchpad", num: "02", label: "Canvas Scratchpad", icon: Pencil, badge: "LIVE" },
-    { key: "credentials", num: "03", label: "Credentials", icon: ShieldCheck, count: certifications.length },
-    { key: "experience", num: "04", label: "Career & Edu", icon: Briefcase, count: experience.length + (volunteering?.length || 0) },
-    { key: "stack", num: "05", label: "Technical Matrix", icon: Terminal, count: 5 },
+    { key: "credentials", num: "02", label: "Credentials", icon: ShieldCheck, count: certifications.length },
+    { key: "experience", num: "03", label: "Career & Edu", icon: Briefcase, count: experience.length + (volunteering?.length || 0) },
+    { key: "stack", num: "04", label: "Technical Matrix", icon: Terminal, count: 5 },
   ];
 
   const handleTabChange = (key: TabKey) => {
@@ -430,14 +427,7 @@ export function StudioConsole() {
                 </div>
               )}
 
-              {/* VIEW 2: INTERACTIVE CANVAS SCRATCHPAD */}
-              {activeTab === "scratchpad" && (
-                <div className="h-full">
-                  <CanvasScratchpad />
-                </div>
-              )}
-
-              {/* VIEW 3: CREDENTIALS */}
+              {/* VIEW 2: CREDENTIALS */}
               {activeTab === "credentials" && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                   {certifications.map((cert: Certification) => (
