@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   ArrowUpRight, 
   Briefcase, 
@@ -23,6 +23,110 @@ import { playUiClick } from "@/lib/audio";
 import { useToast } from "@/components/ui/Toast";
 
 type ActiveModal = "works" | "credentials" | "career" | "stack" | null;
+
+interface TiltCardProps {
+  onClick: () => void;
+  icon: React.ElementType;
+  badge: string;
+  title: string;
+  description: string;
+  actionText: string;
+}
+
+function EditorialTiltCard({
+  onClick,
+  icon: Icon,
+  badge,
+  title,
+  description,
+  actionText,
+}: TiltCardProps) {
+  const cardRef = useRef<HTMLButtonElement>(null);
+  const [transform, setTransform] = useState("perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)");
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+
+    setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px) scale3d(1.015, 1.015, 1.015)`);
+    setGlowPos({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 });
+  };
+
+  const handleMouseLeave = () => {
+    setTransform("perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)");
+    setIsHovered(false);
+  };
+
+  return (
+    <button
+      ref={cardRef}
+      type="button"
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform,
+        transition: isHovered ? "transform 0.1s ease-out" : "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
+      }}
+      className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 flex flex-col justify-between space-y-6 cursor-pointer overflow-hidden backdrop-blur-xl"
+    >
+      {/* Dynamic Cursor Spotlight Layer */}
+      <div 
+        className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-3xl"
+        style={{
+          opacity: isHovered ? 1 : 0,
+          background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(212, 175, 55, 0.18) 0%, transparent 65%)`
+        }}
+      />
+
+      {/* Shimmer Light Reflection Sweep on Hover */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-3xl"
+      >
+        <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 group-hover:translate-x-[300%] transition-transform duration-1000" />
+      </div>
+
+      {/* Top Header inside Card */}
+      <div className="relative z-10 flex items-center justify-between">
+        <div className="w-14 h-14 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#d4af37]/20 group-hover:rotate-3 shadow-md shadow-[#d4af37]/10">
+          <Icon className="w-7 h-7 text-[#d4af37] transition-transform duration-300 group-hover:scale-105" />
+        </div>
+        <span className="flex items-center gap-1.5 text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3.5 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 backdrop-blur-sm group-hover:border-[#d4af37]/60 transition-colors">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-pulse" />
+          {badge}
+        </span>
+      </div>
+
+      {/* Middle Body inside Card */}
+      <div className="relative z-10 space-y-2">
+        <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors duration-200">
+          {title}
+        </h3>
+        <p className="text-sm text-[#aba392] font-light leading-relaxed group-hover:text-[#c4beb1] transition-colors duration-200">
+          {description}
+        </p>
+      </div>
+
+      {/* Bottom Action Bar inside Card */}
+      <div className="relative z-10 flex items-center justify-between text-xs font-mono text-[#d4af37] font-bold pt-3 border-t border-[#2e2921]/90 group-hover:border-[#d4af37]/40 transition-colors">
+        <span className="group-hover:tracking-wider transition-all duration-200">{actionText}</span>
+        <div className="w-8 h-8 rounded-full bg-[#d4af37]/10 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:text-zinc-950 transition-all duration-200">
+          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </div>
+      </div>
+    </button>
+  );
+}
 
 export function EditorialTheme() {
   const { personal, projects, certifications, experience, volunteering, skills, education } = PORTFOLIO_DATA;
@@ -57,6 +161,21 @@ export function EditorialTheme() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  const marqueeItems = [
+    "Laravel & PHP",
+    "MySQL ACID Ledgers",
+    "Asynchronous Webhooks",
+    "React 19 & Next.js",
+    "TypeScript",
+    "HTML5 Canvas Studio",
+    "Web Audio API",
+    "Google Professional UX",
+    "Multi-Cam Live Broadcast",
+    "Video Direction",
+    "Docker & Linux",
+    "Idempotent Transaction Systems"
+  ];
 
   return (
     <div className="min-h-screen bg-[#0d0c0a] text-[#f7f4ec] font-sans selection:bg-[#d4af37]/35 selection:text-white pb-32">
@@ -237,7 +356,7 @@ export function EditorialTheme() {
           </div>
         </section>
 
-        {/* GRAND 2x2 FEATURE TILES (THE 4 EYE-CATCHING MODAL BUTTONS) */}
+        {/* GRAND 2x2 FEATURE TILES (INTERACTIVE 3D TILT CARDS) */}
         <section aria-label="Dossiers Navigation" className="pt-6 border-t border-[#2e2921]">
           <div className="flex items-center justify-between pb-6">
             <div>
@@ -249,136 +368,81 @@ export function EditorialTheme() {
               </h2>
             </div>
             <span className="text-xs font-mono text-[#7a7265] hidden sm:inline">
-              SELECT TO INSPECT · 4 DOSSIERS
+              INTERACTIVE 3D · 4 DOSSIERS
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* TILE 1: SELECTED WORKS & SYSTEMS */}
-            <button
-              type="button"
+            <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("works");
               }}
-              className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:bg-[#1f1b15] hover:border-[#d4af37]/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#d4af37]/10 flex flex-col justify-between space-y-6 cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-13 h-13 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] group-hover:scale-110 transition-transform duration-300">
-                  <Layers className="w-6 h-6 text-[#d4af37]" />
-                </div>
-                <span className="text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30">
-                  6 Curated Cases
-                </span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors">
-                  Selected Works & Systems
-                </h3>
-                <p className="text-sm text-[#aba392] font-light leading-relaxed pt-2">
-                  Production fintech transaction ledgers, digital key vaults, in-browser synthesizers & concert media.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#d4af37] font-bold pt-3 border-t border-[#2e2921]/80">
-                <span>Open Portfolio Index</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </div>
-            </button>
+              icon={Layers}
+              badge="6 Curated Cases"
+              title="Selected Works & Systems"
+              description="Production fintech transaction ledgers, digital key vaults, in-browser synthesizers & concert media."
+              actionText="Open Portfolio Index"
+            />
 
             {/* TILE 2: VERIFIED CREDENTIALS */}
-            <button
-              type="button"
+            <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("credentials");
               }}
-              className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:bg-[#1f1b15] hover:border-[#d4af37]/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#d4af37]/10 flex flex-col justify-between space-y-6 cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-13 h-13 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] group-hover:scale-110 transition-transform duration-300">
-                  <ShieldCheck className="w-6 h-6 text-[#d4af37]" />
-                </div>
-                <span className="text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30">
-                  7 Official Certs
-                </span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors">
-                  Verified Pedigree & Proof
-                </h3>
-                <p className="text-sm text-[#aba392] font-light leading-relaxed pt-2">
-                  Meta Database Engineer, Google Professional UX Design, IBM Python AI & HackerRank verified badges.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#d4af37] font-bold pt-3 border-t border-[#2e2921]/80">
-                <span>View Verified Badges</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </div>
-            </button>
+              icon={ShieldCheck}
+              badge="7 Official Certs"
+              title="Verified Pedigree & Proof"
+              description="Meta Database Engineer, Google Professional UX Design, IBM Python AI & HackerRank verified badges."
+              actionText="View Verified Badges"
+            />
 
             {/* TILE 3: CAREER & STEWARDSHIP */}
-            <button
-              type="button"
+            <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("career");
               }}
-              className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:bg-[#1f1b15] hover:border-[#d4af37]/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#d4af37]/10 flex flex-col justify-between space-y-6 cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-13 h-13 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] group-hover:scale-110 transition-transform duration-300">
-                  <Briefcase className="w-6 h-6 text-[#d4af37]" />
-                </div>
-                <span className="text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30">
-                  5+ Years Leadership
-                </span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors">
-                  Career & Stewardship
-                </h3>
-                <p className="text-sm text-[#aba392] font-light leading-relaxed pt-2">
-                  Head of Marketing at Nusa Indah Tropika & 3+ years directing multimedia operations at GKJW.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#d4af37] font-bold pt-3 border-t border-[#2e2921]/80">
-                <span>Examine Track Record</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </div>
-            </button>
+              icon={Briefcase}
+              badge="5+ Years Leadership"
+              title="Career & Stewardship"
+              description="Head of Marketing at Nusa Indah Tropika & 3+ years directing multimedia operations at GKJW."
+              actionText="Examine Track Record"
+            />
 
             {/* TILE 4: TECHNICAL ARSENAL */}
-            <button
-              type="button"
+            <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("stack");
               }}
-              className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:bg-[#1f1b15] hover:border-[#d4af37]/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#d4af37]/10 flex flex-col justify-between space-y-6 cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-13 h-13 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] group-hover:scale-110 transition-transform duration-300">
-                  <Cpu className="w-6 h-6 text-[#d4af37]" />
-                </div>
-                <span className="text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30">
-                  Fullstack & Systems
-                </span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors">
-                  Technical Arsenal
-                </h3>
-                <p className="text-sm text-[#aba392] font-light leading-relaxed pt-2">
-                  Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API.
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#d4af37] font-bold pt-3 border-t border-[#2e2921]/80">
-                <span>Inspect Architecture Matrix</span>
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </div>
-            </button>
+              icon={Cpu}
+              badge="Fullstack & Systems"
+              title="Technical Arsenal"
+              description="Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API."
+              actionText="Inspect Architecture Matrix"
+            />
 
+          </div>
+        </section>
+
+        {/* INFINITE TECH MARQUEE TAPE (SLICK RUNNING MARQUEE) */}
+        <section aria-label="Core Competencies Ticker" className="pt-2">
+          <div className="rounded-2xl border border-[#2e2921] bg-[#161411]/60 py-3.5 px-4 overflow-hidden relative backdrop-blur-md">
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
+            
+            <div className="animate-marquee items-center gap-8 font-mono text-xs text-[#aba392]">
+              {marqueeItems.concat(marqueeItems).map((item, idx) => (
+                <div key={idx} className="flex items-center gap-3 whitespace-nowrap hover:text-[#d4af37] transition-colors cursor-default">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/60" />
+                  <span className="font-semibold tracking-wide">{item}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -481,23 +545,24 @@ export function EditorialTheme() {
             {/* Works List */}
             <div className="divide-y divide-[#2e2921]">
               {filteredProjects.map((project: Project, idx) => (
-                <article key={project.id} className="py-6 flex flex-col md:flex-row md:items-start justify-between gap-6">
+                <article key={project.id} className="py-6 flex flex-col md:flex-row md:items-start justify-between gap-6 group hover:bg-[#171410] px-4 -mx-4 rounded-2xl transition-colors">
                   <div className="space-y-2 md:w-3/5">
                     <div className="flex items-center gap-2 text-xs font-mono">
                       <span className="text-[#d4af37] font-bold">0{idx + 1}</span>
                       <span className="text-[#7a7265]">//</span>
                       <span className="uppercase text-[#aba392]">{project.category}</span>
                       {project.featured && (
-                        <span className="text-[10px] text-[#d4af37] px-2 py-0.2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10">
+                        <span className="text-[10px] text-[#d4af37] px-2 py-0.2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 flex items-center gap-1 font-semibold">
+                          <Sparkles className="w-3 h-3 text-[#d4af37]" />
                           Featured
                         </span>
                       )}
                     </div>
-                    <h3 className="text-xl font-serif font-bold text-white">{project.title}</h3>
+                    <h3 className="text-xl font-serif font-bold text-white group-hover:text-[#e8cb74] transition-colors">{project.title}</h3>
                     <p className="text-xs sm:text-sm text-[#aba392] leading-relaxed font-light">{project.description}</p>
                     <div className="flex flex-wrap gap-1.5 pt-2">
                       {project.techStack.map((tech) => (
-                        <span key={tech} className="text-[10px] font-mono text-[#aba392] bg-[#161411] px-2 py-0.5 rounded border border-[#2e2921]">
+                        <span key={tech} className="text-[10px] font-mono text-[#aba392] bg-[#161411] px-2.5 py-0.5 rounded border border-[#2e2921] hover:border-[#d4af37]/40 hover:text-white transition-colors">
                           {tech}
                         </span>
                       ))}
@@ -507,7 +572,10 @@ export function EditorialTheme() {
                   <div className="md:w-2/5 md:text-right space-y-3 flex flex-col md:items-end justify-between self-stretch">
                     <div className="space-y-1 text-xs font-mono text-[#aba392]">
                       {project.metrics.map((m, i) => (
-                        <div key={i} className="text-[#f7f4ec]">{m}</div>
+                        <div key={i} className="text-[#f7f4ec] flex items-center md:justify-end gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]" />
+                          <span>{m}</span>
+                        </div>
                       ))}
                     </div>
 
@@ -519,7 +587,7 @@ export function EditorialTheme() {
                             playUiClick(750);
                             setSelectedArchProject(project.id);
                           }}
-                          className="inline-flex items-center gap-1.5 text-xs font-mono text-[#d4af37] hover:text-[#e8cb74] font-semibold border-b border-[#d4af37]/40 pb-0.5"
+                          className="inline-flex items-center gap-1.5 text-xs font-mono text-[#d4af37] hover:text-[#e8cb74] font-semibold border-b border-[#d4af37]/40 pb-0.5 transition-colors"
                         >
                           <Terminal className="w-3.5 h-3.5" />
                           <span>Inspect Spec</span>
@@ -532,7 +600,7 @@ export function EditorialTheme() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => playUiClick(600)}
-                          className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] hover:border-[#d4af37]/50 px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
                         >
                           <span>Live Demo</span>
                           <ExternalLink className="w-3 h-3" />
@@ -545,7 +613,7 @@ export function EditorialTheme() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => playUiClick(600)}
-                          className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
+                          className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] hover:border-[#d4af37]/50 px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
                         >
                           <GithubIcon className="w-3 h-3" />
                           <span>Code</span>
