@@ -6,57 +6,57 @@ export function Experience() {
   const { experience, education } = PORTFOLIO_DATA;
 
   return (
-    <section id="experience" className="py-20 border-b border-zinc-850/80">
+    <section id="experience" className="py-14 border-b border-zinc-850/80">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
           
           {/* Work Experience (Span 2 columns) */}
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 text-xs font-mono text-blue-400 uppercase tracking-wider mb-2">
+            <div className="flex items-center gap-2 text-xs font-mono text-blue-400 uppercase tracking-wider mb-1.5">
               <Briefcase className="w-4 h-4" aria-hidden="true" />
-              <span>Career Trajectory</span>
+              <span>CAREER TRAJECTORY</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-8">
-              Work & Engineering Experience
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-6">
+              Engineering & Leadership
             </h2>
 
-            <div className="space-y-8">
+            <div className="space-y-4">
               {experience.map((item, idx) => (
                 <div
                   key={idx}
-                  className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-6 md:p-7 transition-colors hover:border-zinc-700"
+                  className="rounded-lg border border-zinc-800/80 bg-zinc-900/30 p-5 transition-colors hover:border-zinc-700"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                     <div>
-                      <h3 className="text-lg font-bold text-zinc-100">{item.role}</h3>
-                      <p className="text-sm font-semibold text-blue-400">{item.company}</p>
+                      <h3 className="text-base font-bold text-zinc-100">{item.role}</h3>
+                      <p className="text-xs font-semibold text-blue-400">{item.company}</p>
                     </div>
-                    <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-400">
+                    <div className="flex items-center gap-3 text-xs font-mono text-zinc-500">
                       <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+                        <Calendar className="w-3 h-3" />
                         <span>{item.period}</span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+                        <MapPin className="w-3 h-3" />
                         <span>{item.location}</span>
                       </span>
                     </div>
                   </div>
 
-                  <ul className="mt-4 space-y-2 text-sm text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
+                  <ul className="mt-2.5 space-y-1.5 text-xs text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
                     {item.highlights.map((highlight, hIdx) => (
-                      <li key={hIdx} className="marker:text-zinc-500">
+                      <li key={hIdx} className="marker:text-zinc-600">
                         {highlight}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="mt-5 flex flex-wrap gap-1.5 pt-3 border-t border-zinc-800/50">
+                  <div className="mt-3 flex flex-wrap gap-1.5 pt-2 border-t border-zinc-850">
                     {item.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-2 py-0.5 text-xs font-mono rounded bg-zinc-800/40 text-zinc-400 border border-zinc-750"
+                        className="px-2 py-0.5 text-[11px] font-mono rounded bg-zinc-800/40 text-zinc-400 border border-zinc-750"
                       >
                         {skill}
                       </span>
@@ -69,36 +69,30 @@ export function Experience() {
 
           {/* Education & Academic Foundation (1 column) */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-purple-400 uppercase tracking-wider mb-2">
+            <div className="flex items-center gap-2 text-xs font-mono text-purple-400 uppercase tracking-wider mb-1.5">
               <GraduationCap className="w-4 h-4" aria-hidden="true" />
-              <span>Academic Foundation</span>
+              <span>ACADEMIC FOUNDATION</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-8">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-6">
               Education
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               {education.map((edu, idx) => (
                 <div
                   key={idx}
-                  className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-6 transition-colors hover:border-zinc-700"
+                  className="rounded-lg border border-zinc-800/80 bg-zinc-900/30 p-5 transition-colors hover:border-zinc-700"
                 >
                   <span className="text-xs font-mono text-purple-400 font-semibold">{edu.period}</span>
-                  <h3 className="text-base font-bold text-zinc-100 mt-1">{edu.degree}</h3>
-                  <p className="text-sm font-medium text-zinc-300 mt-0.5">{edu.institution}</p>
-                  <p className="text-xs text-zinc-400 mt-2">{edu.field}</p>
-                  {edu.location && (
-                    <p className="text-xs font-mono text-zinc-400 mt-1 flex items-center gap-1">
-                      <MapPin className="w-3 h-3" aria-hidden="true" />
-                      <span>{edu.location}</span>
-                    </p>
-                  )}
+                  <h3 className="text-sm font-bold text-zinc-100 mt-0.5">{edu.degree}</h3>
+                  <p className="text-xs font-medium text-zinc-300">{edu.institution}</p>
+                  <p className="text-xs text-zinc-500 mt-1.5">{edu.field}</p>
                 </div>
               ))}
 
-              <div className="p-5 rounded-xl border border-zinc-800/60 bg-blue-950/10 text-xs text-zinc-400 leading-relaxed">
-                <span className="font-semibold text-zinc-200 block mb-1">Continuous Specialization</span>
-                Combined 8 years of formal computer engineering education with ongoing industry certifications across Meta, Google, and HackerRank.
+              <div className="p-4 rounded-lg border border-zinc-800/60 bg-blue-950/15 text-xs text-zinc-400 leading-relaxed font-mono">
+                <span className="font-semibold text-zinc-200 block mb-1">REVWORKS STANDARDS</span>
+                8 years of formal computer engineering education combined with active industry credentials from Meta, Google, and HackerRank.
               </div>
             </div>
           </div>

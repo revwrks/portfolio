@@ -47,15 +47,18 @@ export interface Education {
 
 export const PORTFOLIO_DATA = {
   personal: {
+    brandName: "REVWORKS",
     name: "Mahendra Pujo Prianto",
+    alias: "Rev",
     role: "Creative Technologist & Fullstack Engineer",
-    headline: "Building high-throughput backend architectures, interactive canvas engines, and cinematic visual media.",
-    bio: "Fullstack software engineer with 5+ years of production experience spanning fintech transaction systems, interactive Web Audio/Canvas tools, and internal ERP platforms. Blends deep backend database engineering with certified UX research and commercial video direction to build digital products that actually convert.",
+    headline: "REVWORKS // Digital engineering, high-throughput systems, and cinematic media by Rev.",
+    bio: "Fullstack software engineer and creative director operating under the REVWORKS imprint. 5+ years of shipping production fintech webhook ledgers, interactive canvas engines, and commercial video direction.",
     location: "Malang / Batu, East Java, Indonesia",
     email: "mahendrapujo@gmail.com",
     linkedin: "https://www.linkedin.com/in/mahendra-pujo-p/",
-    github: "https://github.com/mahendrapujo",
-    status: "Available for high-impact software engineering & product roles",
+    github: "https://github.com/revwrks",
+    instagram: "https://www.instagram.com/itzrevv/",
+    status: "REVWORKS LAB // Open for engineering & product collaborations",
   },
   skills: {
     backend: ["Node.js", "Java", "PHP / Laravel", "Python", "REST APIs", "Webhooks", "Asynchronous Jobs"],
@@ -80,7 +83,7 @@ export const PORTFOLIO_DATA = {
         "Created self-service warranty claim workflow with automated replacement checks."
       ],
       links: {
-        github: "https://github.com/mahendrapujo",
+        github: "https://github.com/revwrks",
       },
       featured: true,
     },
@@ -119,7 +122,7 @@ export const PORTFOLIO_DATA = {
         "Audit trail activity logging across administrative actions for operational compliance."
       ],
       links: {
-        github: "https://github.com/mahendrapujo",
+        github: "https://github.com/revwrks",
       },
       featured: true,
     },
@@ -137,7 +140,7 @@ export const PORTFOLIO_DATA = {
         "Generates automated daily sales recaps, cash-drawer reconciliation, and margin analysis."
       ],
       links: {
-        github: "https://github.com/mahendrapujo",
+        github: "https://github.com/revwrks",
       },
       featured: false,
     },
