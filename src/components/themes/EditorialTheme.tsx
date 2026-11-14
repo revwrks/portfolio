@@ -27,6 +27,7 @@ import { PORTFOLIO_DATA, Project, Certification } from "@/data/portfolio";
 import { ArchitectureInspector } from "@/components/console/ArchitectureInspector";
 import { GoldenParticleCanvas } from "@/components/effects/GoldenParticleCanvas";
 import { FluidCursorSpotlight } from "@/components/effects/FluidCursorSpotlight";
+import { BackgroundAudioPlayer } from "@/components/audio/BackgroundAudioPlayer";
 import { AnimatedCounter } from "@/components/effects/AnimatedCounter";
 import { CipherScrambleText } from "@/components/effects/CipherScrambleText";
 import { CardProjectsMarquee } from "@/components/cards/CardProjectsMarquee";
@@ -262,6 +263,9 @@ export function EditorialTheme() {
 
       {/* 3. Fluid Ambient Cursor Spotlight Ring */}
       <FluidCursorSpotlight />
+
+      {/* 4. Luxury Floating Background Audio Player */}
+      <BackgroundAudioPlayer />
 
       {/* Background Page Content Wrapper with Spatial Depth Scale on Modal Open */}
       <div
