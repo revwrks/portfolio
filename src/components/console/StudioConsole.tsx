@@ -13,19 +13,27 @@ import {
   Mail, 
   MapPin, 
   Palette, 
+  Pencil,
   ShieldCheck, 
   Sparkles, 
   Terminal, 
-  Wrench 
+  Wrench,
+  Zap
 } from "lucide-react";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/ui/Icons";
 import { PORTFOLIO_DATA, Project, Certification } from "@/data/portfolio";
+import { StudioTelemetry } from "@/components/console/StudioTelemetry";
+import { CanvasScratchpad } from "@/components/console/CanvasScratchpad";
+import { ArchitectureInspector } from "@/components/console/ArchitectureInspector";
+import { playUiClick } from "@/lib/audio";
 
-type TabKey = "works" | "credentials" | "experience" | "stack";
+type TabKey = "works" | "scratchpad" | "credentials" | "experience" | "stack";
 
 export function StudioConsole() {
   const [activeTab, setActiveTab] = useState<TabKey>("works");
   const [worksFilter, setWorksFilter] = useState<"all" | "engineering" | "creative">("all");
+  const [selectedArchProject, setSelectedArchProject] = useState<string | null>(null);
+
   const { personal, projects, certifications, experience, education, skills } = PORTFOLIO_DATA;
 
   const filteredProjects = projects.filter((p) => {
@@ -33,20 +41,26 @@ export function StudioConsole() {
     return p.category === worksFilter;
   });
 
-  const navItems: { key: TabKey; label: string; icon: React.ElementType; count?: number }[] = [
+  const navItems: { key: TabKey; label: string; icon: React.ElementType; count?: number | string; badge?: string }[] = [
     { key: "works", label: "Selected Works", icon: Layers, count: projects.length },
+    { key: "scratchpad", label: "Canvas Scratchpad", icon: Pencil, badge: "LIVE" },
     { key: "credentials", label: "Credentials", icon: ShieldCheck, count: certifications.length },
     { key: "experience", label: "Experience & Edu", icon: Briefcase, count: experience.length },
     { key: "stack", label: "Tech Stack", icon: Terminal, count: 5 },
   ];
 
+  const handleTabChange = (key: TabKey) => {
+    playUiClick(800);
+    setActiveTab(key);
+  };
+
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#09090b] text-[#fafafa] flex flex-col font-sans select-none lg:select-auto">
       
-      {/* Top Mobile Bar (Visible only on smaller screens) */}
+      {/* Top Mobile Bar */}
       <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-zinc-800/80 bg-zinc-950 flex-shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+          <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
           <span className="font-mono text-sm font-black tracking-tight text-white">REVWORKS</span>
           <span className="text-xs text-zinc-500 font-mono">// REV</span>
         </div>
@@ -76,10 +90,10 @@ export function StudioConsole() {
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden max-w-7xl mx-auto w-full lg:p-6 lg:gap-6">
         
         {/* LEFT PANE: Studio Anchor (Fixed on desktop, 38% width) */}
-        <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-6 lg:p-8 lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/70 lg:backdrop-blur-md flex-shrink-0 border-b lg:border-b-0 border-zinc-850">
+        <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-6 lg:p-7 lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/70 lg:backdrop-blur-md flex-shrink-0 border-b lg:border-b-0 border-zinc-850 overflow-y-auto">
           <div>
             {/* Studio Badge */}
-            <div className="hidden lg:flex items-center justify-between mb-6">
+            <div className="hidden lg:flex items-center justify-between mb-5">
               <div className="flex items-center gap-2.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
                 <span className="font-mono text-base font-black tracking-tight text-white">
@@ -89,8 +103,8 @@ export function StudioConsole() {
                   // LAB
                 </span>
               </div>
-              <span className="text-[11px] font-mono text-zinc-500 px-2 py-0.5 rounded border border-zinc-800 bg-zinc-900/50">
-                v2.0
+              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                ● ACTIVE
               </span>
             </div>
 
@@ -102,19 +116,13 @@ export function StudioConsole() {
               <p className="text-xs sm:text-sm font-mono text-blue-400 mt-1">
                 {personal.role} <span className="text-zinc-500">(@rev)</span>
               </p>
-              <p className="mt-3 text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+              <p className="mt-2.5 text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
                 {personal.bio}
               </p>
             </div>
 
-            {/* Live Status Pill */}
-            <div className="mt-4 flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg w-fit">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              <span>{personal.status}</span>
-            </div>
-
             {/* Studio Navigation (Interactive Tabs) */}
-            <nav className="mt-6 lg:mt-8 space-y-1.5" role="tablist" aria-label="Studio Console Views">
+            <nav className="mt-5 space-y-1.5" role="tablist" aria-label="Studio Console Views">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.key;
@@ -124,7 +132,7 @@ export function StudioConsole() {
                     type="button"
                     role="tab"
                     aria-selected={isActive}
-                    onClick={() => setActiveTab(item.key)}
+                    onClick={() => handleTabChange(item.key)}
                     className={`w-full min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-mono transition-all ${
                       isActive
                         ? "bg-blue-600 text-white font-bold shadow-md shadow-blue-900/20"
@@ -135,7 +143,12 @@ export function StudioConsole() {
                       <Icon className="w-4 h-4 flex-shrink-0" />
                       <span>{item.label}</span>
                     </div>
-                    {item.count !== undefined && (
+
+                    {item.badge ? (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold animate-pulse">
+                        {item.badge}
+                      </span>
+                    ) : item.count !== undefined ? (
                       <span
                         className={`text-[11px] px-2 py-0.5 rounded-md ${
                           isActive
@@ -145,34 +158,25 @@ export function StudioConsole() {
                       >
                         {item.count}
                       </span>
-                    )}
+                    ) : null}
                   </button>
                 );
               })}
             </nav>
           </div>
 
-          {/* Social & Contact Footer (Desktop) */}
-          <div className="hidden lg:block pt-6 border-t border-zinc-850/80 mt-6">
-            <div className="flex items-center justify-between text-xs text-zinc-400 font-mono mb-3">
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-zinc-500" />
-                <span>{personal.location}</span>
-              </span>
-              <a
-                href={`mailto:${personal.email}`}
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                {personal.email}
-              </a>
-            </div>
+          {/* Left Pane Lower Section: Telemetry + Socials */}
+          <div className="pt-5 border-t border-zinc-850/80 mt-5 space-y-3">
+            {/* Feature 3: Studio Telemetry */}
+            <StudioTelemetry />
 
-            <div className="flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
               <a
                 href={personal.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-h-[44px] flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-white transition-colors"
+                onClick={() => playUiClick(600)}
+                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-white transition-colors"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>@revwrks</span>
@@ -181,7 +185,8 @@ export function StudioConsole() {
                 href={personal.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-h-[44px] flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-pink-400 transition-colors"
+                onClick={() => playUiClick(600)}
+                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-pink-400 transition-colors"
               >
                 <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                 <span>@itzrevv</span>
@@ -190,6 +195,7 @@ export function StudioConsole() {
                 href={personal.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => playUiClick(600)}
                 className="min-h-[44px] p-2.5 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-blue-400 transition-colors"
                 aria-label="LinkedIn profile"
               >
@@ -216,7 +222,10 @@ export function StudioConsole() {
               <div className="flex items-center gap-1 p-0.5 rounded-md border border-zinc-800 bg-zinc-900/80 text-[11px] font-mono">
                 <button
                   type="button"
-                  onClick={() => setWorksFilter("all")}
+                  onClick={() => {
+                    playUiClick(500);
+                    setWorksFilter("all");
+                  }}
                   className={`px-2.5 py-1 rounded transition-colors ${
                     worksFilter === "all" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:text-zinc-200"
                   }`}
@@ -225,7 +234,10 @@ export function StudioConsole() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setWorksFilter("engineering")}
+                  onClick={() => {
+                    playUiClick(500);
+                    setWorksFilter("engineering");
+                  }}
                   className={`px-2.5 py-1 rounded transition-colors ${
                     worksFilter === "engineering" ? "bg-blue-600 text-white" : "text-zinc-400 hover:text-zinc-200"
                   }`}
@@ -234,7 +246,10 @@ export function StudioConsole() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setWorksFilter("creative")}
+                  onClick={() => {
+                    playUiClick(500);
+                    setWorksFilter("creative");
+                  }}
                   className={`px-2.5 py-1 rounded transition-colors ${
                     worksFilter === "creative" ? "bg-purple-600 text-white" : "text-zinc-400 hover:text-zinc-200"
                   }`}
@@ -248,6 +263,7 @@ export function StudioConsole() {
             {activeTab !== "works" && (
               <a
                 href={`mailto:${personal.email}`}
+                onClick={() => playUiClick(700)}
                 className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-white transition-colors"
               >
                 <Mail className="w-3.5 h-3.5 text-blue-400" />
@@ -259,7 +275,7 @@ export function StudioConsole() {
           {/* Stage Contained Scrollable Body */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 focus:outline-none" tabIndex={0}>
             
-            {/* VIEW 1: WORKS (Grid inspired by yozananta/wvgs-portfolio) */}
+            {/* VIEW 1: WORKS */}
             {activeTab === "works" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredProjects.map((project: Project) => (
@@ -306,14 +322,29 @@ export function StudioConsole() {
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center justify-between gap-2">
-                      <div className="flex flex-wrap gap-1">
-                        {project.techStack.slice(0, 3).map((t) => (
-                          <span key={t} className="text-[10px] font-mono text-zinc-400">
-                            #{t}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="mt-4 pt-3 border-t border-zinc-800/60 flex flex-wrap items-center justify-between gap-2">
+                      {/* Feature 4: Inspect Architecture trigger */}
+                      {project.id === "topup-store" ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            playUiClick(1000);
+                            setSelectedArchProject(project.title);
+                          }}
+                          className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-950/40 border border-cyan-800/40 px-2.5 py-1.5 rounded-lg transition-colors"
+                        >
+                          <Zap className="w-3.5 h-3.5" />
+                          <span>Inspect Spec</span>
+                        </button>
+                      ) : (
+                        <div className="flex flex-wrap gap-1">
+                          {project.techStack.slice(0, 3).map((t) => (
+                            <span key={t} className="text-[10px] font-mono text-zinc-400">
+                              #{t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-2">
                         {project.links.live && (
@@ -321,6 +352,7 @@ export function StudioConsole() {
                             href={project.links.live}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => playUiClick(700)}
                             className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-medium text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg transition-colors"
                           >
                             <span>Live</span>
@@ -332,6 +364,7 @@ export function StudioConsole() {
                             href={project.links.github}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => playUiClick(700)}
                             className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-lg border border-zinc-700 transition-colors"
                           >
                             <GithubIcon className="w-3 h-3" />
@@ -345,7 +378,14 @@ export function StudioConsole() {
               </div>
             )}
 
-            {/* VIEW 2: CREDENTIALS (Grid inspired by CertCard in wvgs-portfolio) */}
+            {/* VIEW 2: INTERACTIVE CANVAS SCRATCHPAD (Feature 1) */}
+            {activeTab === "scratchpad" && (
+              <div className="h-full">
+                <CanvasScratchpad />
+              </div>
+            )}
+
+            {/* VIEW 3: CREDENTIALS */}
             {activeTab === "credentials" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 {certifications.map((cert: Certification) => (
@@ -387,6 +427,7 @@ export function StudioConsole() {
                         href={cert.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => playUiClick(700)}
                         className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300 py-1"
                       >
                         <span>Verify Credential</span>
@@ -398,7 +439,7 @@ export function StudioConsole() {
               </div>
             )}
 
-            {/* VIEW 3: EXPERIENCE & EDUCATION */}
+            {/* VIEW 4: EXPERIENCE & EDUCATION */}
             {activeTab === "experience" && (
               <div className="space-y-6">
                 <div>
@@ -449,7 +490,7 @@ export function StudioConsole() {
               </div>
             )}
 
-            {/* VIEW 4: TECH STACK MATRIX */}
+            {/* VIEW 5: TECH STACK MATRIX */}
             {activeTab === "stack" && (
               <div className="space-y-3">
                 {[
@@ -498,6 +539,14 @@ export function StudioConsole() {
         </main>
 
       </div>
+
+      {/* Feature 4: Interactive Architecture Drawer */}
+      <ArchitectureInspector
+        isOpen={!!selectedArchProject}
+        onClose={() => setSelectedArchProject(null)}
+        projectTitle={selectedArchProject || ""}
+      />
+
     </div>
   );
 }
