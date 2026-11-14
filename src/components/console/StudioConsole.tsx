@@ -9,6 +9,7 @@ import {
   Database, 
   ExternalLink, 
   GraduationCap, 
+  HeartHandshake,
   Layers, 
   Mail, 
   MapPin, 
@@ -33,8 +34,9 @@ export function StudioConsole() {
   const [activeTab, setActiveTab] = useState<TabKey>("works");
   const [worksFilter, setWorksFilter] = useState<"all" | "engineering" | "creative">("all");
   const [selectedArchProject, setSelectedArchProject] = useState<string | null>(null);
+  const [isHoveredAvatar, setIsHoveredAvatar] = useState(false);
 
-  const { personal, projects, certifications, experience, education, skills } = PORTFOLIO_DATA;
+  const { personal, projects, certifications, experience, education, volunteering, skills } = PORTFOLIO_DATA;
 
   const filteredProjects = projects.filter((p) => {
     if (worksFilter === "all") return true;
@@ -45,7 +47,7 @@ export function StudioConsole() {
     { key: "works", label: "Selected Works", icon: Layers, count: projects.length },
     { key: "scratchpad", label: "Canvas Scratchpad", icon: Pencil, badge: "LIVE" },
     { key: "credentials", label: "Credentials", icon: ShieldCheck, count: certifications.length },
-    { key: "experience", label: "Experience & Edu", icon: Briefcase, count: experience.length },
+    { key: "experience", label: "Experience & Edu", icon: Briefcase, count: experience.length + (volunteering?.length || 0) },
     { key: "stack", label: "Tech Stack", icon: Terminal, count: 5 },
   ];
 
@@ -59,10 +61,14 @@ export function StudioConsole() {
       
       {/* Top Mobile Bar */}
       <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-zinc-800/80 bg-zinc-950 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-          <span className="font-mono text-sm font-black tracking-tight text-white">REVWORKS</span>
-          <span className="text-xs text-zinc-500 font-mono">// REV</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0">
+            <img src={personal.avatar} alt="Rev" className="w-full h-full object-cover object-top" />
+          </div>
+          <div>
+            <span className="font-mono text-sm font-black tracking-tight text-white block leading-none">REVWORKS</span>
+            <span className="text-[10px] text-zinc-500 font-mono">// {personal.name}</span>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <a
@@ -93,7 +99,7 @@ export function StudioConsole() {
         <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-6 lg:p-7 lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/70 lg:backdrop-blur-md flex-shrink-0 border-b lg:border-b-0 border-zinc-850 overflow-y-auto">
           <div>
             {/* Studio Badge */}
-            <div className="hidden lg:flex items-center justify-between mb-5">
+            <div className="hidden lg:flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
                 <span className="font-mono text-base font-black tracking-tight text-white">
@@ -108,18 +114,41 @@ export function StudioConsole() {
               </span>
             </div>
 
-            {/* Profile Intro */}
-            <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-white leading-tight">
-                {personal.name}
-              </h1>
-              <p className="text-xs sm:text-sm font-mono text-blue-400 mt-1">
-                {personal.role} <span className="text-zinc-500">(@rev)</span>
-              </p>
-              <p className="mt-2.5 text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
-                {personal.bio}
-              </p>
+            {/* Profile Avatar + Intro */}
+            <div className="flex items-center gap-4 mb-3">
+              <div
+                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-zinc-700/80 bg-zinc-850 flex-shrink-0 group cursor-pointer shadow-lg shadow-blue-950/20"
+                onMouseEnter={() => {
+                  setIsHoveredAvatar(true);
+                  playUiClick(1200);
+                }}
+                onMouseLeave={() => setIsHoveredAvatar(false)}
+                title="Hover for alternative pose!"
+              >
+                <img
+                  src={isHoveredAvatar ? personal.avatarHover : personal.avatar}
+                  alt={`${personal.name} avatar`}
+                  className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                />
+                <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-zinc-950" title="Online" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">
+                  {personal.name}
+                </h1>
+                <p className="text-xs font-mono text-blue-400 mt-0.5">
+                  {personal.role} <span className="text-zinc-500">(@rev)</span>
+                </p>
+                <p className="text-[11px] font-mono text-zinc-500 mt-1 flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-zinc-500" />
+                  <span>{personal.location}</span>
+                </p>
+              </div>
             </div>
+
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+              {personal.bio}
+            </p>
 
             {/* Studio Navigation (Interactive Tabs) */}
             <nav className="mt-5 space-y-1.5" role="tablist" aria-label="Studio Console Views">
@@ -166,7 +195,7 @@ export function StudioConsole() {
           </div>
 
           {/* Left Pane Lower Section: Telemetry + Socials */}
-          <div className="pt-5 border-t border-zinc-850/80 mt-5 space-y-3">
+          <div className="pt-4 border-t border-zinc-850/80 mt-4 space-y-3">
             {/* Feature 3: Studio Telemetry */}
             <StudioTelemetry />
 
@@ -439,7 +468,7 @@ export function StudioConsole() {
               </div>
             )}
 
-            {/* VIEW 4: EXPERIENCE & EDUCATION */}
+            {/* VIEW 4: EXPERIENCE, EDUCATION & VOLUNTEERING */}
             {activeTab === "experience" && (
               <div className="space-y-6">
                 <div>
@@ -469,6 +498,39 @@ export function StudioConsole() {
                   </div>
                 </div>
 
+                {/* Volunteering & Community Work */}
+                <div className="pt-4 border-t border-zinc-850">
+                  <h2 className="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <HeartHandshake className="w-3.5 h-3.5" />
+                    <span>Social Services & Community</span>
+                  </h2>
+                  <div className="space-y-3">
+                    {volunteering?.map((vol, idx) => (
+                      <div
+                        key={idx}
+                        className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-4 transition-colors hover:border-zinc-700"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                          <div>
+                            <h3 className="text-sm font-bold text-zinc-100">{vol.role}</h3>
+                            <p className="text-xs font-semibold text-emerald-400">{vol.organization}</p>
+                          </div>
+                          <span className="text-xs font-mono text-zinc-500">{vol.period}</span>
+                        </div>
+                        <p className="text-[11px] font-mono text-zinc-400 mb-2">
+                          Category: {vol.category}
+                        </p>
+                        <ul className="mt-2 space-y-1 text-xs text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
+                          {vol.highlights.map((h, i) => (
+                            <li key={i}>{h}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Academic Foundation */}
                 <div className="pt-4 border-t border-zinc-850">
                   <h2 className="text-xs font-mono text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <GraduationCap className="w-3.5 h-3.5" />

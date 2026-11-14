@@ -45,11 +45,21 @@ export interface Education {
   location?: string;
 }
 
+export interface Volunteering {
+  organization: string;
+  role: string;
+  period: string;
+  category: string;
+  highlights: string[];
+}
+
 export const PORTFOLIO_DATA = {
   personal: {
     brandName: "REVWORKS",
     name: "Mahendra Pujo Prianto",
     alias: "Rev",
+    avatar: "/rev3.JPG",
+    avatarHover: "/rev2.JPG",
     role: "Creative Technologist & Fullstack Engineer",
     headline: "REVWORKS // Digital engineering, high-throughput systems, and cinematic media by Rev.",
     bio: "Fullstack software engineer and creative director operating under the REVWORKS imprint. 5+ years of shipping production fintech webhook ledgers, interactive canvas engines, and commercial video direction.",
@@ -313,5 +323,18 @@ export const PORTFOLIO_DATA = {
       period: "2017 – 2021",
       location: "Malang, Indonesia"
     }
-  ] as Education[]
+  ] as Education[],
+  volunteering: [
+    {
+      organization: "GKJW (Gereja Kristen Jawi Wetan)",
+      role: "Multimedia Specialist",
+      period: "Aug 2023 – Present (3+ years)",
+      category: "Social Services & Live Broadcast",
+      highlights: [
+        "Directing live multi-camera broadcast production and audio-visual streaming for weekly congregational services.",
+        "Managing media presentation systems, visual cues, and live audio mixing boards.",
+        "Mentoring and training youth volunteer teams on live camera operation and media capture."
+      ]
+    }
+  ] as Volunteering[]
 };
