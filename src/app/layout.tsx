@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mahendrapujo.vercel.app",
+    url: "https://revwrks.vercel.app",
     title: "Mahendra Pujo Prianto — Creative Technologist & Fullstack Engineer",
     description: "High-throughput backend architectures, interactive canvas engines, and cinematic visual media.",
     siteName: "Mahendra Pujo Prianto Portfolio",

@@ -226,7 +226,7 @@ export function EditorialTheme() {
     playUiClick(950);
     navigator.clipboard.writeText(personal.email);
     setCopiedEmail(true);
-    showToast("Email copied to clipboard: mahendrapujo@gmail.com 📋");
+    showToast(`Email copied to clipboard: ${personal.email} 📋`);
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
@@ -301,7 +301,10 @@ export function EditorialTheme() {
         >
           <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
             {/* Brand Identity: Cinzel Luxury Display */}
-            <motion.div variants={itemVariants} className="flex items-center gap-3">
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-3"
+            >
               <span className="font-cinzel tracking-[0.25em] text-base sm:text-lg font-black text-white">
                 REVWORKS
               </span>
@@ -316,7 +319,7 @@ export function EditorialTheme() {
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="text-xs font-mono text-[#f7f4ec] hover:text-[#d4af37] border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 rounded-full px-4 py-2 transition-all duration-150 flex items-center gap-1.5"
+                className="text-xs font-mono text-[#f7f4ec] hover:text-[#d4af37] border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 rounded-full px-4 py-2 transition-all duration-150 flex items-center gap-1.5 cursor-pointer"
               >
                 {copiedEmail ? (
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
@@ -691,7 +694,10 @@ export function EditorialTheme() {
           <motion.div variants={itemVariants}>
             REVWORKS // DESIGNED & CRAFTED BY REV · 2026
           </motion.div>
-          <motion.div variants={itemVariants} className="flex items-center gap-4">
+          <motion.div
+            variants={itemVariants}
+            className="flex items-center gap-4"
+          >
             <button
               type="button"
               onClick={handleCopyEmail}

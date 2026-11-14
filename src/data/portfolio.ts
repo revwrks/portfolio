@@ -65,7 +65,7 @@ export const PORTFOLIO_DATA = {
       "REVWORKS // Digital engineering, high-throughput systems, and cinematic media by Rev.",
     bio: "Fullstack software engineer and creative director operating under the REVWORKS imprint. 5+ years of shipping production fintech webhook ledgers, interactive canvas engines, and commercial video direction.",
     location: "Malang / Batu, East Java, Indonesia",
-    email: "mahendrapujo@gmail.com",
+    email: "rev.revoltgroup@gmail.com",
     linkedin: "https://www.linkedin.com/in/mahendra-pujo-p/",
     github: "https://github.com/revwrks",
     instagram: "https://www.instagram.com/itzrevv/",
@@ -173,7 +173,7 @@ export const PORTFOLIO_DATA = {
       ],
       links: {
         live: "https://digi-art-netlify.netlify.app",
-        github: "https://github.com/mahendrapujo",
+        github: "https://github.com/revwrks",
       },
       featured: true,
     },
