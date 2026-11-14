@@ -127,7 +127,7 @@ export function BackgroundAudioPlayer() {
 
       {/* Floating Audio Player Capsule in Bottom Right Corner */}
       <div 
-        className="fixed bottom-6 right-6 z-40"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
@@ -138,7 +138,7 @@ export function BackgroundAudioPlayer() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 6, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute bottom-full right-0 mb-3 px-3.5 py-1.5 rounded-xl bg-[#161411]/95 border border-[#d4af37]/40 text-[#f7f4ec] font-mono text-[11px] whitespace-nowrap shadow-xl backdrop-blur-md flex items-center gap-2 pointer-events-none"
+              className="hidden sm:flex absolute bottom-full right-0 mb-3 px-3.5 py-1.5 rounded-xl bg-[#161411]/95 border border-[#d4af37]/40 text-[#f7f4ec] font-mono text-[11px] whitespace-nowrap shadow-xl backdrop-blur-md items-center gap-2 pointer-events-none"
             >
               <Music className="w-3.5 h-3.5 text-[#d4af37]" />
               <span>
@@ -155,7 +155,7 @@ export function BackgroundAudioPlayer() {
           onClick={togglePlay}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.96 }}
-          className={`flex items-center gap-3 px-4 py-2.5 rounded-full border transition-all duration-300 shadow-2xl backdrop-blur-xl ${
+          className={`flex items-center gap-2.5 sm:gap-3 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full border transition-all duration-300 shadow-2xl backdrop-blur-xl ${
             isPlaying
               ? "bg-[#161411]/95 border-[#d4af37] shadow-[#d4af37]/25 text-[#f7f4ec]"
               : "bg-[#161411]/80 border-[#2e2921] hover:border-[#d4af37]/60 text-[#aba392] hover:text-[#f7f4ec]"

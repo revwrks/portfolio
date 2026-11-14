@@ -109,6 +109,7 @@ function EditorialTiltCard({
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -147,11 +148,11 @@ function EditorialTiltCard({
           ? "transform 0.08s ease-out"
           : "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className={`group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 flex flex-col justify-between space-y-6 cursor-pointer overflow-hidden backdrop-blur-xl ${className}`}
+      className={`group relative text-left p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 flex flex-col justify-between space-y-5 sm:space-y-6 cursor-pointer overflow-hidden backdrop-blur-xl ${className}`}
     >
       {/* Dynamic Cursor Spotlight Layer */}
       <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-3xl"
+        className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-2xl sm:rounded-3xl"
         style={{
           opacity: isHovered ? 1 : 0,
           background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(212, 175, 55, 0.22) 0%, transparent 65%)`,
@@ -159,7 +160,7 @@ function EditorialTiltCard({
       />
 
       {/* Shimmer Light Reflection Sweep on Hover */}
-      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-3xl">
+      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-2xl sm:rounded-3xl">
         <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 group-hover:translate-x-[300%] transition-transform duration-1000" />
       </div>
 
@@ -169,16 +170,16 @@ function EditorialTiltCard({
       )}
 
       {/* Clean Minimal Title & Description */}
-      <div className="relative z-10 space-y-2">
-        <div className="flex items-center gap-2.5">
+      <div className="relative z-10 space-y-1.5 sm:space-y-2">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {Icon && (
-            <Icon className="w-5 h-5 text-[#d4af37] flex-shrink-0 transition-transform duration-200 group-hover:scale-110" />
+            <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#d4af37] flex-shrink-0 transition-transform duration-200 group-hover:scale-110" />
           )}
-          <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors duration-200">
+          <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors duration-200">
             {title}
           </h3>
         </div>
-        <p className="text-sm text-[#aba392] font-light leading-relaxed group-hover:text-[#c4beb1] transition-colors duration-200">
+        <p className="text-xs sm:text-sm text-[#aba392] font-light leading-relaxed group-hover:text-[#c4beb1] transition-colors duration-200">
           {description}
         </p>
       </div>
@@ -188,8 +189,8 @@ function EditorialTiltCard({
         <span className="group-hover:tracking-wider transition-all duration-200">
           {actionText}
         </span>
-        <div className="w-8 h-8 rounded-full bg-[#d4af37]/10 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:text-zinc-950 transition-all duration-200 shadow-sm">
-          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#d4af37]/10 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:text-zinc-950 transition-all duration-200 shadow-sm">
+          <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>
       </div>
     </motion.button>
@@ -299,7 +300,7 @@ export function EditorialTheme() {
           variants={subContainerVariants}
           className="border-b border-[#2e2921]/90 bg-[#0d0c0a]/90 backdrop-blur-md sticky top-0 z-30"
         >
-          <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
             {/* Brand Identity: Cinzel Luxury Display */}
             <motion.div
               variants={itemVariants}
@@ -321,22 +322,22 @@ export function EditorialTheme() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-5xl mx-auto px-6 pt-12 sm:pt-18 space-y-16 relative z-10"
+          className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 sm:pt-16 space-y-12 sm:space-y-16 relative z-10"
         >
           {/* HERO SECTION: PORTRAIT & MANIFESTO */}
           <section
             aria-label="Prologue"
-            className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start"
+            className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-start"
           >
             {/* Left Column: Pure Portrait & Dossier Stats */}
             <motion.div
               variants={subContainerVariants}
-              className="md:col-span-4 space-y-6"
+              className="md:col-span-4 space-y-6 max-w-sm mx-auto md:max-w-none w-full"
             >
               {/* Pure Pristine Portrait Frame with Smooth Dissolve & Ambient Hover Glow */}
               <motion.div variants={itemVariants}>
                 <div
-                  className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-500 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 aspect-[4/5] w-full"
+                  className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-500 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 aspect-[4/5] w-full max-w-[280px] sm:max-w-xs md:max-w-none mx-auto"
                   onMouseEnter={() => setIsHoveredAvatar(true)}
                   onMouseLeave={() => setIsHoveredAvatar(false)}
                   onClick={() => {
@@ -373,7 +374,7 @@ export function EditorialTheme() {
               {/* Quick Metadata Box */}
               <motion.div
                 variants={itemVariants}
-                className="space-y-3 font-mono text-xs text-[#aba392] border-l-2 border-[#2e2921] pl-4"
+                className="space-y-3 font-mono text-xs text-[#aba392] border-l-2 border-[#2e2921] pl-4 max-w-[280px] sm:max-w-xs md:max-w-none mx-auto"
               >
                 <div>
                   <span className="text-[#7a7265] block text-[10px] uppercase">
@@ -402,7 +403,7 @@ export function EditorialTheme() {
               {/* Social Links */}
               <motion.div
                 variants={itemVariants}
-                className="flex items-center gap-3 pt-1"
+                className="flex items-center gap-3 pt-1 max-w-[280px] sm:max-w-xs md:max-w-none mx-auto"
               >
                 <a
                   href={personal.github}
@@ -440,13 +441,13 @@ export function EditorialTheme() {
             {/* Right Column: Grand Manifesto & Core Metrics */}
             <motion.div
               variants={subContainerVariants}
-              className="md:col-span-8 space-y-8"
+              className="md:col-span-8 space-y-6 sm:space-y-8"
             >
               <motion.div variants={itemVariants} className="space-y-4">
                 <span className="text-[11px] font-mono tracking-widest text-[#d4af37] uppercase font-bold">
                   <CipherScrambleText text="// ARCHIVAL DOSSIER" />
                 </span>
-                <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-[#f7f4ec] leading-[1.18] font-serif">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-normal tracking-tight text-[#f7f4ec] leading-[1.2] font-serif">
                   Engineering high-throughput systems, creative software, and
                   cinematic visual media.
                 </h1>
@@ -454,7 +455,7 @@ export function EditorialTheme() {
 
               <motion.div
                 variants={itemVariants}
-                className="space-y-4 text-base sm:text-lg text-[#aba392] leading-relaxed font-light"
+                className="space-y-4 text-sm sm:text-base md:text-lg text-[#aba392] leading-relaxed font-light"
               >
                 <p>
                   Operating under the{" "}
@@ -466,7 +467,7 @@ export function EditorialTheme() {
                   financial webhook ledgers, real-time in-browser synthesizers,
                   and live multi-camera broadcast direction.
                 </p>
-                <p className="text-sm sm:text-base text-[#7a7265] leading-relaxed">
+                <p className="text-xs sm:text-base text-[#7a7265] leading-relaxed">
                   Currently serving as{" "}
                   <span className="text-[#f7f4ec] font-medium">
                     Head of Marketing at Nusa Indah Tropika
@@ -481,7 +482,7 @@ export function EditorialTheme() {
               {/* Quick Metrics Bar with Animated Smooth Counter */}
               <motion.div
                 variants={itemVariants}
-                className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-y border-[#2e2921] font-mono text-xs"
+                className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 py-5 sm:py-6 border-y border-[#2e2921] font-mono text-xs"
               >
                 <div>
                   <span className="text-2xl sm:text-3xl font-bold text-[#f7f4ec] block">
@@ -520,12 +521,12 @@ export function EditorialTheme() {
               {/* Direct Contact Buttons */}
               <motion.div
                 variants={itemVariants}
-                className="flex flex-wrap items-center gap-4 pt-1"
+                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-1"
               >
                 <a
                   href={`mailto:${personal.email}`}
                   onClick={() => playUiClick(700)}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#d4af37] text-zinc-950 font-mono text-xs font-bold hover:bg-[#e8cb74] transition-all duration-150 hover:scale-[1.02] shadow-lg shadow-[#d4af37]/15"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#d4af37] text-zinc-950 font-mono text-xs font-bold hover:bg-[#e8cb74] transition-all duration-150 hover:scale-[1.02] shadow-lg shadow-[#d4af37]/15 w-full sm:w-auto"
                 >
                   <Mail className="w-4 h-4 text-zinc-950" />
                   <span>Initiate Conversation</span>
@@ -533,7 +534,7 @@ export function EditorialTheme() {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 font-mono text-xs text-[#f7f4ec] transition-all duration-150 hover:scale-[1.02]"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-[#2e2921] hover:border-[#d4af37]/60 bg-[#161411]/80 font-mono text-xs text-[#f7f4ec] transition-all duration-150 hover:scale-[1.02] w-full sm:w-auto"
                 >
                   <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>{copiedEmail ? "Email Copied!" : "Copy Email"}</span>
@@ -556,7 +557,7 @@ export function EditorialTheme() {
                 <span className="text-xs font-mono tracking-widest text-[#d4af37] uppercase font-bold block mb-1">
                   <CipherScrambleText text="// ARCHIVAL VAULT" />
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-serif text-[#f7f4ec]">
+                <h2 className="text-xl sm:text-3xl font-serif text-[#f7f4ec]">
                   Explore Deep Dossiers & Case Studies
                 </h2>
               </div>
@@ -564,7 +565,7 @@ export function EditorialTheme() {
 
             <motion.div
               variants={subContainerVariants}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"
             >
               {/* TILE 1: SELECTED WORKS & SYSTEMS (PROJECTS APP MARQUEE) */}
               <EditorialTiltCard
@@ -665,7 +666,7 @@ export function EditorialTheme() {
           whileInView="visible"
           viewport={{ once: true, margin: "-40px" }}
           variants={subContainerVariants}
-          className="max-w-5xl mx-auto px-6 mt-32 pt-12 border-t border-[#2e2921] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[#7a7265] relative z-10"
+          className="max-w-5xl mx-auto px-4 sm:px-6 mt-20 sm:mt-32 pt-8 sm:pt-12 border-t border-[#2e2921] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] sm:text-xs text-[#7a7265] text-center sm:text-left relative z-10"
         >
           <motion.div variants={itemVariants}>
             REVWORKS // DESIGNED & CRAFTED BY REV · 2026
@@ -693,7 +694,7 @@ export function EditorialTheme() {
       <AnimatePresence>
         {activeModal === "works" && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md"
             role="dialog"
             aria-modal="true"
           >
@@ -702,22 +703,36 @@ export function EditorialTheme() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+              className="relative w-full max-w-4xl max-h-[88vh] sm:max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl sm:rounded-3xl border border-[#2e2921] bg-[#12100d] p-4 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2921]">
-                <div className="flex items-center gap-3">
-                  <Layers className="w-6 h-6 text-[#d4af37]" />
-                  <div>
-                    <h2 className="text-2xl font-serif font-bold text-white">
-                      Selected Works & Digital Systems
-                    </h2>
-                    <p className="text-xs font-mono text-[#aba392]">
-                      Production applications and creative multimedia showcase
-                    </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <Layers className="w-5 h-5 sm:w-6 sm:h-6 text-[#d4af37] flex-shrink-0" />
+                    <div>
+                      <h2 className="text-lg sm:text-2xl font-serif font-bold text-white leading-tight">
+                        Selected Works & Digital Systems
+                      </h2>
+                      <p className="text-[11px] sm:text-xs font-mono text-[#aba392]">
+                        Production applications & creative multimedia showcase
+                      </p>
+                    </div>
                   </div>
+                  {/* Close button on mobile */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playUiClick(600);
+                      setActiveModal(null);
+                    }}
+                    className="sm:hidden p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors flex-shrink-0"
+                    aria-label="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto pt-1 sm:pt-0">
                   {/* Filter Pills */}
                   <div className="flex items-center gap-1 border border-[#2e2921] p-1 rounded-full text-xs font-mono bg-[#161411]">
                     <button
@@ -726,7 +741,7 @@ export function EditorialTheme() {
                         playUiClick(500);
                         setWorksFilter("all");
                       }}
-                      className={`px-3 py-1 rounded-full transition-colors ${
+                      className={`px-2.5 sm:px-3 py-1 rounded-full transition-colors text-[11px] sm:text-xs ${
                         worksFilter === "all"
                           ? "bg-[#d4af37] text-zinc-950 font-bold"
                           : "text-[#aba392] hover:text-white"
@@ -740,7 +755,7 @@ export function EditorialTheme() {
                         playUiClick(500);
                         setWorksFilter("engineering");
                       }}
-                      className={`px-3 py-1 rounded-full transition-colors ${
+                      className={`px-2.5 sm:px-3 py-1 rounded-full transition-colors text-[11px] sm:text-xs ${
                         worksFilter === "engineering"
                           ? "bg-[#d4af37] text-zinc-950 font-bold"
                           : "text-[#aba392] hover:text-white"
@@ -754,7 +769,7 @@ export function EditorialTheme() {
                         playUiClick(500);
                         setWorksFilter("creative");
                       }}
-                      className={`px-3 py-1 rounded-full transition-colors ${
+                      className={`px-2.5 sm:px-3 py-1 rounded-full transition-colors text-[11px] sm:text-xs ${
                         worksFilter === "creative"
                           ? "bg-[#d4af37] text-zinc-950 font-bold"
                           : "text-[#aba392] hover:text-white"
@@ -764,13 +779,14 @@ export function EditorialTheme() {
                     </button>
                   </div>
 
+                  {/* Desktop close button */}
                   <button
                     type="button"
                     onClick={() => {
                       playUiClick(600);
                       setActiveModal(null);
                     }}
-                    className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                    className="hidden sm:inline-flex p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
                     aria-label="Close"
                   >
                     <X className="w-5 h-5" />
@@ -783,7 +799,7 @@ export function EditorialTheme() {
                 {filteredProjects.map((project: Project, idx) => (
                   <article
                     key={project.id}
-                    className="py-6 flex flex-col md:flex-row md:items-start justify-between gap-6 group hover:bg-[#171410] px-4 -mx-4 rounded-2xl transition-colors"
+                    className="py-6 flex flex-col md:flex-row md:items-start justify-between gap-6 group hover:bg-[#171410] px-3 sm:px-4 -mx-3 sm:-mx-4 rounded-xl sm:rounded-2xl transition-colors"
                   >
                     <div className="space-y-2 md:w-3/5">
                       <div className="flex items-center gap-2 text-xs font-mono">
@@ -901,7 +917,7 @@ export function EditorialTheme() {
       <AnimatePresence>
         {activeModal === "credentials" && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md"
             role="dialog"
             aria-modal="true"
           >
@@ -910,12 +926,12 @@ export function EditorialTheme() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+              className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[85vh] overflow-y-auto overflow-x-hidden rounded-2xl sm:rounded-3xl border border-[#2e2921] bg-[#12100d] p-4 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-[#d4af37]" />
-                  <h2 className="text-xl font-serif font-bold text-white">
+              <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="w-5 h-5 text-[#d4af37] flex-shrink-0" />
+                  <h2 className="text-lg sm:text-xl font-serif font-bold text-white leading-tight">
                     Verified Pedigree & Official Credentials
                   </h2>
                 </div>
@@ -925,7 +941,7 @@ export function EditorialTheme() {
                     playUiClick(600);
                     setActiveModal(null);
                   }}
-                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors flex-shrink-0"
                   aria-label="Close"
                 >
                   <X className="w-5 h-5" />
@@ -936,7 +952,7 @@ export function EditorialTheme() {
                 {certifications.map((cert: Certification) => (
                   <div
                     key={cert.id}
-                    className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2 hover:border-[#d4af37]/40 transition-colors"
+                    className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2 hover:border-[#d4af37]/40 transition-colors"
                   >
                     <div className="flex items-center justify-between text-xs font-mono text-[#aba392]">
                       <span className="text-white font-bold">
@@ -944,11 +960,11 @@ export function EditorialTheme() {
                       </span>
                       <span>{cert.issueDate}</span>
                     </div>
-                    <h3 className="text-base font-semibold text-[#f7f4ec]">
+                    <h3 className="text-sm sm:text-base font-semibold text-[#f7f4ec]">
                       {cert.name}
                     </h3>
                     {cert.credentialId && (
-                      <span className="text-xs font-mono text-[#aba392] block">
+                      <span className="text-[11px] sm:text-xs font-mono text-[#aba392] block break-all">
                         Credential ID:{" "}
                         <code className="text-[#d4af37] font-bold">
                           {cert.credentialId}
@@ -992,7 +1008,7 @@ export function EditorialTheme() {
       <AnimatePresence>
         {activeModal === "career" && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md"
             role="dialog"
             aria-modal="true"
           >
@@ -1001,12 +1017,12 @@ export function EditorialTheme() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+              className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[85vh] overflow-y-auto overflow-x-hidden rounded-2xl sm:rounded-3xl border border-[#2e2921] bg-[#12100d] p-4 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-                <div className="flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-[#d4af37]" />
-                  <h2 className="text-xl font-serif font-bold text-white">
+              <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2.5">
+                  <Briefcase className="w-5 h-5 text-[#d4af37] flex-shrink-0" />
+                  <h2 className="text-lg sm:text-xl font-serif font-bold text-white leading-tight">
                     Professional Journey & Community Stewardship
                   </h2>
                 </div>
@@ -1016,7 +1032,7 @@ export function EditorialTheme() {
                     playUiClick(600);
                     setActiveModal(null);
                   }}
-                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors flex-shrink-0"
                   aria-label="Close"
                 >
                   <X className="w-5 h-5" />
@@ -1032,10 +1048,10 @@ export function EditorialTheme() {
                   {experience.map((exp, idx) => (
                     <div
                       key={idx}
-                      className="border-l-2 border-[#2e2921] pl-4 space-y-1.5"
+                      className="border-l-2 border-[#2e2921] pl-3.5 sm:pl-4 space-y-1.5"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
-                        <h3 className="text-base font-bold text-white">
+                        <h3 className="text-sm sm:text-base font-bold text-white">
                           {exp.role} ·{" "}
                           <span className="text-[#d4af37]">{exp.company}</span>
                         </h3>
@@ -1044,7 +1060,7 @@ export function EditorialTheme() {
                       <div className="text-xs font-mono text-[#7a7265]">
                         {exp.location} · {exp.type}
                       </div>
-                      <p className="text-sm text-[#aba392] font-light leading-relaxed pt-1">
+                      <p className="text-xs sm:text-sm text-[#aba392] font-light leading-relaxed pt-1">
                         {exp.highlights[0]}
                       </p>
                     </div>
@@ -1060,10 +1076,10 @@ export function EditorialTheme() {
                     {volunteering.map((vol, idx) => (
                       <div
                         key={idx}
-                        className="border-l-2 border-emerald-500/60 pl-4 space-y-1.5 bg-emerald-950/15 p-3.5 rounded-r-xl"
+                        className="border-l-2 border-emerald-500/60 pl-3.5 sm:pl-4 space-y-1.5 bg-emerald-950/15 p-3 sm:p-3.5 rounded-r-xl"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
-                          <h3 className="text-base font-bold text-emerald-400">
+                          <h3 className="text-sm sm:text-base font-bold text-emerald-400">
                             {vol.role} ·{" "}
                             <span className="text-[#f7f4ec]">
                               {vol.organization}
@@ -1074,7 +1090,7 @@ export function EditorialTheme() {
                         <div className="text-xs font-mono text-[#7a7265]">
                           {vol.category}
                         </div>
-                        <p className="text-sm text-[#aba392] font-light leading-relaxed pt-1">
+                        <p className="text-xs sm:text-sm text-[#aba392] font-light leading-relaxed pt-1">
                           {vol.highlights[0]}
                         </p>
                       </div>
@@ -1091,10 +1107,10 @@ export function EditorialTheme() {
                     {education.map((edu, idx) => (
                       <div
                         key={idx}
-                        className="border-l-2 border-[#2e2921] pl-4 space-y-1"
+                        className="border-l-2 border-[#2e2921] pl-3.5 sm:pl-4 space-y-1"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
-                          <h3 className="text-base font-bold text-white">
+                          <h3 className="text-sm sm:text-base font-bold text-white">
                             {edu.institution}
                           </h3>
                           <span className="text-[#aba392]">{edu.period}</span>
@@ -1131,7 +1147,7 @@ export function EditorialTheme() {
       <AnimatePresence>
         {activeModal === "stack" && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md"
             role="dialog"
             aria-modal="true"
           >
@@ -1140,12 +1156,12 @@ export function EditorialTheme() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+              className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[85vh] overflow-y-auto overflow-x-hidden rounded-2xl sm:rounded-3xl border border-[#2e2921] bg-[#12100d] p-4 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-                <div className="flex items-center gap-2">
-                  <Cpu className="w-5 h-5 text-[#d4af37]" />
-                  <h2 className="text-xl font-serif font-bold text-white">
+              <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2.5">
+                  <Cpu className="w-5 h-5 text-[#d4af37] flex-shrink-0" />
+                  <h2 className="text-lg sm:text-xl font-serif font-bold text-white leading-tight">
                     Technical Arsenal & Architecture Matrix
                   </h2>
                 </div>
@@ -1155,7 +1171,7 @@ export function EditorialTheme() {
                     playUiClick(600);
                     setActiveModal(null);
                   }}
-                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors flex-shrink-0"
                   aria-label="Close"
                 >
                   <X className="w-5 h-5" />
@@ -1163,11 +1179,11 @@ export function EditorialTheme() {
               </div>
 
               <div className="space-y-4">
-                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
                   <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
                     // Backend, APIs & Asynchronous Queues
                   </h3>
-                  <div className="flex flex-wrap gap-2 pt-1">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                     {skills.backend.map((s) => (
                       <span
                         key={s}
@@ -1179,11 +1195,11 @@ export function EditorialTheme() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
                   <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
                     // Databases, Ledgers & Storage
                   </h3>
-                  <div className="flex flex-wrap gap-2 pt-1">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                     {skills.databases.map((s) => (
                       <span
                         key={s}
@@ -1195,11 +1211,11 @@ export function EditorialTheme() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
                   <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
                     // Frontend, Canvas & Web Audio
                   </h3>
-                  <div className="flex flex-wrap gap-2 pt-1">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                     {skills.frontend.map((s) => (
                       <span
                         key={s}
@@ -1211,11 +1227,11 @@ export function EditorialTheme() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
                   <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
                     // Creative Direction, UX & Media Production
                   </h3>
-                  <div className="flex flex-wrap gap-2 pt-1">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
                     {skills.creativeDesign
                       .concat(skills.devOpsAndTools)
                       .map((s) => (
@@ -1251,7 +1267,7 @@ export function EditorialTheme() {
         {/* ============================================================ */}
         {activeModal === "contact" && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md"
             role="dialog"
             aria-modal="true"
           >
@@ -1260,20 +1276,19 @@ export function EditorialTheme() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+              className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl sm:rounded-3xl border border-[#2e2921] bg-[#12100d] p-4 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#d4af37]/15 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37]">
-                    <Send className="w-5 h-5" />
+              <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#d4af37]/15 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] flex-shrink-0">
+                    <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-serif font-bold text-white">
+                    <h2 className="text-xl sm:text-2xl font-serif font-bold text-white leading-tight">
                       Direct Inquiries & Collaboration
                     </h2>
-                    <p className="text-xs font-mono text-[#aba392]">
-                      Architectural consultations, enterprise contracts &
-                      creative direction
+                    <p className="text-[11px] sm:text-xs font-mono text-[#aba392]">
+                      Architectural consultations & creative direction
                     </p>
                   </div>
                 </div>
@@ -1283,7 +1298,7 @@ export function EditorialTheme() {
                     playUiClick(600);
                     setActiveModal(null);
                   }}
-                  className="p-2 rounded-xl bg-[#1e1b16] hover:bg-[#2e2921] text-[#aba392] hover:text-white transition-colors"
+                  className="p-2 rounded-xl bg-[#1e1b16] hover:bg-[#2e2921] text-[#aba392] hover:text-white transition-colors flex-shrink-0"
                   aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />
@@ -1291,29 +1306,29 @@ export function EditorialTheme() {
               </div>
 
               {/* Status Banner */}
-              <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-950/20 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="text-xs font-mono font-bold text-emerald-300">
+              <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-emerald-500/30 bg-emerald-950/20 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
+                  <span className="text-[11px] sm:text-xs font-mono font-bold text-emerald-300">
                     STATUS: ACCEPTING Q2 CONTRACTS
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-[#aba392]">
+                <span className="text-[10px] sm:text-[11px] font-mono text-[#aba392] flex-shrink-0">
                   Malang / UTC+7
                 </span>
               </div>
 
               {/* Primary Direct Action */}
-              <div className="p-6 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-4">
+              <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-4">
                 <span className="text-[10px] font-mono tracking-widest text-[#d4af37] uppercase font-bold block">
                   // OFFICIAL TRANSMISSION LINE
                 </span>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#1e1b16] border border-[#2e2921]">
-                  <div className="flex items-center gap-3 px-2 font-mono text-sm text-[#f7f4ec]">
-                    <Mail className="w-4 h-4 text-[#d4af37]" />
+                  <div className="flex items-center gap-2.5 px-1 sm:px-2 font-mono text-xs sm:text-sm text-[#f7f4ec] break-all sm:break-normal">
+                    <Mail className="w-4 h-4 text-[#d4af37] flex-shrink-0" />
                     <span>{personal.email}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
                     <button
                       type="button"
                       onClick={handleCopyEmail}

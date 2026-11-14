@@ -18,14 +18,14 @@ export function CardTerminalStream() {
 
       {/* Code lines */}
       <div className="space-y-1 text-[10px] pt-1">
-        <div className="text-zinc-400 flex items-center gap-2">
-          <span className="text-[#7a7265]">01</span>
-          <span>const ledger = await db.queue.process(job);</span>
+        <div className="text-zinc-400 flex items-center gap-2 truncate">
+          <span className="text-[#7a7265] flex-shrink-0">01</span>
+          <span className="truncate">const ledger = await db.queue.process(job);</span>
         </div>
-        <div className="text-[#d4af37] flex items-center gap-2">
-          <span className="text-[#7a7265]">02</span>
-          <span>return verifyWebhookSignature(payload);</span>
-          <span className="w-1.5 h-3 bg-[#d4af37] animate-pulse" />
+        <div className="text-[#d4af37] flex items-center gap-2 truncate">
+          <span className="text-[#7a7265] flex-shrink-0">02</span>
+          <span className="truncate">return verifyWebhookSignature(payload);</span>
+          <span className="w-1.5 h-3 bg-[#d4af37] animate-pulse flex-shrink-0" />
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export function CardCredentialsBadges() {
   });
 
   return (
-    <div className="relative w-full h-24 overflow-hidden flex items-center justify-center gap-3 px-2 pointer-events-none select-none">
+    <div className="relative w-full h-24 overflow-hidden flex items-center justify-center gap-2 sm:gap-3 px-1 sm:px-2 pointer-events-none select-none scale-95 sm:scale-100">
       {/* Badge 1: Meta */}
       <motion.div
         animate={{ y: [-3, 3] }}
