@@ -43,12 +43,12 @@ export function StudioConsole() {
     return p.category === worksFilter;
   });
 
-  const navItems: { key: TabKey; label: string; icon: React.ElementType; count?: number | string; badge?: string }[] = [
-    { key: "works", label: "Selected Works", icon: Layers, count: projects.length },
-    { key: "scratchpad", label: "Canvas Scratchpad", icon: Pencil, badge: "LIVE" },
-    { key: "credentials", label: "Credentials", icon: ShieldCheck, count: certifications.length },
-    { key: "experience", label: "Experience & Edu", icon: Briefcase, count: experience.length + (volunteering?.length || 0) },
-    { key: "stack", label: "Tech Stack", icon: Terminal, count: 5 },
+  const navItems: { key: TabKey; num: string; label: string; icon: React.ElementType; count?: number | string; badge?: string }[] = [
+    { key: "works", num: "01", label: "Selected Works", icon: Layers, count: projects.length },
+    { key: "scratchpad", num: "02", label: "Canvas Scratchpad", icon: Pencil, badge: "LIVE" },
+    { key: "credentials", num: "03", label: "Credentials", icon: ShieldCheck, count: certifications.length },
+    { key: "experience", num: "04", label: "Career & Edu", icon: Briefcase, count: experience.length + (volunteering?.length || 0) },
+    { key: "stack", num: "05", label: "Technical Matrix", icon: Terminal, count: 5 },
   ];
 
   const handleTabChange = (key: TabKey) => {
@@ -57,26 +57,24 @@ export function StudioConsole() {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#09090b] text-[#fafafa] flex flex-col font-sans select-none lg:select-auto">
+    <div className="relative h-screen w-screen overflow-hidden bg-[#050507] text-[#fafafa] flex flex-col font-sans select-none lg:select-auto">
       
-      {/* Subtle Atmospheric Frosted Backdrop Lighting */}
+      {/* Background Architectural Grid Accent */}
       <div 
-        className="absolute top-[-15%] left-[-10%] w-[55vw] h-[55vh] rounded-full bg-blue-900/10 blur-[130px] pointer-events-none" 
-        aria-hidden="true" 
-      />
-      <div 
-        className="absolute bottom-[-15%] right-[-10%] w-[50vw] h-[50vh] rounded-full bg-indigo-900/10 blur-[140px] pointer-events-none" 
+        className="absolute inset-0 bg-[radial-gradient(#1e1e28_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none" 
         aria-hidden="true" 
       />
 
       {/* Top Mobile Bar */}
-      <header className="lg:hidden relative z-20 flex items-center justify-between px-4 py-3 border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-xl flex-shrink-0">
+      <header className="lg:hidden relative z-20 flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-[#09090e]/95 backdrop-blur-xl flex-shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0 shadow-md">
+          <div className="w-8 h-8 rounded-lg overflow-hidden border border-zinc-700 flex-shrink-0 shadow-md">
             <img src={personal.avatar} alt="Rev" className="w-full h-full object-cover object-top" />
           </div>
           <div>
-            <span className="font-mono text-sm font-black tracking-tight text-white block leading-none">REVWORKS</span>
+            <span className="font-mono text-sm font-black tracking-tight text-white block leading-none">
+              REVWORKS<span className="text-lime-400">®</span>
+            </span>
             <span className="text-[10px] text-zinc-500 font-mono">// {personal.name}</span>
           </div>
         </div>
@@ -103,31 +101,30 @@ export function StudioConsole() {
       </header>
 
       {/* Main Single-Viewport Stage Container */}
-      <div className="relative z-10 flex-1 flex flex-col lg:flex-row overflow-hidden max-w-7xl mx-auto w-full lg:p-6 lg:gap-6">
+      <div className="relative z-10 flex-1 flex flex-col lg:flex-row overflow-hidden max-w-7xl mx-auto w-full lg:p-5 lg:gap-5">
         
-        {/* LEFT PANE: Studio Anchor (Frosted Glass Look) */}
-        <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-6 lg:p-7 lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/65 lg:backdrop-blur-2xl lg:shadow-2xl lg:shadow-black/60 flex-shrink-0 border-b lg:border-b-0 border-zinc-850 overflow-y-auto custom-scrollbar">
+        {/* LEFT PANE: Neo-Brutalist Studio Anchor (Astryx Y2K Theme) */}
+        <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-5 lg:p-6 lg:rounded-xl border-b lg:border border-zinc-800/90 bg-[#0a0a0f] flex-shrink-0 overflow-y-auto custom-scrollbar shadow-2xl">
           <div>
-            {/* Studio Badge */}
-            <div className="hidden lg:flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                <span className="font-mono text-base font-black tracking-tight text-white">
-                  REVWORKS
+            {/* Studio Header Stamp */}
+            <div className="hidden lg:flex items-center justify-between mb-4 pb-3 border-b border-zinc-850">
+              <div className="flex items-center gap-2 font-mono">
+                <span className="text-base font-black tracking-tighter text-white">
+                  REVWORKS<span className="text-lime-400">®</span>
                 </span>
-                <span className="text-xs font-mono text-zinc-500 font-semibold tracking-wider">
-                  // LAB
+                <span className="text-[11px] text-zinc-500 font-semibold tracking-wider">
+                  [CREATIVE TECH LAB]
                 </span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 shadow-sm">
-                ● ACTIVE
+              <span className="text-[10px] font-mono font-bold text-lime-400 bg-lime-400/10 px-2 py-0.5 rounded border border-lime-400/30">
+                ACTIVE // 2026
               </span>
             </div>
 
-            {/* Profile Avatar + Intro */}
-            <div className="flex items-center gap-4 mb-3">
+            {/* Viewfinder Framed Avatar + Personal Identity */}
+            <div className="flex items-center gap-4 mb-4">
               <div
-                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-zinc-700/80 bg-zinc-850 flex-shrink-0 group cursor-pointer shadow-xl shadow-blue-950/30 transition-transform duration-200 hover:scale-[1.03]"
+                className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-zinc-700 bg-zinc-900 flex-shrink-0 group cursor-pointer shadow-md transition-all duration-200 hover:border-lime-400"
                 onMouseEnter={() => {
                   setIsHoveredAvatar(true);
                   playUiClick(1200);
@@ -135,19 +132,25 @@ export function StudioConsole() {
                 onMouseLeave={() => setIsHoveredAvatar(false)}
                 title="Hover for alternative pose!"
               >
+                {/* Viewfinder Crosshair Ticks */}
+                <span className="absolute top-1 left-1 text-[8px] font-mono text-zinc-500 leading-none z-10">+</span>
+                <span className="absolute top-1 right-1 text-[8px] font-mono text-zinc-500 leading-none z-10">+</span>
+                <span className="absolute bottom-1 left-1 text-[8px] font-mono text-zinc-500 leading-none z-10">+</span>
+                <span className="absolute bottom-1 right-1 text-[8px] font-mono text-zinc-500 leading-none z-10">+</span>
+
                 <img
                   src={isHoveredAvatar ? personal.avatarHover : personal.avatar}
                   alt={`${personal.name} avatar`}
                   className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
                 />
-                <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-zinc-950 shadow-sm" title="Online" />
               </div>
+
               <div>
-                <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">
+                <h1 className="text-lg sm:text-xl font-black tracking-tight text-white uppercase leading-tight font-mono">
                   {personal.name}
                 </h1>
-                <p className="text-xs font-mono text-blue-400 mt-0.5">
-                  {personal.role} <span className="text-zinc-500">(@rev)</span>
+                <p className="text-xs font-mono font-semibold text-lime-400 mt-0.5 tracking-wide">
+                  CREATIVE TECHNOLOGIST // REV
                 </p>
                 <p className="text-[11px] font-mono text-zinc-400 mt-1 flex items-center gap-1">
                   <MapPin className="w-3 h-3 text-zinc-500" />
@@ -160,7 +163,7 @@ export function StudioConsole() {
               {personal.bio}
             </p>
 
-            {/* Studio Navigation (Interactive Tabs with Tactile Compression & Seam Indicator) */}
+            {/* Astryx Segmented Navigation (Industrial / Y2K Style) */}
             <nav className="mt-5 space-y-1.5" role="tablist" aria-label="Studio Console Views">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -172,30 +175,30 @@ export function StudioConsole() {
                     role="tab"
                     aria-selected={isActive}
                     onClick={() => handleTabChange(item.key)}
-                    className={`w-full min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-mono transition-all duration-150 active:scale-[0.98] ${
+                    className={`w-full min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-mono transition-all duration-150 active:scale-[0.98] ${
                       isActive
-                        ? "bg-blue-600/90 text-white font-bold shadow-lg shadow-blue-900/30 border border-blue-400/40 backdrop-blur-md"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent hover:border-zinc-800/80 backdrop-blur-sm"
+                        ? "bg-zinc-100 text-zinc-950 font-black shadow-md border-l-4 border-lime-500"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900 border border-zinc-850/80 hover:border-zinc-700"
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
-                      {isActive && (
-                        <span className="w-1 h-4 rounded-full bg-white mr-0.5 animate-pulse" aria-hidden="true" />
-                      )}
+                    <div className="flex items-center gap-3">
+                      <span className={`text-[10px] font-bold ${isActive ? "text-zinc-600" : "text-zinc-500"}`}>
+                        {item.num}
+                      </span>
                       <Icon className="w-4 h-4 flex-shrink-0" />
                       <span>{item.label}</span>
                     </div>
 
                     {item.badge ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-lime-400/20 text-lime-400 border border-lime-400/40 font-bold animate-pulse">
                         {item.badge}
                       </span>
                     ) : item.count !== undefined ? (
                       <span
-                        className={`text-[11px] px-2 py-0.5 rounded-md ${
+                        className={`text-[11px] font-bold px-2 py-0.5 rounded ${
                           isActive
-                            ? "bg-blue-700/80 text-blue-100"
-                            : "bg-zinc-800/80 text-zinc-400"
+                            ? "bg-zinc-300 text-zinc-900"
+                            : "bg-zinc-800 text-zinc-400"
                         }`}
                       >
                         {item.count}
@@ -208,7 +211,7 @@ export function StudioConsole() {
           </div>
 
           {/* Left Pane Lower Section: Telemetry + Socials */}
-          <div className="pt-4 border-t border-zinc-850/80 mt-4 space-y-3">
+          <div className="pt-4 border-t border-zinc-850 mt-4 space-y-3">
             {/* Feature 3: Studio Telemetry */}
             <StudioTelemetry />
 
@@ -218,7 +221,7 @@ export function StudioConsole() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playUiClick(600)}
-                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800/80 bg-zinc-900/50 hover:bg-zinc-800/70 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-white transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-white transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>@revwrks</span>
@@ -228,7 +231,7 @@ export function StudioConsole() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playUiClick(600)}
-                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800/80 bg-zinc-900/50 hover:bg-zinc-800/70 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-pink-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-pink-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                 <span>@itzrevv</span>
@@ -238,7 +241,7 @@ export function StudioConsole() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playUiClick(600)}
-                className="min-h-[44px] p-2.5 rounded-lg border border-zinc-800/80 bg-zinc-900/50 hover:bg-zinc-800/70 hover:border-zinc-700 text-zinc-300 hover:text-blue-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                className="min-h-[44px] p-2.5 rounded-lg border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-blue-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
                 aria-label="LinkedIn profile"
               >
                 <LinkedinIcon className="w-4 h-4 text-blue-400" />
@@ -247,21 +250,22 @@ export function StudioConsole() {
           </div>
         </aside>
 
-        {/* RIGHT PANE: The Stage (Frosted Glass Look + Smooth Scroll) */}
-        <main className="lg:w-[62%] flex-1 flex flex-col overflow-hidden lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/50 lg:backdrop-blur-2xl lg:shadow-2xl lg:shadow-black/60">
+        {/* RIGHT PANE: The Stage (Neo-Brutalist Studio Workstation) */}
+        <main className="lg:w-[62%] flex-1 flex flex-col overflow-hidden lg:rounded-xl border border-zinc-800/90 bg-[#0a0a0f] shadow-2xl">
           
           {/* Stage Top Bar */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md flex-shrink-0">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-zinc-800 bg-[#0e0e14] flex-shrink-0">
             <div className="flex items-center gap-2 font-mono text-xs">
-              <span className="text-zinc-500">STAGE //</span>
-              <span className="text-zinc-200 font-bold uppercase tracking-wider">
+              <span className="text-zinc-500 font-bold">STAGE //</span>
+              <span className="text-lime-400 font-black uppercase tracking-wider">
                 {activeTab}
               </span>
+              <span className="text-zinc-600 hidden sm:inline">· WORKSPACE-01</span>
             </div>
 
             {/* Filter pills if in Works tab */}
             {activeTab === "works" && (
-              <div className="flex items-center gap-1 p-0.5 rounded-md border border-zinc-800/80 bg-zinc-900/70 backdrop-blur-md text-[11px] font-mono">
+              <div className="flex items-center gap-1 p-0.5 rounded-lg border border-zinc-800 bg-zinc-900 text-[11px] font-mono">
                 <button
                   type="button"
                   onClick={() => {
@@ -269,7 +273,7 @@ export function StudioConsole() {
                     setWorksFilter("all");
                   }}
                   className={`px-2.5 py-1 rounded transition-colors ${
-                    worksFilter === "all" ? "bg-zinc-800 text-white font-semibold shadow-sm" : "text-zinc-400 hover:text-zinc-200"
+                    worksFilter === "all" ? "bg-zinc-100 text-zinc-950 font-bold" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   All ({projects.length})
@@ -281,7 +285,7 @@ export function StudioConsole() {
                     setWorksFilter("engineering");
                   }}
                   className={`px-2.5 py-1 rounded transition-colors ${
-                    worksFilter === "engineering" ? "bg-blue-600 text-white font-semibold shadow-sm" : "text-zinc-400 hover:text-zinc-200"
+                    worksFilter === "engineering" ? "bg-blue-600 text-white font-bold" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   Code
@@ -293,7 +297,7 @@ export function StudioConsole() {
                     setWorksFilter("creative");
                   }}
                   className={`px-2.5 py-1 rounded transition-colors ${
-                    worksFilter === "creative" ? "bg-purple-600 text-white font-semibold shadow-sm" : "text-zinc-400 hover:text-zinc-200"
+                    worksFilter === "creative" ? "bg-purple-600 text-white font-bold" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   Media
@@ -308,14 +312,14 @@ export function StudioConsole() {
                 onClick={() => playUiClick(700)}
                 className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-white transition-colors"
               >
-                <Mail className="w-3.5 h-3.5 text-blue-400" />
+                <Mail className="w-3.5 h-3.5 text-lime-400" />
                 <span className="hidden sm:inline">Connect with Rev</span>
               </a>
             )}
           </div>
 
           {/* Stage Contained Scrollable Body with Fade-Slide Staging */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 focus:outline-none custom-scrollbar" tabIndex={0}>
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 focus:outline-none custom-scrollbar" tabIndex={0}>
             
             {/* STAGE CONTAINER WITH ELEGANT ENTER ANIMATION */}
             <div key={activeTab} className="animate-stage-enter">
@@ -326,12 +330,12 @@ export function StudioConsole() {
                   {filteredProjects.map((project: Project) => (
                     <article
                       key={project.id}
-                      className="group flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 ease-out hover:-translate-y-1 hover:border-zinc-600/90 hover:bg-zinc-850/70 hover:shadow-xl hover:shadow-blue-950/25"
+                      className="group flex flex-col justify-between rounded-xl border border-zinc-800 bg-[#0e0e14] p-4 sm:p-5 transition-all duration-200 ease-out hover:-translate-y-1 hover:border-zinc-500 hover:bg-[#121218] hover:shadow-xl hover:shadow-black/50"
                     >
                       <div>
                         <div className="flex items-center justify-between gap-2 mb-2">
                           <span
-                            className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold border ${
                               project.category === "engineering"
                                 ? "border-blue-500/30 bg-blue-500/10 text-blue-400"
                                 : "border-purple-500/30 bg-purple-500/10 text-purple-400"
@@ -340,14 +344,14 @@ export function StudioConsole() {
                             {project.category.toUpperCase()}
                           </span>
                           {project.featured && (
-                            <span className="flex items-center gap-1 text-[10px] font-mono text-amber-400">
+                            <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-lime-400 bg-lime-400/10 px-2 py-0.5 rounded border border-lime-400/30">
                               <Sparkles className="w-3 h-3" />
                               <span>FLAGSHIP</span>
                             </span>
                           )}
                         </div>
 
-                        <h2 className="text-base sm:text-lg font-bold text-zinc-100 leading-snug group-hover:text-blue-300 transition-colors">
+                        <h2 className="text-base sm:text-lg font-black text-zinc-100 leading-snug group-hover:text-white transition-colors">
                           {project.title}
                         </h2>
                         <p className="mt-1.5 text-xs text-zinc-300 leading-relaxed font-normal">
@@ -359,7 +363,7 @@ export function StudioConsole() {
                           {project.metrics.map((m, i) => (
                             <span
                               key={i}
-                              className="text-[10px] font-mono bg-zinc-950/80 px-2 py-0.5 rounded border border-zinc-800/80 text-zinc-400 group-hover:border-zinc-700 transition-colors"
+                              className="text-[10px] font-mono bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800 text-zinc-400 group-hover:border-zinc-700 transition-colors"
                             >
                               • {m}
                             </span>
@@ -367,7 +371,7 @@ export function StudioConsole() {
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-zinc-800/60 flex flex-wrap items-center justify-between gap-2">
+                      <div className="mt-4 pt-3 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-2">
                         {/* Feature 4: Inspect Architecture trigger */}
                         {project.id === "topup-store" ? (
                           <button
@@ -376,7 +380,7 @@ export function StudioConsole() {
                               playUiClick(1000);
                               setSelectedArchProject(project.title);
                             }}
-                            className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-950/40 border border-cyan-800/40 px-2.5 py-1.5 rounded-lg transition-all duration-150 hover:scale-[1.03] active:scale-[0.97]"
+                            className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono font-bold text-cyan-300 bg-cyan-950/40 border border-cyan-700/50 px-2.5 py-1.5 rounded-lg transition-all duration-150 hover:scale-[1.03] active:scale-[0.97]"
                           >
                             <Zap className="w-3.5 h-3.5" />
                             <span>Inspect Spec</span>
@@ -401,7 +405,7 @@ export function StudioConsole() {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => playUiClick(700)}
-                              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-medium text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg transition-all duration-150 hover:scale-105 active:scale-95 shadow-sm"
+                              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-bold text-zinc-950 bg-lime-400 hover:bg-lime-300 px-3 py-1.5 rounded-lg transition-all duration-150 hover:scale-105 active:scale-95 shadow-sm"
                             >
                               <span>Live</span>
                               <ExternalLink className="w-3 h-3" />
@@ -413,7 +417,7 @@ export function StudioConsole() {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => playUiClick(700)}
-                              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-3 py-1.5 rounded-lg border border-zinc-700/80 transition-all duration-150 hover:scale-105 active:scale-95"
+                              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-semibold text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-lg border border-zinc-700 transition-all duration-150 hover:scale-105 active:scale-95"
                             >
                               <GithubIcon className="w-3 h-3" />
                               <span>Code</span>
@@ -439,14 +443,14 @@ export function StudioConsole() {
                   {certifications.map((cert: Certification) => (
                     <article
                       key={cert.id}
-                      className="group flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md p-4 transition-all duration-200 ease-out hover:-translate-y-1 hover:border-zinc-600/90 hover:bg-zinc-850/70 hover:shadow-xl hover:shadow-emerald-950/20"
+                      className="group flex flex-col justify-between rounded-xl border border-zinc-800 bg-[#0e0e14] p-4 transition-all duration-200 ease-out hover:-translate-y-1 hover:border-zinc-500 hover:bg-[#121218]"
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-1.5">
                           <span className="text-zinc-300 font-semibold">{cert.issuer}</span>
                           <span>{cert.issueDate}</span>
                         </div>
-                        <h2 className="text-sm font-bold text-zinc-100 leading-snug group-hover:text-emerald-300 transition-colors">
+                        <h2 className="text-sm font-black text-zinc-100 leading-snug group-hover:text-lime-300 transition-colors font-mono">
                           {cert.name}
                         </h2>
                         {cert.credentialId && (
@@ -458,7 +462,7 @@ export function StudioConsole() {
                           {cert.skills.map((s) => (
                             <span
                               key={s}
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800/60 text-zinc-400 border border-zinc-750 hover:scale-105 hover:bg-zinc-700/60 transition-transform"
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800/80 text-zinc-400 border border-zinc-700 hover:scale-105 hover:bg-zinc-700 transition-transform"
                             >
                               {s}
                             </span>
@@ -466,17 +470,17 @@ export function StudioConsole() {
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-2.5 border-t border-zinc-850/80 flex items-center justify-between">
-                        <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                      <div className="mt-4 pt-2.5 border-t border-zinc-800 flex items-center justify-between">
+                        <span className="text-[11px] font-mono text-lime-400 font-bold flex items-center gap-1">
                           <Award className="w-3 h-3" />
-                          <span>Verified</span>
+                          <span>VERIFIED</span>
                         </span>
                         <a
                           href={cert.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => playUiClick(700)}
-                          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300 py-1 transition-colors"
+                          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-bold text-lime-400 hover:text-lime-300 py-1 transition-colors"
                         >
                           <span>Verify Credential</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -491,19 +495,19 @@ export function StudioConsole() {
               {activeTab === "experience" && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xs font-mono text-blue-400 uppercase tracking-wider mb-3">
-                      // Career Trajectory (5+ Years)
+                    <h2 className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider mb-3">
+                      // Career Trajectory (5+ Years Production)
                     </h2>
                     <div className="space-y-3">
                       {experience.map((exp, idx) => (
                         <div
                           key={idx}
-                          className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-zinc-850/50"
+                          className="rounded-xl border border-zinc-800 bg-[#0e0e14] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700"
                         >
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                             <div>
                               <h3 className="text-sm font-bold text-zinc-100">{exp.role}</h3>
-                              <p className="text-xs font-semibold text-blue-400">{exp.company}</p>
+                              <p className="text-xs font-semibold text-blue-400 font-mono">{exp.company}</p>
                             </div>
                             <span className="text-xs font-mono text-zinc-500">{exp.period}</span>
                           </div>
@@ -519,20 +523,20 @@ export function StudioConsole() {
 
                   {/* Volunteering & Community Work */}
                   <div className="pt-4 border-t border-zinc-850">
-                    <h2 className="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <h2 className="text-xs font-mono font-bold text-lime-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                       <HeartHandshake className="w-3.5 h-3.5" />
-                      <span>Social Services & Community</span>
+                      <span>Social Services & Community (GKJW)</span>
                     </h2>
                     <div className="space-y-3">
                       {volunteering?.map((vol, idx) => (
                         <div
                           key={idx}
-                          className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-zinc-850/50"
+                          className="rounded-xl border border-zinc-800 bg-[#0e0e14] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700"
                         >
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                             <div>
                               <h3 className="text-sm font-bold text-zinc-100">{vol.role}</h3>
-                              <p className="text-xs font-semibold text-emerald-400">{vol.organization}</p>
+                              <p className="text-xs font-semibold text-lime-400 font-mono">{vol.organization}</p>
                             </div>
                             <span className="text-xs font-mono text-zinc-500">{vol.period}</span>
                           </div>
@@ -551,7 +555,7 @@ export function StudioConsole() {
 
                   {/* Academic Foundation */}
                   <div className="pt-4 border-t border-zinc-850">
-                    <h2 className="text-xs font-mono text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <h2 className="text-xs font-mono font-bold text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                       <GraduationCap className="w-3.5 h-3.5" />
                       <span>Academic Foundation</span>
                     </h2>
@@ -559,7 +563,7 @@ export function StudioConsole() {
                       {education.map((edu, idx) => (
                         <div
                           key={idx}
-                          className="rounded-lg border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-3.5 transition-all duration-200 hover:border-zinc-700"
+                          className="rounded-lg border border-zinc-800 bg-[#0e0e14] p-3.5 transition-all duration-200 hover:border-zinc-700"
                         >
                           <span className="text-[11px] font-mono text-purple-400">{edu.period}</span>
                           <h3 className="text-xs font-bold text-zinc-100 mt-0.5">{edu.degree}</h3>
@@ -585,17 +589,17 @@ export function StudioConsole() {
                     return (
                       <div
                         key={idx}
-                        className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-4 transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-850/50"
+                        className="rounded-xl border border-zinc-800 bg-[#0e0e14] p-4 transition-all duration-200 hover:border-zinc-700"
                       >
                         <div className="flex items-center gap-2 mb-2.5">
                           <Icon className={`w-4 h-4 ${s.color}`} />
-                          <h2 className="text-xs font-mono font-bold text-zinc-200">{s.title}</h2>
+                          <h2 className="text-xs font-mono font-bold text-zinc-200 uppercase">{s.title}</h2>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {s.items.map((item) => (
                             <span
                               key={item}
-                              className="px-2 py-1 text-xs font-mono rounded bg-zinc-800/50 text-zinc-300 border border-zinc-750 transition-all duration-150 hover:scale-105 hover:bg-zinc-700/60 hover:border-zinc-600"
+                              className="px-2 py-1 text-xs font-mono rounded bg-zinc-800 text-zinc-300 border border-zinc-700 transition-all duration-150 hover:scale-105 hover:bg-zinc-700 hover:border-zinc-500"
                             >
                               {item}
                             </span>
@@ -612,9 +616,9 @@ export function StudioConsole() {
           </div>
 
           {/* Mobile Bottom Social Anchor */}
-          <footer className="lg:hidden flex items-center justify-between px-4 py-2.5 border-t border-zinc-850 bg-zinc-950/80 backdrop-blur-md text-xs font-mono text-zinc-400 flex-shrink-0">
-            <span>REVWORKS © 2026</span>
-            <a href={`mailto:${personal.email}`} className="text-blue-400">
+          <footer className="lg:hidden flex items-center justify-between px-4 py-2.5 border-t border-zinc-850 bg-[#0e0e14] text-xs font-mono text-zinc-400 flex-shrink-0">
+            <span>REVWORKS® © 2026</span>
+            <a href={`mailto:${personal.email}`} className="text-lime-400">
               {personal.email}
             </a>
           </footer>
