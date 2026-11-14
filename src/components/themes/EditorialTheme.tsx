@@ -18,16 +18,23 @@ import {
   X,
   Code2,
   Database,
-  Film
+  Film,
+  Send,
+  MessageSquare
 } from "lucide-react";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/ui/Icons";
 import { PORTFOLIO_DATA, Project, Certification } from "@/data/portfolio";
 import { ArchitectureInspector } from "@/components/console/ArchitectureInspector";
 import { GoldenParticleCanvas } from "@/components/effects/GoldenParticleCanvas";
+import { CardProjectsMarquee } from "@/components/cards/CardProjectsMarquee";
+import { CardChatBubbles } from "@/components/cards/CardChatBubbles";
+import { CardCredentialsBadges } from "@/components/cards/CardCredentialsBadges";
+import { CardAudioWaveform } from "@/components/cards/CardAudioWaveform";
+import { CardTerminalStream } from "@/components/cards/CardTerminalStream";
 import { playUiClick } from "@/lib/audio";
 import { useToast } from "@/components/ui/Toast";
 
-type ActiveModal = "works" | "credentials" | "career" | "stack" | null;
+type ActiveModal = "works" | "credentials" | "career" | "stack" | "contact" | null;
 
 // Animation Variants (inspired by Yoza's blur-reveal stagger)
 const containerVariants: Variants = {
@@ -64,6 +71,8 @@ interface TiltCardProps {
   previewPills?: string[];
   statNumber?: string;
   statLabel?: string;
+  visualSlot?: React.ReactNode;
+  className?: string;
 }
 
 function EditorialTiltCard({
@@ -76,6 +85,8 @@ function EditorialTiltCard({
   previewPills,
   statNumber,
   statLabel,
+  visualSlot,
+  className = "",
 }: TiltCardProps) {
   const cardRef = useRef<HTMLButtonElement>(null);
   const [transform, setTransform] = useState("perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)");
@@ -115,7 +126,7 @@ function EditorialTiltCard({
         transform,
         transition: isHovered ? "transform 0.08s ease-out" : "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
       }}
-      className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 flex flex-col justify-between space-y-6 cursor-pointer overflow-hidden backdrop-blur-xl"
+      className={`group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 flex flex-col justify-between space-y-6 cursor-pointer overflow-hidden backdrop-blur-xl ${className}`}
     >
       {/* Dynamic Cursor Spotlight Layer */}
       <div 
@@ -130,6 +141,13 @@ function EditorialTiltCard({
       <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-3xl">
         <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 group-hover:translate-x-[300%] transition-transform duration-1000" />
       </div>
+
+      {/* Inner Card Visual Animation Slot (Projects Marquee, Chat Bubbles, Badges, Waveform) */}
+      {visualSlot && (
+        <div className="relative z-10 w-full mb-1">
+          {visualSlot}
+        </div>
+      )}
 
       {/* Top Header inside Card */}
       <div className="relative z-10 flex items-center justify-between">
@@ -434,7 +452,7 @@ export function EditorialTheme() {
           </motion.div>
         </section>
 
-        {/* GRAND 2x2 FEATURE TILES (3D TILT WITH INTERNAL CHOREOGRAPHY) */}
+        {/* GRAND 2x2+1 FEATURE BENTO (3D TILT WITH BESPOKE INTERNAL ANIMATIONS) */}
         <section aria-label="Dossiers Navigation" className="pt-6 border-t border-[#2e2921]">
           <div className="flex items-center justify-between pb-6">
             <div>
@@ -446,18 +464,19 @@ export function EditorialTheme() {
               </h2>
             </div>
             <span className="text-xs font-mono text-[#7a7265] hidden sm:inline">
-              INTERACTIVE 3D · 4 DOSSIERS
+              INTERACTIVE 3D · 5 INTERACTIVE MODULES
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* TILE 1: SELECTED WORKS & SYSTEMS */}
+            {/* TILE 1: SELECTED WORKS & SYSTEMS (PROJECTS APP MARQUEE) */}
             <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("works");
               }}
+              visualSlot={<CardProjectsMarquee />}
               icon={Layers}
               badge="6 Curated Cases"
               title="Selected Works & Systems"
@@ -466,12 +485,28 @@ export function EditorialTheme() {
               previewPills={["TopUp Store", "Digi-Art Synth", "Chorus ERP", "Tamboer POS"]}
             />
 
-            {/* TILE 2: VERIFIED CREDENTIALS */}
+            {/* TILE 2: DIRECT INQUIRY & CONTACT (CHAT BUBBLE ANIMATION) */}
+            <EditorialTiltCard
+              onClick={() => {
+                playUiClick(800);
+                setActiveModal("contact");
+              }}
+              visualSlot={<CardChatBubbles />}
+              icon={Send}
+              badge="Direct Channel"
+              title="Contact & Collaboration"
+              description="Direct line for architectural contracts, technical advising, and multimedia creative direction."
+              actionText="Initiate Transmission"
+              previewPills={["itzrevv@gmail.com", "LinkedIn", "Instagram", "GitHub"]}
+            />
+
+            {/* TILE 3: VERIFIED CREDENTIALS (FLOATING BADGES) */}
             <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("credentials");
               }}
+              visualSlot={<CardCredentialsBadges />}
               icon={ShieldCheck}
               badge="7 Official Certs"
               title="Verified Pedigree & Proof"
@@ -480,12 +515,13 @@ export function EditorialTheme() {
               previewPills={["Meta Database", "Google UX", "IBM AI", "HackerRank"]}
             />
 
-            {/* TILE 3: CAREER & STEWARDSHIP */}
+            {/* TILE 4: CAREER & STEWARDSHIP (LIVE BROADCAST WAVEFORM) */}
             <EditorialTiltCard
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("career");
               }}
+              visualSlot={<CardAudioWaveform />}
               icon={Briefcase}
               badge="5+ Years Leadership"
               title="Career & Stewardship"
@@ -494,18 +530,20 @@ export function EditorialTheme() {
               previewPills={["Head of Marketing", "GKJW Multimedia", "Freelance Web"]}
             />
 
-            {/* TILE 4: TECHNICAL ARSENAL */}
+            {/* TILE 5: TECHNICAL ARSENAL (TERMINAL STREAM, FULL WIDTH) */}
             <EditorialTiltCard
+              className="md:col-span-2"
               onClick={() => {
                 playUiClick(800);
                 setActiveModal("stack");
               }}
+              visualSlot={<CardTerminalStream />}
               icon={Cpu}
               badge="Fullstack & Systems"
               title="Technical Arsenal"
               description="Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API."
               actionText="Inspect Architecture Matrix"
-              previewPills={["Laravel", "MySQL ACID", "Webhooks", "React 19"]}
+              previewPills={["Laravel", "MySQL ACID", "Webhooks", "React 19", "Web Audio API", "Docker"]}
             />
 
           </div>
@@ -1008,6 +1046,155 @@ export function EditorialTheme() {
                   className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
                 >
                   Close Arsenal
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* ============================================================ */}
+        {/* MODAL 5: DIRECT INQUIRY & CONTACT CHANNEL */}
+        {/* ============================================================ */}
+        {activeModal === "contact" && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#d4af37]/15 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37]">
+                    <Send className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-white">
+                      Direct Inquiries & Collaboration
+                    </h2>
+                    <p className="text-xs font-mono text-[#aba392]">
+                      Architectural consultations, enterprise contracts & creative direction
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="p-2 rounded-xl bg-[#1e1b16] hover:bg-[#2e2921] text-[#aba392] hover:text-white transition-colors"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Status Banner */}
+              <div className="p-4 rounded-2xl border border-emerald-500/30 bg-emerald-950/20 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-xs font-mono font-bold text-emerald-300">
+                    STATUS: ACCEPTING Q2 CONTRACTS
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-[#aba392]">Malang / UTC+7</span>
+              </div>
+
+              {/* Primary Direct Action */}
+              <div className="p-6 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-4">
+                <span className="text-[10px] font-mono tracking-widest text-[#d4af37] uppercase font-bold block">
+                  // OFFICIAL TRANSMISSION LINE
+                </span>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#1e1b16] border border-[#2e2921]">
+                  <div className="flex items-center gap-3 px-2 font-mono text-sm text-[#f7f4ec]">
+                    <Mail className="w-4 h-4 text-[#d4af37]" />
+                    <span>{personal.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleCopyEmail}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#2e2921] hover:bg-[#3d372c] text-xs font-mono font-semibold text-[#f7f4ec] transition-colors"
+                    >
+                      <Copy className="w-3.5 h-3.5 text-[#d4af37]" />
+                      <span>Copy</span>
+                    </button>
+                    <a
+                      href={`mailto:${personal.email}`}
+                      onClick={() => playUiClick(700)}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#d4af37] text-zinc-950 hover:bg-[#e8cb74] text-xs font-mono font-bold transition-all shadow-md shadow-[#d4af37]/20"
+                    >
+                      <Send className="w-3.5 h-3.5" />
+                      <span>Send Mail</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Direct Social Channels */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <a
+                  href={personal.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playUiClick(600)}
+                  className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 hover:border-[#d4af37]/60 flex items-center justify-between transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <GithubIcon className="w-5 h-5 text-[#aba392] group-hover:text-white" />
+                    <div>
+                      <span className="text-xs font-bold text-white block">GitHub</span>
+                      <span className="text-[10px] font-mono text-[#7a7265]">@revwrks</span>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#7a7265] group-hover:text-[#d4af37] transition-colors" />
+                </a>
+
+                <a
+                  href={personal.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playUiClick(600)}
+                  className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 hover:border-[#d4af37]/60 flex items-center justify-between transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <LinkedinIcon className="w-5 h-5 text-[#aba392] group-hover:text-blue-400" />
+                    <div>
+                      <span className="text-xs font-bold text-white block">LinkedIn</span>
+                      <span className="text-[10px] font-mono text-[#7a7265]">Professional</span>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#7a7265] group-hover:text-[#d4af37] transition-colors" />
+                </a>
+
+                <a
+                  href={personal.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playUiClick(600)}
+                  className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 hover:border-[#d4af37]/60 flex items-center justify-between transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <InstagramIcon className="w-5 h-5 text-[#aba392] group-hover:text-pink-400" />
+                    <div>
+                      <span className="text-xs font-bold text-white block">Instagram</span>
+                      <span className="text-[10px] font-mono text-[#7a7265]">@itzrevv</span>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#7a7265] group-hover:text-[#d4af37] transition-colors" />
+                </a>
+              </div>
+
+              <div className="pt-4 border-t border-[#2e2921] flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
+                >
+                  Close Channel
                 </button>
               </div>
             </motion.div>
