@@ -45,6 +45,40 @@ body {
   color: #ffffff;
 }
 
+/* Elegant Stage Fade-Slide Animation */
+@keyframes stageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stage-enter {
+  animation: stageEnter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sleek Minimalist Contained Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   * {

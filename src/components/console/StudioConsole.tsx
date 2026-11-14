@@ -57,12 +57,22 @@ export function StudioConsole() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#09090b] text-[#fafafa] flex flex-col font-sans select-none lg:select-auto">
+    <div className="relative h-screen w-screen overflow-hidden bg-[#09090b] text-[#fafafa] flex flex-col font-sans select-none lg:select-auto">
       
+      {/* Subtle Atmospheric Frosted Backdrop Lighting */}
+      <div 
+        className="absolute top-[-15%] left-[-10%] w-[55vw] h-[55vh] rounded-full bg-blue-900/10 blur-[130px] pointer-events-none" 
+        aria-hidden="true" 
+      />
+      <div 
+        className="absolute bottom-[-15%] right-[-10%] w-[50vw] h-[50vh] rounded-full bg-indigo-900/10 blur-[140px] pointer-events-none" 
+        aria-hidden="true" 
+      />
+
       {/* Top Mobile Bar */}
-      <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-zinc-800/80 bg-zinc-950 flex-shrink-0">
+      <header className="lg:hidden relative z-20 flex items-center justify-between px-4 py-3 border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-xl flex-shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0">
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-700 flex-shrink-0 shadow-md">
             <img src={personal.avatar} alt="Rev" className="w-full h-full object-cover object-top" />
           </div>
           <div>
@@ -93,10 +103,10 @@ export function StudioConsole() {
       </header>
 
       {/* Main Single-Viewport Stage Container */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden max-w-7xl mx-auto w-full lg:p-6 lg:gap-6">
+      <div className="relative z-10 flex-1 flex flex-col lg:flex-row overflow-hidden max-w-7xl mx-auto w-full lg:p-6 lg:gap-6">
         
-        {/* LEFT PANE: Studio Anchor (Fixed on desktop, 38% width) */}
-        <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-6 lg:p-7 lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/70 lg:backdrop-blur-md flex-shrink-0 border-b lg:border-b-0 border-zinc-850 overflow-y-auto">
+        {/* LEFT PANE: Studio Anchor (Frosted Glass Look) */}
+        <aside className="lg:w-[38%] flex flex-col justify-between p-4 sm:p-6 lg:p-7 lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/65 lg:backdrop-blur-2xl lg:shadow-2xl lg:shadow-black/60 flex-shrink-0 border-b lg:border-b-0 border-zinc-850 overflow-y-auto custom-scrollbar">
           <div>
             {/* Studio Badge */}
             <div className="hidden lg:flex items-center justify-between mb-4">
@@ -109,7 +119,7 @@ export function StudioConsole() {
                   // LAB
                 </span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 shadow-sm">
                 ● ACTIVE
               </span>
             </div>
@@ -117,7 +127,7 @@ export function StudioConsole() {
             {/* Profile Avatar + Intro */}
             <div className="flex items-center gap-4 mb-3">
               <div
-                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-zinc-700/80 bg-zinc-850 flex-shrink-0 group cursor-pointer shadow-lg shadow-blue-950/20"
+                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-zinc-700/80 bg-zinc-850 flex-shrink-0 group cursor-pointer shadow-xl shadow-blue-950/30 transition-transform duration-200 hover:scale-[1.03]"
                 onMouseEnter={() => {
                   setIsHoveredAvatar(true);
                   playUiClick(1200);
@@ -130,7 +140,7 @@ export function StudioConsole() {
                   alt={`${personal.name} avatar`}
                   className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
                 />
-                <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-zinc-950" title="Online" />
+                <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-zinc-950 shadow-sm" title="Online" />
               </div>
               <div>
                 <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-white leading-tight">
@@ -139,7 +149,7 @@ export function StudioConsole() {
                 <p className="text-xs font-mono text-blue-400 mt-0.5">
                   {personal.role} <span className="text-zinc-500">(@rev)</span>
                 </p>
-                <p className="text-[11px] font-mono text-zinc-500 mt-1 flex items-center gap-1">
+                <p className="text-[11px] font-mono text-zinc-400 mt-1 flex items-center gap-1">
                   <MapPin className="w-3 h-3 text-zinc-500" />
                   <span>{personal.location}</span>
                 </p>
@@ -150,7 +160,7 @@ export function StudioConsole() {
               {personal.bio}
             </p>
 
-            {/* Studio Navigation (Interactive Tabs) */}
+            {/* Studio Navigation (Interactive Tabs with Tactile Compression & Seam Indicator) */}
             <nav className="mt-5 space-y-1.5" role="tablist" aria-label="Studio Console Views">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -162,27 +172,30 @@ export function StudioConsole() {
                     role="tab"
                     aria-selected={isActive}
                     onClick={() => handleTabChange(item.key)}
-                    className={`w-full min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-mono transition-all ${
+                    className={`w-full min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-mono transition-all duration-150 active:scale-[0.98] ${
                       isActive
-                        ? "bg-blue-600 text-white font-bold shadow-md shadow-blue-900/20"
-                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/80 border border-transparent hover:border-zinc-800"
+                        ? "bg-blue-600/90 text-white font-bold shadow-lg shadow-blue-900/30 border border-blue-400/40 backdrop-blur-md"
+                        : "text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent hover:border-zinc-800/80 backdrop-blur-sm"
                     }`}
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2.5">
+                      {isActive && (
+                        <span className="w-1 h-4 rounded-full bg-white mr-0.5 animate-pulse" aria-hidden="true" />
+                      )}
                       <Icon className="w-4 h-4 flex-shrink-0" />
                       <span>{item.label}</span>
                     </div>
 
                     {item.badge ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold animate-pulse">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold animate-pulse">
                         {item.badge}
                       </span>
                     ) : item.count !== undefined ? (
                       <span
                         className={`text-[11px] px-2 py-0.5 rounded-md ${
                           isActive
-                            ? "bg-blue-700/60 text-blue-100"
-                            : "bg-zinc-800 text-zinc-400"
+                            ? "bg-blue-700/80 text-blue-100"
+                            : "bg-zinc-800/80 text-zinc-400"
                         }`}
                       >
                         {item.count}
@@ -205,7 +218,7 @@ export function StudioConsole() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playUiClick(600)}
-                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-white transition-colors"
+                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800/80 bg-zinc-900/50 hover:bg-zinc-800/70 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-white transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>@revwrks</span>
@@ -215,7 +228,7 @@ export function StudioConsole() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playUiClick(600)}
-                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-pink-400 transition-colors"
+                className="min-h-[44px] flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-800/80 bg-zinc-900/50 hover:bg-zinc-800/70 hover:border-zinc-700 text-xs font-mono text-zinc-300 hover:text-pink-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
               >
                 <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                 <span>@itzrevv</span>
@@ -225,7 +238,7 @@ export function StudioConsole() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playUiClick(600)}
-                className="min-h-[44px] p-2.5 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-blue-400 transition-colors"
+                className="min-h-[44px] p-2.5 rounded-lg border border-zinc-800/80 bg-zinc-900/50 hover:bg-zinc-800/70 hover:border-zinc-700 text-zinc-300 hover:text-blue-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
                 aria-label="LinkedIn profile"
               >
                 <LinkedinIcon className="w-4 h-4 text-blue-400" />
@@ -234,11 +247,11 @@ export function StudioConsole() {
           </div>
         </aside>
 
-        {/* RIGHT PANE: The Stage (62% width, contained scroll inside) */}
-        <main className="lg:w-[62%] flex-1 flex flex-col overflow-hidden lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/40 lg:backdrop-blur-md">
+        {/* RIGHT PANE: The Stage (Frosted Glass Look + Smooth Scroll) */}
+        <main className="lg:w-[62%] flex-1 flex flex-col overflow-hidden lg:rounded-2xl lg:border lg:border-zinc-800/80 lg:bg-zinc-950/50 lg:backdrop-blur-2xl lg:shadow-2xl lg:shadow-black/60">
           
           {/* Stage Top Bar */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-zinc-800/80 bg-zinc-950/80 flex-shrink-0">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md flex-shrink-0">
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="text-zinc-500">STAGE //</span>
               <span className="text-zinc-200 font-bold uppercase tracking-wider">
@@ -248,7 +261,7 @@ export function StudioConsole() {
 
             {/* Filter pills if in Works tab */}
             {activeTab === "works" && (
-              <div className="flex items-center gap-1 p-0.5 rounded-md border border-zinc-800 bg-zinc-900/80 text-[11px] font-mono">
+              <div className="flex items-center gap-1 p-0.5 rounded-md border border-zinc-800/80 bg-zinc-900/70 backdrop-blur-md text-[11px] font-mono">
                 <button
                   type="button"
                   onClick={() => {
@@ -256,7 +269,7 @@ export function StudioConsole() {
                     setWorksFilter("all");
                   }}
                   className={`px-2.5 py-1 rounded transition-colors ${
-                    worksFilter === "all" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:text-zinc-200"
+                    worksFilter === "all" ? "bg-zinc-800 text-white font-semibold shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   All ({projects.length})
@@ -268,7 +281,7 @@ export function StudioConsole() {
                     setWorksFilter("engineering");
                   }}
                   className={`px-2.5 py-1 rounded transition-colors ${
-                    worksFilter === "engineering" ? "bg-blue-600 text-white" : "text-zinc-400 hover:text-zinc-200"
+                    worksFilter === "engineering" ? "bg-blue-600 text-white font-semibold shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   Code
@@ -280,7 +293,7 @@ export function StudioConsole() {
                     setWorksFilter("creative");
                   }}
                   className={`px-2.5 py-1 rounded transition-colors ${
-                    worksFilter === "creative" ? "bg-purple-600 text-white" : "text-zinc-400 hover:text-zinc-200"
+                    worksFilter === "creative" ? "bg-purple-600 text-white font-semibold shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   Media
@@ -301,297 +314,305 @@ export function StudioConsole() {
             )}
           </div>
 
-          {/* Stage Contained Scrollable Body */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 focus:outline-none" tabIndex={0}>
+          {/* Stage Contained Scrollable Body with Fade-Slide Staging */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 focus:outline-none custom-scrollbar" tabIndex={0}>
             
-            {/* VIEW 1: WORKS */}
-            {activeTab === "works" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredProjects.map((project: Project) => (
-                  <article
-                    key={project.id}
-                    className="flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4 sm:p-5 transition-all hover:border-zinc-700 hover:bg-zinc-900/70"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
-                            project.category === "engineering"
-                              ? "border-blue-500/30 bg-blue-500/10 text-blue-400"
-                              : "border-purple-500/30 bg-purple-500/10 text-purple-400"
-                          }`}
-                        >
-                          {project.category.toUpperCase()}
-                        </span>
-                        {project.featured && (
-                          <span className="flex items-center gap-1 text-[10px] font-mono text-amber-400">
-                            <Sparkles className="w-3 h-3" />
-                            <span>FLAGSHIP</span>
-                          </span>
-                        )}
-                      </div>
-
-                      <h2 className="text-base sm:text-lg font-bold text-zinc-100 leading-snug">
-                        {project.title}
-                      </h2>
-                      <p className="mt-1.5 text-xs text-zinc-300 leading-relaxed font-normal">
-                        {project.tagline}
-                      </p>
-
-                      {/* Key Metric Highlights */}
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {project.metrics.map((m, i) => (
+            {/* STAGE CONTAINER WITH ELEGANT ENTER ANIMATION */}
+            <div key={activeTab} className="animate-stage-enter">
+              
+              {/* VIEW 1: WORKS */}
+              {activeTab === "works" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredProjects.map((project: Project) => (
+                    <article
+                      key={project.id}
+                      className="group flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 ease-out hover:-translate-y-1 hover:border-zinc-600/90 hover:bg-zinc-850/70 hover:shadow-xl hover:shadow-blue-950/25"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
                           <span
-                            key={i}
-                            className="text-[10px] font-mono bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800 text-zinc-400"
+                            className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                              project.category === "engineering"
+                                ? "border-blue-500/30 bg-blue-500/10 text-blue-400"
+                                : "border-purple-500/30 bg-purple-500/10 text-purple-400"
+                            }`}
                           >
-                            • {m}
+                            {project.category.toUpperCase()}
                           </span>
-                        ))}
-                      </div>
-                    </div>
+                          {project.featured && (
+                            <span className="flex items-center gap-1 text-[10px] font-mono text-amber-400">
+                              <Sparkles className="w-3 h-3" />
+                              <span>FLAGSHIP</span>
+                            </span>
+                          )}
+                        </div>
 
-                    <div className="mt-4 pt-3 border-t border-zinc-800/60 flex flex-wrap items-center justify-between gap-2">
-                      {/* Feature 4: Inspect Architecture trigger */}
-                      {project.id === "topup-store" ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            playUiClick(1000);
-                            setSelectedArchProject(project.title);
-                          }}
-                          className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-950/40 border border-cyan-800/40 px-2.5 py-1.5 rounded-lg transition-colors"
-                        >
-                          <Zap className="w-3.5 h-3.5" />
-                          <span>Inspect Spec</span>
-                        </button>
-                      ) : (
-                        <div className="flex flex-wrap gap-1">
-                          {project.techStack.slice(0, 3).map((t) => (
-                            <span key={t} className="text-[10px] font-mono text-zinc-400">
-                              #{t}
+                        <h2 className="text-base sm:text-lg font-bold text-zinc-100 leading-snug group-hover:text-blue-300 transition-colors">
+                          {project.title}
+                        </h2>
+                        <p className="mt-1.5 text-xs text-zinc-300 leading-relaxed font-normal">
+                          {project.tagline}
+                        </p>
+
+                        {/* Key Metric Highlights */}
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {project.metrics.map((m, i) => (
+                            <span
+                              key={i}
+                              className="text-[10px] font-mono bg-zinc-950/80 px-2 py-0.5 rounded border border-zinc-800/80 text-zinc-400 group-hover:border-zinc-700 transition-colors"
+                            >
+                              • {m}
                             </span>
                           ))}
                         </div>
-                      )}
-
-                      <div className="flex items-center gap-2">
-                        {project.links.live && (
-                          <a
-                            href={project.links.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => playUiClick(700)}
-                            className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-medium text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg transition-colors"
-                          >
-                            <span>Live</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-                        {project.links.github && (
-                          <a
-                            href={project.links.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => playUiClick(700)}
-                            className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-lg border border-zinc-700 transition-colors"
-                          >
-                            <GithubIcon className="w-3 h-3" />
-                            <span>Code</span>
-                          </a>
-                        )}
                       </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
 
-            {/* VIEW 2: INTERACTIVE CANVAS SCRATCHPAD (Feature 1) */}
-            {activeTab === "scratchpad" && (
-              <div className="h-full">
-                <CanvasScratchpad />
-              </div>
-            )}
-
-            {/* VIEW 3: CREDENTIALS */}
-            {activeTab === "credentials" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                {certifications.map((cert: Certification) => (
-                  <article
-                    key={cert.id}
-                    className="flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4 transition-colors hover:border-zinc-700 hover:bg-zinc-900/60"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-1.5">
-                        <span className="text-zinc-300 font-semibold">{cert.issuer}</span>
-                        <span>{cert.issueDate}</span>
-                      </div>
-                      <h2 className="text-sm font-bold text-zinc-100 leading-snug">
-                        {cert.name}
-                      </h2>
-                      {cert.credentialId && (
-                        <p className="mt-1 text-[11px] font-mono text-zinc-400">
-                          ID: <span className="text-zinc-300">{cert.credentialId}</span>
-                        </p>
-                      )}
-                      <div className="mt-2.5 flex flex-wrap gap-1">
-                        {cert.skills.map((s) => (
-                          <span
-                            key={s}
-                            className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800/60 text-zinc-400 border border-zinc-750"
+                      <div className="mt-4 pt-3 border-t border-zinc-800/60 flex flex-wrap items-center justify-between gap-2">
+                        {/* Feature 4: Inspect Architecture trigger */}
+                        {project.id === "topup-store" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playUiClick(1000);
+                              setSelectedArchProject(project.title);
+                            }}
+                            className="min-h-[44px] inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 bg-cyan-950/40 border border-cyan-800/40 px-2.5 py-1.5 rounded-lg transition-all duration-150 hover:scale-[1.03] active:scale-[0.97]"
                           >
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-2.5 border-t border-zinc-850 flex items-center justify-between">
-                      <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
-                        <Award className="w-3 h-3" />
-                        <span>Verified</span>
-                      </span>
-                      <a
-                        href={cert.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => playUiClick(700)}
-                        className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300 py-1"
-                      >
-                        <span>Verify Credential</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
-
-            {/* VIEW 4: EXPERIENCE, EDUCATION & VOLUNTEERING */}
-            {activeTab === "experience" && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xs font-mono text-blue-400 uppercase tracking-wider mb-3">
-                    // Career Trajectory (5+ Years)
-                  </h2>
-                  <div className="space-y-3">
-                    {experience.map((exp, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-4 transition-colors hover:border-zinc-700"
-                      >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                          <div>
-                            <h3 className="text-sm font-bold text-zinc-100">{exp.role}</h3>
-                            <p className="text-xs font-semibold text-blue-400">{exp.company}</p>
+                            <Zap className="w-3.5 h-3.5" />
+                            <span>Inspect Spec</span>
+                          </button>
+                        ) : (
+                          <div className="flex flex-wrap gap-1">
+                            {project.techStack.slice(0, 3).map((t) => (
+                              <span 
+                                key={t} 
+                                className="text-[10px] font-mono text-zinc-400 hover:text-zinc-200 transition-colors"
+                              >
+                                #{t}
+                              </span>
+                            ))}
                           </div>
-                          <span className="text-xs font-mono text-zinc-500">{exp.period}</span>
+                        )}
+
+                        <div className="flex items-center gap-2">
+                          {project.links.live && (
+                            <a
+                              href={project.links.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => playUiClick(700)}
+                              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono font-medium text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-lg transition-all duration-150 hover:scale-105 active:scale-95 shadow-sm"
+                            >
+                              <span>Live</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                          {project.links.github && (
+                            <a
+                              href={project.links.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => playUiClick(700)}
+                              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-700 px-3 py-1.5 rounded-lg border border-zinc-700/80 transition-all duration-150 hover:scale-105 active:scale-95"
+                            >
+                              <GithubIcon className="w-3 h-3" />
+                              <span>Code</span>
+                            </a>
+                          )}
                         </div>
-                        <ul className="mt-2 space-y-1 text-xs text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
-                          {exp.highlights.map((h, i) => (
-                            <li key={i}>{h}</li>
-                          ))}
-                        </ul>
                       </div>
-                    ))}
-                  </div>
+                    </article>
+                  ))}
                 </div>
+              )}
 
-                {/* Volunteering & Community Work */}
-                <div className="pt-4 border-t border-zinc-850">
-                  <h2 className="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <HeartHandshake className="w-3.5 h-3.5" />
-                    <span>Social Services & Community</span>
-                  </h2>
-                  <div className="space-y-3">
-                    {volunteering?.map((vol, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-4 transition-colors hover:border-zinc-700"
-                      >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                          <div>
-                            <h3 className="text-sm font-bold text-zinc-100">{vol.role}</h3>
-                            <p className="text-xs font-semibold text-emerald-400">{vol.organization}</p>
-                          </div>
-                          <span className="text-xs font-mono text-zinc-500">{vol.period}</span>
-                        </div>
-                        <p className="text-[11px] font-mono text-zinc-400 mb-2">
-                          Category: {vol.category}
-                        </p>
-                        <ul className="mt-2 space-y-1 text-xs text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
-                          {vol.highlights.map((h, i) => (
-                            <li key={i}>{h}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
+              {/* VIEW 2: INTERACTIVE CANVAS SCRATCHPAD */}
+              {activeTab === "scratchpad" && (
+                <div className="h-full">
+                  <CanvasScratchpad />
                 </div>
+              )}
 
-                {/* Academic Foundation */}
-                <div className="pt-4 border-t border-zinc-850">
-                  <h2 className="text-xs font-mono text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <GraduationCap className="w-3.5 h-3.5" />
-                    <span>Academic Foundation</span>
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {education.map((edu, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-lg border border-zinc-800/80 bg-zinc-900/30 p-3.5"
-                      >
-                        <span className="text-[11px] font-mono text-purple-400">{edu.period}</span>
-                        <h3 className="text-xs font-bold text-zinc-100 mt-0.5">{edu.degree}</h3>
-                        <p className="text-xs text-zinc-400">{edu.institution}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* VIEW 5: TECH STACK MATRIX */}
-            {activeTab === "stack" && (
-              <div className="space-y-3">
-                {[
-                  { title: "Backend Systems & APIs", items: skills.backend, icon: Terminal, color: "text-blue-400" },
-                  { title: "Databases & Data Modeling", items: skills.databases, icon: Database, color: "text-emerald-400" },
-                  { title: "Frontend & HTML5 Canvas", items: skills.frontend, icon: Code2, color: "text-cyan-400" },
-                  { title: "UX Research & Video Direction", items: skills.creativeDesign, icon: Palette, color: "text-purple-400" },
-                  { title: "DevOps, Infra & Environments", items: skills.devOpsAndTools, icon: Wrench, color: "text-amber-400" },
-                ].map((s, idx) => {
-                  const Icon = s.icon;
-                  return (
-                    <div
-                      key={idx}
-                      className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 p-4 transition-colors hover:border-zinc-700"
+              {/* VIEW 3: CREDENTIALS */}
+              {activeTab === "credentials" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {certifications.map((cert: Certification) => (
+                    <article
+                      key={cert.id}
+                      className="group flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md p-4 transition-all duration-200 ease-out hover:-translate-y-1 hover:border-zinc-600/90 hover:bg-zinc-850/70 hover:shadow-xl hover:shadow-emerald-950/20"
                     >
-                      <div className="flex items-center gap-2 mb-2.5">
-                        <Icon className={`w-4 h-4 ${s.color}`} />
-                        <h2 className="text-xs font-mono font-bold text-zinc-200">{s.title}</h2>
+                      <div>
+                        <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-1.5">
+                          <span className="text-zinc-300 font-semibold">{cert.issuer}</span>
+                          <span>{cert.issueDate}</span>
+                        </div>
+                        <h2 className="text-sm font-bold text-zinc-100 leading-snug group-hover:text-emerald-300 transition-colors">
+                          {cert.name}
+                        </h2>
+                        {cert.credentialId && (
+                          <p className="mt-1 text-[11px] font-mono text-zinc-400">
+                            ID: <span className="text-zinc-300 select-all">{cert.credentialId}</span>
+                          </p>
+                        )}
+                        <div className="mt-2.5 flex flex-wrap gap-1">
+                          {cert.skills.map((s) => (
+                            <span
+                              key={s}
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800/60 text-zinc-400 border border-zinc-750 hover:scale-105 hover:bg-zinc-700/60 transition-transform"
+                            >
+                              {s}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {s.items.map((item) => (
-                          <span
-                            key={item}
-                            className="px-2 py-1 text-xs font-mono rounded bg-zinc-800/50 text-zinc-300 border border-zinc-750"
-                          >
-                            {item}
-                          </span>
-                        ))}
+
+                      <div className="mt-4 pt-2.5 border-t border-zinc-850/80 flex items-center justify-between">
+                        <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                          <Award className="w-3 h-3" />
+                          <span>Verified</span>
+                        </span>
+                        <a
+                          href={cert.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => playUiClick(700)}
+                          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300 py-1 transition-colors"
+                        >
+                          <span>Verify Credential</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
                       </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+
+              {/* VIEW 4: EXPERIENCE, EDUCATION & VOLUNTEERING */}
+              {activeTab === "experience" && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-xs font-mono text-blue-400 uppercase tracking-wider mb-3">
+                      // Career Trajectory (5+ Years)
+                    </h2>
+                    <div className="space-y-3">
+                      {experience.map((exp, idx) => (
+                        <div
+                          key={idx}
+                          className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-zinc-850/50"
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                            <div>
+                              <h3 className="text-sm font-bold text-zinc-100">{exp.role}</h3>
+                              <p className="text-xs font-semibold text-blue-400">{exp.company}</p>
+                            </div>
+                            <span className="text-xs font-mono text-zinc-500">{exp.period}</span>
+                          </div>
+                          <ul className="mt-2 space-y-1 text-xs text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
+                            {exp.highlights.map((h, i) => (
+                              <li key={i}>{h}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  </div>
+
+                  {/* Volunteering & Community Work */}
+                  <div className="pt-4 border-t border-zinc-850">
+                    <h2 className="text-xs font-mono text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <HeartHandshake className="w-3.5 h-3.5" />
+                      <span>Social Services & Community</span>
+                    </h2>
+                    <div className="space-y-3">
+                      {volunteering?.map((vol, idx) => (
+                        <div
+                          key={idx}
+                          className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-zinc-850/50"
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                            <div>
+                              <h3 className="text-sm font-bold text-zinc-100">{vol.role}</h3>
+                              <p className="text-xs font-semibold text-emerald-400">{vol.organization}</p>
+                            </div>
+                            <span className="text-xs font-mono text-zinc-500">{vol.period}</span>
+                          </div>
+                          <p className="text-[11px] font-mono text-zinc-400 mb-2">
+                            Category: {vol.category}
+                          </p>
+                          <ul className="mt-2 space-y-1 text-xs text-zinc-300 list-disc list-outside pl-4 leading-relaxed">
+                            {vol.highlights.map((h, i) => (
+                              <li key={i}>{h}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Academic Foundation */}
+                  <div className="pt-4 border-t border-zinc-850">
+                    <h2 className="text-xs font-mono text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <GraduationCap className="w-3.5 h-3.5" />
+                      <span>Academic Foundation</span>
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {education.map((edu, idx) => (
+                        <div
+                          key={idx}
+                          className="rounded-lg border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-3.5 transition-all duration-200 hover:border-zinc-700"
+                        >
+                          <span className="text-[11px] font-mono text-purple-400">{edu.period}</span>
+                          <h3 className="text-xs font-bold text-zinc-100 mt-0.5">{edu.degree}</h3>
+                          <p className="text-xs text-zinc-400">{edu.institution}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* VIEW 5: TECH STACK MATRIX */}
+              {activeTab === "stack" && (
+                <div className="space-y-3">
+                  {[
+                    { title: "Backend Systems & APIs", items: skills.backend, icon: Terminal, color: "text-blue-400" },
+                    { title: "Databases & Data Modeling", items: skills.databases, icon: Database, color: "text-emerald-400" },
+                    { title: "Frontend & HTML5 Canvas", items: skills.frontend, icon: Code2, color: "text-cyan-400" },
+                    { title: "UX Research & Video Direction", items: skills.creativeDesign, icon: Palette, color: "text-purple-400" },
+                    { title: "DevOps, Infra & Environments", items: skills.devOpsAndTools, icon: Wrench, color: "text-amber-400" },
+                  ].map((s, idx) => {
+                    const Icon = s.icon;
+                    return (
+                      <div
+                        key={idx}
+                        className="rounded-xl border border-zinc-800/80 bg-zinc-900/30 backdrop-blur-md p-4 transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-850/50"
+                      >
+                        <div className="flex items-center gap-2 mb-2.5">
+                          <Icon className={`w-4 h-4 ${s.color}`} />
+                          <h2 className="text-xs font-mono font-bold text-zinc-200">{s.title}</h2>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {s.items.map((item) => (
+                            <span
+                              key={item}
+                              className="px-2 py-1 text-xs font-mono rounded bg-zinc-800/50 text-zinc-300 border border-zinc-750 transition-all duration-150 hover:scale-105 hover:bg-zinc-700/60 hover:border-zinc-600"
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+            </div>
 
           </div>
 
           {/* Mobile Bottom Social Anchor */}
-          <footer className="lg:hidden flex items-center justify-between px-4 py-2.5 border-t border-zinc-850 bg-zinc-950 text-xs font-mono text-zinc-400 flex-shrink-0">
+          <footer className="lg:hidden flex items-center justify-between px-4 py-2.5 border-t border-zinc-850 bg-zinc-950/80 backdrop-blur-md text-xs font-mono text-zinc-400 flex-shrink-0">
             <span>REVWORKS © 2026</span>
             <a href={`mailto:${personal.email}`} className="text-blue-400">
               {personal.email}
