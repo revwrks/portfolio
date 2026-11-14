@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, type Variants } from "motion/react";
 import { 
   ArrowUpRight, 
   Briefcase, 
@@ -14,15 +15,44 @@ import {
   ShieldCheck, 
   Sparkles, 
   Terminal, 
-  X 
+  X,
+  Code2,
+  Database,
+  Film
 } from "lucide-react";
 import { GithubIcon, InstagramIcon, LinkedinIcon } from "@/components/ui/Icons";
 import { PORTFOLIO_DATA, Project, Certification } from "@/data/portfolio";
 import { ArchitectureInspector } from "@/components/console/ArchitectureInspector";
+import { GoldenParticleCanvas } from "@/components/effects/GoldenParticleCanvas";
 import { playUiClick } from "@/lib/audio";
 import { useToast } from "@/components/ui/Toast";
 
 type ActiveModal = "works" | "credentials" | "career" | "stack" | null;
+
+// Animation Variants (inspired by Yoza's blur-reveal stagger)
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 interface TiltCardProps {
   onClick: () => void;
@@ -31,6 +61,9 @@ interface TiltCardProps {
   title: string;
   description: string;
   actionText: string;
+  previewPills?: string[];
+  statNumber?: string;
+  statLabel?: string;
 }
 
 function EditorialTiltCard({
@@ -40,6 +73,9 @@ function EditorialTiltCard({
   title,
   description,
   actionText,
+  previewPills,
+  statNumber,
+  statLabel,
 }: TiltCardProps) {
   const cardRef = useRef<HTMLButtonElement>(null);
   const [transform, setTransform] = useState("perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)");
@@ -54,8 +90,8 @@ function EditorialTiltCard({
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
 
     setTransform(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px) scale3d(1.015, 1.015, 1.015)`);
     setGlowPos({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 });
@@ -67,7 +103,8 @@ function EditorialTiltCard({
   };
 
   return (
-    <button
+    <motion.button
+      variants={itemVariants}
       ref={cardRef}
       type="button"
       onClick={onClick}
@@ -76,7 +113,7 @@ function EditorialTiltCard({
       onMouseLeave={handleMouseLeave}
       style={{
         transform,
-        transition: isHovered ? "transform 0.1s ease-out" : "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
+        transition: isHovered ? "transform 0.08s ease-out" : "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
       }}
       className="group relative text-left p-6 sm:p-8 rounded-3xl border border-[#2e2921] bg-[#161411]/90 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 flex flex-col justify-between space-y-6 cursor-pointer overflow-hidden backdrop-blur-xl"
     >
@@ -85,14 +122,12 @@ function EditorialTiltCard({
         className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-3xl"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(212, 175, 55, 0.18) 0%, transparent 65%)`
+          background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, rgba(212, 175, 55, 0.22) 0%, transparent 65%)`
         }}
       />
 
       {/* Shimmer Light Reflection Sweep on Hover */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-3xl"
-      >
+      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden rounded-3xl">
         <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 group-hover:translate-x-[300%] transition-transform duration-1000" />
       </div>
 
@@ -101,30 +136,55 @@ function EditorialTiltCard({
         <div className="w-14 h-14 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#d4af37]/20 group-hover:rotate-3 shadow-md shadow-[#d4af37]/10">
           <Icon className="w-7 h-7 text-[#d4af37] transition-transform duration-300 group-hover:scale-105" />
         </div>
+
         <span className="flex items-center gap-1.5 text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3.5 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 backdrop-blur-sm group-hover:border-[#d4af37]/60 transition-colors">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-ping" />
           {badge}
         </span>
       </div>
 
       {/* Middle Body inside Card */}
       <div className="relative z-10 space-y-2">
-        <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors duration-200">
-          {title}
-        </h3>
+        <div className="flex items-baseline justify-between gap-2">
+          <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors duration-200">
+            {title}
+          </h3>
+          {statNumber && (
+            <span className="text-xl font-mono font-bold text-[#d4af37] opacity-80 group-hover:opacity-100 transition-opacity">
+              {statNumber}
+            </span>
+          )}
+        </div>
         <p className="text-sm text-[#aba392] font-light leading-relaxed group-hover:text-[#c4beb1] transition-colors duration-200">
           {description}
         </p>
+
+        {/* Animated preview chips inside card */}
+        {previewPills && previewPills.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-2">
+            {previewPills.map((pill, idx) => (
+              <span
+                key={idx}
+                className="text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-[#1e1b16] text-[#aba392] border border-[#2e2921] group-hover:border-[#d4af37]/30 group-hover:text-white transition-all"
+                style={{
+                  transitionDelay: `${idx * 40}ms`
+                }}
+              >
+                {pill}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Bottom Action Bar inside Card */}
       <div className="relative z-10 flex items-center justify-between text-xs font-mono text-[#d4af37] font-bold pt-3 border-t border-[#2e2921]/90 group-hover:border-[#d4af37]/40 transition-colors">
         <span className="group-hover:tracking-wider transition-all duration-200">{actionText}</span>
-        <div className="w-8 h-8 rounded-full bg-[#d4af37]/10 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:text-zinc-950 transition-all duration-200">
+        <div className="w-8 h-8 rounded-full bg-[#d4af37]/10 flex items-center justify-center group-hover:bg-[#d4af37] group-hover:text-zinc-950 transition-all duration-200 shadow-sm">
           <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>
       </div>
-    </button>
+    </motion.button>
   );
 }
 
@@ -178,8 +238,21 @@ export function EditorialTheme() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0d0c0a] text-[#f7f4ec] font-sans selection:bg-[#d4af37]/35 selection:text-white pb-32">
+    <div className="relative min-h-screen bg-[#0d0c0a] text-[#f7f4ec] font-sans selection:bg-[#d4af37]/35 selection:text-white pb-32 overflow-x-hidden">
       
+      {/* 1. Subtle SVG Fractal Noise Film Grain Texture (Inspired by Yoza) */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-[1] opacity-[0.035]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundSize: "160px 160px"
+        }}
+        aria-hidden="true"
+      />
+
+      {/* 2. Golden Embers Particle Canvas in Background */}
+      <GoldenParticleCanvas />
+
       {/* Top Editorial Ribbon */}
       <header className="border-b border-[#2e2921]/90 bg-[#0d0c0a]/90 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-6 h-18 flex items-center justify-between">
@@ -217,14 +290,19 @@ export function EditorialTheme() {
         </div>
       </header>
 
-      {/* Main Content Flow */}
-      <main className="max-w-5xl mx-auto px-6 pt-12 sm:pt-18 space-y-16">
+      {/* Main Content Flow with Staggered Blur-To-Focus Reveal */}
+      <motion.main 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-5xl mx-auto px-6 pt-12 sm:pt-18 space-y-16 relative z-10"
+      >
         
         {/* HERO SECTION: PORTRAIT & MANIFESTO */}
         <section aria-label="Prologue" className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
           
           {/* Left Column: Pure Portrait & Dossier Stats */}
-          <div className="md:col-span-4 space-y-6">
+          <motion.div variants={itemVariants} className="md:col-span-4 space-y-6">
             {/* Pure Pristine Portrait Frame */}
             <div 
               className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-300 hover:border-[#d4af37]/70"
@@ -292,10 +370,10 @@ export function EditorialTheme() {
                 <LinkedinIcon className="w-4 h-4" />
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Grand Manifesto & Core Metrics */}
-          <div className="md:col-span-8 space-y-8">
+          <motion.div variants={itemVariants} className="md:col-span-8 space-y-8">
             <div className="space-y-4">
               <span className="text-[11px] font-mono tracking-widest text-[#d4af37] uppercase font-bold">
                 // ARCHIVAL DOSSIER
@@ -353,10 +431,10 @@ export function EditorialTheme() {
                 <span>{copiedEmail ? "Email Copied!" : "Copy Email"}</span>
               </button>
             </div>
-          </div>
+          </motion.div>
         </section>
 
-        {/* GRAND 2x2 FEATURE TILES (INTERACTIVE 3D TILT CARDS) */}
+        {/* GRAND 2x2 FEATURE TILES (3D TILT WITH INTERNAL CHOREOGRAPHY) */}
         <section aria-label="Dossiers Navigation" className="pt-6 border-t border-[#2e2921]">
           <div className="flex items-center justify-between pb-6">
             <div>
@@ -385,6 +463,7 @@ export function EditorialTheme() {
               title="Selected Works & Systems"
               description="Production fintech transaction ledgers, digital key vaults, in-browser synthesizers & concert media."
               actionText="Open Portfolio Index"
+              previewPills={["TopUp Store", "Digi-Art Synth", "Chorus ERP", "Tamboer POS"]}
             />
 
             {/* TILE 2: VERIFIED CREDENTIALS */}
@@ -398,6 +477,7 @@ export function EditorialTheme() {
               title="Verified Pedigree & Proof"
               description="Meta Database Engineer, Google Professional UX Design, IBM Python AI & HackerRank verified badges."
               actionText="View Verified Badges"
+              previewPills={["Meta Database", "Google UX", "IBM AI", "HackerRank"]}
             />
 
             {/* TILE 3: CAREER & STEWARDSHIP */}
@@ -411,6 +491,7 @@ export function EditorialTheme() {
               title="Career & Stewardship"
               description="Head of Marketing at Nusa Indah Tropika & 3+ years directing multimedia operations at GKJW."
               actionText="Examine Track Record"
+              previewPills={["Head of Marketing", "GKJW Multimedia", "Freelance Web"]}
             />
 
             {/* TILE 4: TECHNICAL ARSENAL */}
@@ -424,13 +505,14 @@ export function EditorialTheme() {
               title="Technical Arsenal"
               description="Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API."
               actionText="Inspect Architecture Matrix"
+              previewPills={["Laravel", "MySQL ACID", "Webhooks", "React 19"]}
             />
 
           </div>
         </section>
 
         {/* INFINITE TECH MARQUEE TAPE (SLICK RUNNING MARQUEE) */}
-        <section aria-label="Core Competencies Ticker" className="pt-2">
+        <motion.section variants={itemVariants} aria-label="Core Competencies Ticker" className="pt-2">
           <div className="rounded-2xl border border-[#2e2921] bg-[#161411]/60 py-3.5 px-4 overflow-hidden relative backdrop-blur-md">
             <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0c0a] to-transparent z-10 pointer-events-none" />
@@ -444,12 +526,12 @@ export function EditorialTheme() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
-      </main>
+      </motion.main>
 
       {/* Colophon Footer */}
-      <footer className="max-w-5xl mx-auto px-6 mt-32 pt-12 border-t border-[#2e2921] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[#7a7265]">
+      <footer className="max-w-5xl mx-auto px-6 mt-32 pt-12 border-t border-[#2e2921] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-[#7a7265] relative z-10">
         <div>
           REVWORKS // DESIGNED & CRAFTED BY REV · 2026
         </div>
@@ -469,68 +551,207 @@ export function EditorialTheme() {
       {/* ============================================================ */}
       {/* MODAL 1: SELECTED WORKS & SYSTEMS */}
       {/* ============================================================ */}
-      {activeModal === "works" && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6">
-            
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2921]">
-              <div className="flex items-center gap-3">
-                <Layers className="w-6 h-6 text-[#d4af37]" />
-                <div>
-                  <h2 className="text-2xl font-serif font-bold text-white">
-                    Selected Works & Digital Systems
-                  </h2>
-                  <p className="text-xs font-mono text-[#aba392]">
-                    Production applications and creative multimedia showcase
-                  </p>
+      <AnimatePresence>
+        {activeModal === "works" && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+            >
+              
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-3">
+                  <Layers className="w-6 h-6 text-[#d4af37]" />
+                  <div>
+                    <h2 className="text-2xl font-serif font-bold text-white">
+                      Selected Works & Digital Systems
+                    </h2>
+                    <p className="text-xs font-mono text-[#aba392]">
+                      Production applications and creative multimedia showcase
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {/* Filter Pills */}
+                  <div className="flex items-center gap-1 border border-[#2e2921] p-1 rounded-full text-xs font-mono bg-[#161411]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playUiClick(500);
+                        setWorksFilter("all");
+                      }}
+                      className={`px-3 py-1 rounded-full transition-colors ${
+                        worksFilter === "all" ? "bg-[#d4af37] text-zinc-950 font-bold" : "text-[#aba392] hover:text-white"
+                      }`}
+                    >
+                      All ({projects.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playUiClick(500);
+                        setWorksFilter("engineering");
+                      }}
+                      className={`px-3 py-1 rounded-full transition-colors ${
+                        worksFilter === "engineering" ? "bg-[#d4af37] text-zinc-950 font-bold" : "text-[#aba392] hover:text-white"
+                      }`}
+                    >
+                      Engineering
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playUiClick(500);
+                        setWorksFilter("creative");
+                      }}
+                      className={`px-3 py-1 rounded-full transition-colors ${
+                        worksFilter === "creative" ? "bg-[#d4af37] text-zinc-950 font-bold" : "text-[#aba392] hover:text-white"
+                      }`}
+                    >
+                      Creative
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => { playUiClick(600); setActiveModal(null); }}
+                    className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                    aria-label="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                {/* Filter Pills */}
-                <div className="flex items-center gap-1 border border-[#2e2921] p-1 rounded-full text-xs font-mono bg-[#161411]">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playUiClick(500);
-                      setWorksFilter("all");
-                    }}
-                    className={`px-3 py-1 rounded-full transition-colors ${
-                      worksFilter === "all" ? "bg-[#d4af37] text-zinc-950 font-bold" : "text-[#aba392] hover:text-white"
-                    }`}
-                  >
-                    All ({projects.length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playUiClick(500);
-                      setWorksFilter("engineering");
-                    }}
-                    className={`px-3 py-1 rounded-full transition-colors ${
-                      worksFilter === "engineering" ? "bg-[#d4af37] text-zinc-950 font-bold" : "text-[#aba392] hover:text-white"
-                    }`}
-                  >
-                    Engineering
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playUiClick(500);
-                      setWorksFilter("creative");
-                    }}
-                    className={`px-3 py-1 rounded-full transition-colors ${
-                      worksFilter === "creative" ? "bg-[#d4af37] text-zinc-950 font-bold" : "text-[#aba392] hover:text-white"
-                    }`}
-                  >
-                    Creative
-                  </button>
-                </div>
+              {/* Works List */}
+              <div className="divide-y divide-[#2e2921]">
+                {filteredProjects.map((project: Project, idx) => (
+                  <article key={project.id} className="py-6 flex flex-col md:flex-row md:items-start justify-between gap-6 group hover:bg-[#171410] px-4 -mx-4 rounded-2xl transition-colors">
+                    <div className="space-y-2 md:w-3/5">
+                      <div className="flex items-center gap-2 text-xs font-mono">
+                        <span className="text-[#d4af37] font-bold">0{idx + 1}</span>
+                        <span className="text-[#7a7265]">//</span>
+                        <span className="uppercase text-[#aba392]">{project.category}</span>
+                        {project.featured && (
+                          <span className="text-[10px] text-[#d4af37] px-2 py-0.2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 flex items-center gap-1 font-semibold">
+                            <Sparkles className="w-3 h-3 text-[#d4af37]" />
+                            Featured
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-xl font-serif font-bold text-white group-hover:text-[#e8cb74] transition-colors">{project.title}</h3>
+                      <p className="text-xs sm:text-sm text-[#aba392] leading-relaxed font-light">{project.description}</p>
+                      <div className="flex flex-wrap gap-1.5 pt-2">
+                        {project.techStack.map((tech) => (
+                          <span key={tech} className="text-[10px] font-mono text-[#aba392] bg-[#161411] px-2.5 py-0.5 rounded border border-[#2e2921] hover:border-[#d4af37]/40 hover:text-white transition-colors">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
+                    <div className="md:w-2/5 md:text-right space-y-3 flex flex-col md:items-end justify-between self-stretch">
+                      <div className="space-y-1 text-xs font-mono text-[#aba392]">
+                        {project.metrics.map((m, i) => (
+                          <div key={i} className="text-[#f7f4ec] flex items-center md:justify-end gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]" />
+                            <span>{m}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-2">
+                        {project.id === "topup-store" && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playUiClick(750);
+                              setSelectedArchProject(project.id);
+                            }}
+                            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#d4af37] hover:text-[#e8cb74] font-semibold border-b border-[#d4af37]/40 pb-0.5 transition-colors"
+                          >
+                            <Terminal className="w-3.5 h-3.5" />
+                            <span>Inspect Spec</span>
+                          </button>
+                        )}
+
+                        {project.links.live && (
+                          <a
+                            href={project.links.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => playUiClick(600)}
+                            className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] hover:border-[#d4af37]/50 px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
+                          >
+                            <span>Live Demo</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+
+                        {project.links.github && (
+                          <a
+                            href={project.links.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => playUiClick(600)}
+                            className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] hover:border-[#d4af37]/50 px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
+                          >
+                            <GithubIcon className="w-3 h-3" />
+                            <span>Code</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <div className="pt-4 border-t border-[#2e2921] flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="px-5 py-2.5 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
+                >
+                  Close Works Index
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ============================================================ */}
+      {/* MODAL 2: VERIFIED CREDENTIALS */}
+      {/* ============================================================ */}
+      <AnimatePresence>
+        {activeModal === "credentials" && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-[#d4af37]" />
+                  <h2 className="text-xl font-serif font-bold text-white">
+                    Verified Pedigree & Official Credentials
+                  </h2>
+                </div>
                 <button
                   type="button"
                   onClick={() => { playUiClick(600); setActiveModal(null); }}
@@ -540,366 +761,259 @@ export function EditorialTheme() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-            </div>
 
-            {/* Works List */}
-            <div className="divide-y divide-[#2e2921]">
-              {filteredProjects.map((project: Project, idx) => (
-                <article key={project.id} className="py-6 flex flex-col md:flex-row md:items-start justify-between gap-6 group hover:bg-[#171410] px-4 -mx-4 rounded-2xl transition-colors">
-                  <div className="space-y-2 md:w-3/5">
-                    <div className="flex items-center gap-2 text-xs font-mono">
-                      <span className="text-[#d4af37] font-bold">0{idx + 1}</span>
-                      <span className="text-[#7a7265]">//</span>
-                      <span className="uppercase text-[#aba392]">{project.category}</span>
-                      {project.featured && (
-                        <span className="text-[10px] text-[#d4af37] px-2 py-0.2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 flex items-center gap-1 font-semibold">
-                          <Sparkles className="w-3 h-3 text-[#d4af37]" />
-                          Featured
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-xl font-serif font-bold text-white group-hover:text-[#e8cb74] transition-colors">{project.title}</h3>
-                    <p className="text-xs sm:text-sm text-[#aba392] leading-relaxed font-light">{project.description}</p>
-                    <div className="flex flex-wrap gap-1.5 pt-2">
-                      {project.techStack.map((tech) => (
-                        <span key={tech} className="text-[10px] font-mono text-[#aba392] bg-[#161411] px-2.5 py-0.5 rounded border border-[#2e2921] hover:border-[#d4af37]/40 hover:text-white transition-colors">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="md:w-2/5 md:text-right space-y-3 flex flex-col md:items-end justify-between self-stretch">
-                    <div className="space-y-1 text-xs font-mono text-[#aba392]">
-                      {project.metrics.map((m, i) => (
-                        <div key={i} className="text-[#f7f4ec] flex items-center md:justify-end gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]" />
-                          <span>{m}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-3 pt-2">
-                      {project.id === "topup-store" && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            playUiClick(750);
-                            setSelectedArchProject(project.id);
-                          }}
-                          className="inline-flex items-center gap-1.5 text-xs font-mono text-[#d4af37] hover:text-[#e8cb74] font-semibold border-b border-[#d4af37]/40 pb-0.5 transition-colors"
-                        >
-                          <Terminal className="w-3.5 h-3.5" />
-                          <span>Inspect Spec</span>
-                        </button>
-                      )}
-
-                      {project.links.live && (
-                        <a
-                          href={project.links.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => playUiClick(600)}
-                          className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] hover:border-[#d4af37]/50 px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
-                        >
-                          <span>Live Demo</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-
-                      {project.links.github && (
-                        <a
-                          href={project.links.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => playUiClick(600)}
-                          className="inline-flex items-center gap-1 text-xs font-mono text-[#aba392] hover:text-white border border-[#2e2921] hover:border-[#d4af37]/50 px-3 py-1.5 rounded-lg transition-colors bg-[#161411]"
-                        >
-                          <GithubIcon className="w-3 h-3" />
-                          <span>Code</span>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="pt-4 border-t border-[#2e2921] flex justify-end">
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="px-5 py-2.5 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
-              >
-                Close Works Index
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ============================================================ */}
-      {/* MODAL 2: VERIFIED CREDENTIALS */}
-      {/* ============================================================ */}
-      {activeModal === "credentials" && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#d4af37]" />
-                <h2 className="text-xl font-serif font-bold text-white">
-                  Verified Pedigree & Official Credentials
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
-                aria-label="Close"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {certifications.map((cert: Certification) => (
-                <div
-                  key={cert.id}
-                  className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2 hover:border-[#d4af37]/40 transition-colors"
-                >
-                  <div className="flex items-center justify-between text-xs font-mono text-[#aba392]">
-                    <span className="text-white font-bold">{cert.issuer}</span>
-                    <span>{cert.issueDate}</span>
-                  </div>
-                  <h3 className="text-base font-semibold text-[#f7f4ec]">{cert.name}</h3>
-                  {cert.credentialId && (
-                    <span className="text-xs font-mono text-[#aba392] block">
-                      Credential ID: <code className="text-[#d4af37] font-bold">{cert.credentialId}</code>
-                    </span>
-                  )}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {cert.skills.map((skill) => (
-                      <span key={skill} className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1e1b16] text-[#aba392] border border-[#2e2921]">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-4 border-t border-[#2e2921] flex justify-end">
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
-              >
-                Close Dossier
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ============================================================ */}
-      {/* MODAL 3: CAREER & STEWARDSHIP */}
-      {/* ============================================================ */}
-      {activeModal === "career" && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-              <div className="flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-[#d4af37]" />
-                <h2 className="text-xl font-serif font-bold text-white">
-                  Professional Journey & Community Stewardship
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
-                aria-label="Close"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {/* Experience */}
               <div className="space-y-4">
-                <span className="text-[11px] font-mono text-[#d4af37] uppercase tracking-wider block font-bold">
-                  // Professional Positions
-                </span>
-                {experience.map((exp, idx) => (
-                  <div key={idx} className="border-l-2 border-[#2e2921] pl-4 space-y-1.5">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
-                      <h3 className="text-base font-bold text-white">{exp.role} · <span className="text-[#d4af37]">{exp.company}</span></h3>
-                      <span className="text-[#aba392]">{exp.period}</span>
+                {certifications.map((cert: Certification) => (
+                  <div
+                    key={cert.id}
+                    className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2 hover:border-[#d4af37]/40 transition-colors"
+                  >
+                    <div className="flex items-center justify-between text-xs font-mono text-[#aba392]">
+                      <span className="text-white font-bold">{cert.issuer}</span>
+                      <span>{cert.issueDate}</span>
                     </div>
-                    <div className="text-xs font-mono text-[#7a7265]">{exp.location} · {exp.type}</div>
-                    <p className="text-sm text-[#aba392] font-light leading-relaxed pt-1">
-                      {exp.highlights[0]}
-                    </p>
+                    <h3 className="text-base font-semibold text-[#f7f4ec]">{cert.name}</h3>
+                    {cert.credentialId && (
+                      <span className="text-xs font-mono text-[#aba392] block">
+                        Credential ID: <code className="text-[#d4af37] font-bold">{cert.credentialId}</code>
+                      </span>
+                    )}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {cert.skills.map((skill) => (
+                        <span key={skill} className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1e1b16] text-[#aba392] border border-[#2e2921]">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
 
-              {/* Volunteering GKJW */}
-              {volunteering && volunteering.length > 0 && (
-                <div className="space-y-4 pt-4 border-t border-[#2e2921]">
-                  <span className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider block font-bold">
-                    // Community & Faith Stewardship
-                  </span>
-                  {volunteering.map((vol, idx) => (
-                    <div key={idx} className="border-l-2 border-emerald-500/60 pl-4 space-y-1.5 bg-emerald-950/15 p-3.5 rounded-r-xl">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
-                        <h3 className="text-base font-bold text-emerald-400">{vol.role} · <span className="text-[#f7f4ec]">{vol.organization}</span></h3>
-                        <span className="text-[#aba392]">{vol.period}</span>
-                      </div>
-                      <div className="text-xs font-mono text-[#7a7265]">{vol.category}</div>
-                      <p className="text-sm text-[#aba392] font-light leading-relaxed pt-1">
-                        {vol.highlights[0]}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Education */}
-              {education && education.length > 0 && (
-                <div className="space-y-4 pt-4 border-t border-[#2e2921]">
-                  <span className="text-[11px] font-mono text-[#aba392] uppercase tracking-wider block font-bold">
-                    // Academic Foundation
-                  </span>
-                  {education.map((edu, idx) => (
-                    <div key={idx} className="border-l-2 border-[#2e2921] pl-4 space-y-1">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
-                        <h3 className="text-base font-bold text-white">{edu.institution}</h3>
-                        <span className="text-[#aba392]">{edu.period}</span>
-                      </div>
-                      <p className="text-xs text-[#aba392] font-mono">
-                        {edu.degree} · {edu.field}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="pt-4 border-t border-[#2e2921] flex justify-end">
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
-              >
-                Close Timeline
-              </button>
-            </div>
+              <div className="pt-4 border-t border-[#2e2921] flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
+                >
+                  Close Dossier
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
+
+      {/* ============================================================ */}
+      {/* MODAL 3: CAREER & STEWARDSHIP */}
+      {/* ============================================================ */}
+      <AnimatePresence>
+        {activeModal === "career" && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-[#d4af37]" />
+                  <h2 className="text-xl font-serif font-bold text-white">
+                    Professional Journey & Community Stewardship
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Experience */}
+                <div className="space-y-4">
+                  <span className="text-[11px] font-mono text-[#d4af37] uppercase tracking-wider block font-bold">
+                    // Professional Positions
+                  </span>
+                  {experience.map((exp, idx) => (
+                    <div key={idx} className="border-l-2 border-[#2e2921] pl-4 space-y-1.5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
+                        <h3 className="text-base font-bold text-white">{exp.role} · <span className="text-[#d4af37]">{exp.company}</span></h3>
+                        <span className="text-[#aba392]">{exp.period}</span>
+                      </div>
+                      <div className="text-xs font-mono text-[#7a7265]">{exp.location} · {exp.type}</div>
+                      <p className="text-sm text-[#aba392] font-light leading-relaxed pt-1">
+                        {exp.highlights[0]}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Volunteering GKJW */}
+                {volunteering && volunteering.length > 0 && (
+                  <div className="space-y-4 pt-4 border-t border-[#2e2921]">
+                    <span className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider block font-bold">
+                      // Community & Faith Stewardship
+                    </span>
+                    {volunteering.map((vol, idx) => (
+                      <div key={idx} className="border-l-2 border-emerald-500/60 pl-4 space-y-1.5 bg-emerald-950/15 p-3.5 rounded-r-xl">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
+                          <h3 className="text-base font-bold text-emerald-400">{vol.role} · <span className="text-[#f7f4ec]">{vol.organization}</span></h3>
+                          <span className="text-[#aba392]">{vol.period}</span>
+                        </div>
+                        <div className="text-xs font-mono text-[#7a7265]">{vol.category}</div>
+                        <p className="text-sm text-[#aba392] font-light leading-relaxed pt-1">
+                          {vol.highlights[0]}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Education */}
+                {education && education.length > 0 && (
+                  <div className="space-y-4 pt-4 border-t border-[#2e2921]">
+                    <span className="text-[11px] font-mono text-[#aba392] uppercase tracking-wider block font-bold">
+                      // Academic Foundation
+                    </span>
+                    {education.map((edu, idx) => (
+                      <div key={idx} className="border-l-2 border-[#2e2921] pl-4 space-y-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono">
+                          <h3 className="text-base font-bold text-white">{edu.institution}</h3>
+                          <span className="text-[#aba392]">{edu.period}</span>
+                        </div>
+                        <p className="text-xs text-[#aba392] font-mono">
+                          {edu.degree} · {edu.field}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-4 border-t border-[#2e2921] flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
+                >
+                  Close Timeline
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* ============================================================ */}
       {/* MODAL 4: TECHNICAL ARSENAL & MATRIX */}
       {/* ============================================================ */}
-      {activeModal === "stack" && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
-              <div className="flex items-center gap-2">
-                <Cpu className="w-5 h-5 text-[#d4af37]" />
-                <h2 className="text-xl font-serif font-bold text-white">
-                  Technical Arsenal & Architecture Matrix
-                </h2>
+      <AnimatePresence>
+        {activeModal === "stack" && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+            role="dialog"
+            aria-modal="true"
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#2e2921] bg-[#12100d] p-6 sm:p-8 shadow-2xl text-[#f7f4ec] space-y-6"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-[#2e2921]">
+                <div className="flex items-center gap-2">
+                  <Cpu className="w-5 h-5 text-[#d4af37]" />
+                  <h2 className="text-xl font-serif font-bold text-white">
+                    Technical Arsenal & Architecture Matrix
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="p-2 rounded-xl text-[#aba392] hover:text-white hover:bg-[#1f1b15] transition-colors"
-                aria-label="Close"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
 
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
-                  // Backend, APIs & Asynchronous Queues
-                </h3>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {skills.backend.map((s) => (
-                    <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
-                      {s}
-                    </span>
-                  ))}
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                  <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
+                    // Backend, APIs & Asynchronous Queues
+                  </h3>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {skills.backend.map((s) => (
+                      <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                  <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
+                    // Databases, Ledgers & Storage
+                  </h3>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {skills.databases.map((s) => (
+                      <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                  <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
+                    // Frontend, Canvas & Web Audio
+                  </h3>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {skills.frontend.map((s) => (
+                      <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
+                  <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
+                    // Creative Direction, UX & Media Production
+                  </h3>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {skills.creativeDesign.concat(skills.devOpsAndTools).map((s) => (
+                      <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
-                  // Databases, Ledgers & Storage
-                </h3>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {skills.databases.map((s) => (
-                    <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
-                      {s}
-                    </span>
-                  ))}
-                </div>
+              <div className="pt-4 border-t border-[#2e2921] flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => { playUiClick(600); setActiveModal(null); }}
+                  className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
+                >
+                  Close Arsenal
+                </button>
               </div>
-
-              <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
-                  // Frontend, Canvas & Web Audio
-                </h3>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {skills.frontend.map((s) => (
-                    <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl border border-[#2e2921] bg-[#161411]/80 space-y-2">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#d4af37]">
-                  // Creative Direction, UX & Media Production
-                </h3>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {skills.creativeDesign.concat(skills.devOpsAndTools).map((s) => (
-                    <span key={s} className="px-2.5 py-1 rounded-lg text-xs font-mono bg-[#1e1b16] border border-[#2e2921] text-[#f7f4ec]">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-[#2e2921] flex justify-end">
-              <button
-                type="button"
-                onClick={() => { playUiClick(600); setActiveModal(null); }}
-                className="px-5 py-2 rounded-full bg-[#1e1b16] hover:bg-[#2e2921] text-xs font-mono font-bold text-white transition-colors"
-              >
-                Close Arsenal
-              </button>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* TopUp Store Architecture Inspector Modal */}
       {selectedArchProject && (
