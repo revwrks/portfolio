@@ -63,14 +63,10 @@ const itemVariants: Variants = {
 
 interface TiltCardProps {
   onClick: () => void;
-  icon: React.ElementType;
-  badge: string;
+  icon?: React.ElementType;
   title: string;
   description: string;
   actionText: string;
-  previewPills?: string[];
-  statNumber?: string;
-  statLabel?: string;
   visualSlot?: React.ReactNode;
   className?: string;
 }
@@ -78,13 +74,9 @@ interface TiltCardProps {
 function EditorialTiltCard({
   onClick,
   icon: Icon,
-  badge,
   title,
   description,
   actionText,
-  previewPills,
-  statNumber,
-  statLabel,
   visualSlot,
   className = "",
 }: TiltCardProps) {
@@ -142,57 +134,26 @@ function EditorialTiltCard({
         <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 group-hover:translate-x-[300%] transition-transform duration-1000" />
       </div>
 
-      {/* Inner Card Visual Animation Slot (Projects Marquee, Chat Bubbles, Badges, Waveform) */}
+      {/* Top Visual Animation Slot (Projects Marquee, Chat Bubbles, Badges, Waveform, Terminal) */}
       {visualSlot && (
         <div className="relative z-10 w-full mb-1">
           {visualSlot}
         </div>
       )}
 
-      {/* Top Header inside Card */}
-      <div className="relative z-10 flex items-center justify-between">
-        <div className="w-14 h-14 rounded-2xl bg-[#d4af37]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#d4af37]/20 group-hover:rotate-3 shadow-md shadow-[#d4af37]/10">
-          <Icon className="w-7 h-7 text-[#d4af37] transition-transform duration-300 group-hover:scale-105" />
-        </div>
-
-        <span className="flex items-center gap-1.5 text-xs font-mono font-bold tracking-wider text-[#d4af37] uppercase px-3.5 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 backdrop-blur-sm group-hover:border-[#d4af37]/60 transition-colors">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-ping" />
-          {badge}
-        </span>
-      </div>
-
-      {/* Middle Body inside Card */}
+      {/* Clean Minimal Title & Description */}
       <div className="relative z-10 space-y-2">
-        <div className="flex items-baseline justify-between gap-2">
+        <div className="flex items-center gap-2.5">
+          {Icon && (
+            <Icon className="w-5 h-5 text-[#d4af37] flex-shrink-0 transition-transform duration-200 group-hover:scale-110" />
+          )}
           <h3 className="text-2xl font-serif font-bold text-[#f7f4ec] group-hover:text-[#e8cb74] transition-colors duration-200">
             {title}
           </h3>
-          {statNumber && (
-            <span className="text-xl font-mono font-bold text-[#d4af37] opacity-80 group-hover:opacity-100 transition-opacity">
-              {statNumber}
-            </span>
-          )}
         </div>
         <p className="text-sm text-[#aba392] font-light leading-relaxed group-hover:text-[#c4beb1] transition-colors duration-200">
           {description}
         </p>
-
-        {/* Animated preview chips inside card */}
-        {previewPills && previewPills.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 pt-2">
-            {previewPills.map((pill, idx) => (
-              <span
-                key={idx}
-                className="text-[10px] font-mono px-2.5 py-0.5 rounded-md bg-[#1e1b16] text-[#aba392] border border-[#2e2921] group-hover:border-[#d4af37]/30 group-hover:text-white transition-all"
-                style={{
-                  transitionDelay: `${idx * 40}ms`
-                }}
-              >
-                {pill}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Bottom Action Bar inside Card */}
@@ -321,9 +282,9 @@ export function EditorialTheme() {
           
           {/* Left Column: Pure Portrait & Dossier Stats */}
           <motion.div variants={itemVariants} className="md:col-span-4 space-y-6">
-            {/* Pure Pristine Portrait Frame */}
+            {/* Pure Pristine Portrait Frame with Smooth Dissolve & Ambient Hover Glow */}
             <div 
-              className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-300 hover:border-[#d4af37]/70"
+              className="relative rounded-3xl overflow-hidden border border-[#2e2921] bg-[#161411] shadow-2xl cursor-pointer group transition-all duration-500 hover:border-[#d4af37]/80 hover:shadow-2xl hover:shadow-[#d4af37]/15 aspect-[4/5] w-full"
               onMouseEnter={() => setIsHoveredAvatar(true)}
               onMouseLeave={() => setIsHoveredAvatar(false)}
               onClick={() => {
@@ -331,12 +292,29 @@ export function EditorialTheme() {
                 setIsHoveredAvatar(!isHoveredAvatar);
               }}
             >
+              {/* Primary Focused Director Portrait (rev3.JPG) */}
               <img
-                src={isHoveredAvatar ? personal.avatarHover : personal.avatar}
-                alt={personal.name}
-                className="w-full aspect-[4/5] object-cover object-top transition-all duration-500 group-hover:scale-105"
+                src={personal.avatar}
+                alt={`${personal.name} - Director`}
+                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${
+                  isHoveredAvatar ? "opacity-0" : "opacity-100"
+                }`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-30 pointer-events-none" />
+
+              {/* Alternate Playful Winking Portrait (rev2.JPG) */}
+              <img
+                src={personal.avatarHover}
+                alt={`${personal.name} - Alternate Pose`}
+                className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${
+                  isHoveredAvatar ? "opacity-100" : "opacity-0"
+                }`}
+              />
+
+              {/* Luxury Film Vignette Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 pointer-events-none" />
+
+              {/* Shimmer Border Accent on Hover */}
+              <div className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-[#d4af37]/40 pointer-events-none transition-colors duration-500" />
             </div>
 
             {/* Quick Metadata Box */}
@@ -478,11 +456,9 @@ export function EditorialTheme() {
               }}
               visualSlot={<CardProjectsMarquee />}
               icon={Layers}
-              badge="6 Curated Cases"
               title="Selected Works & Systems"
               description="Production fintech transaction ledgers, digital key vaults, in-browser synthesizers & concert media."
               actionText="Open Portfolio Index"
-              previewPills={["TopUp Store", "Digi-Art Synth", "Chorus ERP", "Tamboer POS"]}
             />
 
             {/* TILE 2: DIRECT INQUIRY & CONTACT (CHAT BUBBLE ANIMATION) */}
@@ -493,11 +469,9 @@ export function EditorialTheme() {
               }}
               visualSlot={<CardChatBubbles />}
               icon={Send}
-              badge="Direct Channel"
               title="Contact & Collaboration"
               description="Direct line for architectural contracts, technical advising, and multimedia creative direction."
               actionText="Initiate Transmission"
-              previewPills={["itzrevv@gmail.com", "LinkedIn", "Instagram", "GitHub"]}
             />
 
             {/* TILE 3: VERIFIED CREDENTIALS (FLOATING BADGES) */}
@@ -508,11 +482,9 @@ export function EditorialTheme() {
               }}
               visualSlot={<CardCredentialsBadges />}
               icon={ShieldCheck}
-              badge="7 Official Certs"
               title="Verified Pedigree & Proof"
               description="Meta Database Engineer, Google Professional UX Design, IBM Python AI & HackerRank verified badges."
               actionText="View Verified Badges"
-              previewPills={["Meta Database", "Google UX", "IBM AI", "HackerRank"]}
             />
 
             {/* TILE 4: CAREER & STEWARDSHIP (LIVE BROADCAST WAVEFORM) */}
@@ -523,11 +495,9 @@ export function EditorialTheme() {
               }}
               visualSlot={<CardAudioWaveform />}
               icon={Briefcase}
-              badge="5+ Years Leadership"
               title="Career & Stewardship"
               description="Head of Marketing at Nusa Indah Tropika & 3+ years directing multimedia operations at GKJW."
               actionText="Examine Track Record"
-              previewPills={["Head of Marketing", "GKJW Multimedia", "Freelance Web"]}
             />
 
             {/* TILE 5: TECHNICAL ARSENAL (TERMINAL STREAM, FULL WIDTH) */}
@@ -539,11 +509,9 @@ export function EditorialTheme() {
               }}
               visualSlot={<CardTerminalStream />}
               icon={Cpu}
-              badge="Fullstack & Systems"
               title="Technical Arsenal"
               description="Backend idempotency, MySQL ACID ledgers, React 19, Tailwind, HTML5 Canvas & Web Audio API."
               actionText="Inspect Architecture Matrix"
-              previewPills={["Laravel", "MySQL ACID", "Webhooks", "React 19", "Web Audio API", "Docker"]}
             />
 
           </div>
