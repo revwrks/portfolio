@@ -2,24 +2,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050507;
-  --foreground: #fafafa;
+  --background: #0d0c0a;
+  --foreground: #f7f4ec;
   
-  /* Astryx Y2K / Neo-Brutalist Token Cascade */
-  --astryx-surface-0: #050507;
-  --astryx-surface-1: #0a0a0f;
-  --astryx-surface-2: #121218;
-  --astryx-surface-3: #1a1a24;
-  --astryx-border: #27272a;
-  --astryx-border-strong: #3f3f46;
-  --astryx-border-bright: #71717a;
+  /* Astryx Luxe Warm Espresso & Champagne Brass Tokens */
+  --astryx-surface-0: #0d0c0a;
+  --astryx-surface-1: #161411;
+  --astryx-surface-2: #1e1b16;
+  --astryx-surface-3: #27231c;
+  --astryx-border: #2e2921;
+  --astryx-border-strong: #453e32;
+  --astryx-border-bright: #695e4d;
   
-  --astryx-accent-blue: #3b82f6;
-  --astryx-accent-lime: #a3e635;
-  --astryx-accent-purple: #c084fc;
-  --astryx-accent-cyan: #22d3ee;
+  --astryx-gold: #d4af37;
+  --astryx-gold-light: #e8cb74;
+  --astryx-gold-dark: #aa8c2c;
   
-  --muted: #a1a1aa;
+  --muted: #aba392;
 }
 
 @theme inline {
@@ -39,6 +38,7 @@ html {
 
 body {
   background-color: var(--background);
+  background: radial-gradient(ellipse at 50% -5%, #221b13 0%, #0d0c0a 75%);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
@@ -47,14 +47,14 @@ body {
 
 /* Accessibility Focus Ring (WCAG 2.1 AA) */
 :focus-visible {
-  outline: 2px solid var(--astryx-accent-lime);
+  outline: 2px solid var(--astryx-gold);
   outline-offset: 2px;
 }
 
 /* Selection */
 ::selection {
-  background-color: #a3e635;
-  color: #000000;
+  background-color: rgba(212, 175, 55, 0.35);
+  color: #ffffff;
 }
 
 /* Elegant Stage Fade-Slide Animation */
