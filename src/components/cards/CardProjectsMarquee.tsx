@@ -21,7 +21,7 @@ interface ProjectIcon {
 
 const PROJECT_ICONS: ProjectIcon[] = [
   {
-    name: "TopUp Store",
+    name: "Garuda TopUp",
     category: "Fintech",
     gradient: "from-amber-500 via-orange-500 to-amber-700",
     borderColor: "border-amber-400/40",

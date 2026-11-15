@@ -1432,11 +1432,11 @@ export function EditorialTheme() {
         )}
       </AnimatePresence>
 
-      {/* TopUp Store Architecture Inspector Modal */}
+      {/* Garuda TopUp Architecture Inspector Modal */}
       {selectedArchProject && (
         <ArchitectureInspector
           isOpen={true}
-          projectTitle="TopUp Store & KeyVault Engine"
+          projectTitle="Garuda TopUp & KeyVault Engine"
           onClose={() => setSelectedArchProject(null)}
         />
       )}

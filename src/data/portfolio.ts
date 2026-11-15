@@ -115,7 +115,7 @@ export const PORTFOLIO_DATA = {
   projects: [
     {
       id: "topup-store",
-      title: "TopUp Store & KeyVault Engine",
+      title: "Garuda TopUp & KeyVault Engine",
       category: "engineering",
       tagline:
         "High-concurrency digital inventory, subscription ledger, and webhook processing platform.",
