@@ -141,7 +141,7 @@ export const PORTFOLIO_DATA = {
         "Created self-service warranty claim workflow with automated replacement checks.",
       ],
       links: {
-        github: "https://github.com/revwrks",
+        github: "https://github.com/revwrks/garuda-top-up",
       },
       featured: true,
     },
@@ -173,7 +173,7 @@ export const PORTFOLIO_DATA = {
       ],
       links: {
         live: "https://digi-art-netlify.netlify.app",
-        github: "https://github.com/revwrks",
+        github: "https://github.com/revwrks/digi-art",
       },
       featured: true,
     },
@@ -204,7 +204,7 @@ export const PORTFOLIO_DATA = {
         "Audit trail activity logging across administrative actions for operational compliance.",
       ],
       links: {
-        github: "https://github.com/revwrks",
+        github: "https://github.com/revwrks/chorus_studio",
       },
       featured: true,
     },
@@ -234,7 +234,7 @@ export const PORTFOLIO_DATA = {
         "Generates automated daily sales recaps, cash-drawer reconciliation, and margin analysis.",
       ],
       links: {
-        github: "https://github.com/revwrks",
+        github: "https://github.com/revwrks/tamboer_gadget",
       },
       featured: false,
     },
