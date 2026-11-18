@@ -83,17 +83,43 @@ export const NegativeSpacePhilosophy: React.FC = () => {
           </span>
         </h2>
         <div className="w-16 h-[1px] bg-foreground/20 mx-auto my-6" />
-        <p className="font-sans text-xs sm:text-sm text-muted max-w-md mx-auto leading-relaxed">
+        <p className="font-sans text-xs sm:text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
           Mastering the discipline of radical subtraction. High performance does not require visual noise—it demands structural clarity, verified invariants, and uncompromising precision.
         </p>
+
+        {/* Mobile Stacked Capabilities (Visible on mobile/tablet) */}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 mt-10 text-left pointer-events-auto md:hidden">
+          {REAL_CAPABILITY_NODES.map((node) => (
+            <div
+              key={`mobile-${node.id}`}
+              className="p-4 bg-[#121215] border border-white/10"
+              onClick={() => playMechanicalClick(1100)}
+            >
+              <div className="flex items-center justify-between mb-1.5 pb-1 border-b border-white/10">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">
+                  {node.tag}
+                </span>
+                <span className="font-mono text-[9px] text-emerald-400 font-bold">
+                  {node.metric}
+                </span>
+              </div>
+              <h3 className="font-heading text-sm font-bold text-white">
+                {node.title}
+              </h3>
+              <p className="font-sans text-[11px] text-zinc-400 mt-1 leading-snug">
+                {node.desc}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Floating Radial Capability Nodes */}
+      {/* Floating Radial Capability Nodes (Desktop) */}
       {REAL_CAPABILITY_NODES.map((node) => (
         <div
           key={node.id}
           data-ns-node
-          className="absolute z-20 group hidden md:block max-w-[260px] p-4 bg-surface-card border border-hairline hover:border-foreground rounded-none transition-all duration-300 hover:-translate-y-1 hover:shadow-brutalist cursor-default shadow-sm"
+          className="absolute z-20 group hidden md:block max-w-[260px] p-4 bg-[#121215] border border-white/10 hover:border-emerald-400/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-default"
           style={{
             left: node.polarPos.x,
             top: node.polarPos.y,
@@ -101,18 +127,18 @@ export const NegativeSpacePhilosophy: React.FC = () => {
           onMouseEnter={() => playElasticPop(580)}
           onClick={() => playMechanicalClick(1100)}
         >
-          <div className="flex items-center justify-between mb-1 pb-1 border-b border-hairline">
-            <span className="font-mono text-[9px] uppercase tracking-wider text-muted">
+          <div className="flex items-center justify-between mb-1 pb-1 border-b border-white/10">
+            <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">
               {node.tag}
             </span>
-            <span className="font-mono text-[9px] text-accent font-bold">
+            <span className="font-mono text-[9px] text-emerald-400 font-bold">
               {node.metric}
             </span>
           </div>
-          <h3 className="font-heading text-sm font-bold text-foreground group-hover:underline">
+          <h3 className="font-heading text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">
             {node.title}
           </h3>
-          <p className="font-sans text-[11px] text-muted mt-1 leading-snug">
+          <p className="font-sans text-[11px] text-zinc-400 mt-1 leading-snug">
             {node.desc}
           </p>
         </div>

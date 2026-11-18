@@ -169,11 +169,11 @@ export default function HolographicCapabilitiesGrid() {
     window.addEventListener("resize", handleResize);
 
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const startTime = performance.now();
 
-    const animate = () => {
+    const animate = (timestamp: number = performance.now()) => {
       animationFrameId = requestAnimationFrame(animate);
-      const time = clock.getElapsedTime();
+      const time = (timestamp - startTime) * 0.001;
 
       mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.05;
       mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.05;
@@ -248,15 +248,6 @@ export default function HolographicCapabilitiesGrid() {
             <h2 className="font-heading text-3xl md:text-5xl font-black uppercase tracking-tight text-foreground mt-2">
               Technical Core &amp; Engineering Breadth
             </h2>
-          </div>
-
-          <div className="font-mono text-xs text-muted flex items-center gap-6">
-            <div>
-              <span className="text-foreground font-bold">4 DOMAINS</span> SPECIFIED
-            </div>
-            <div>
-              <span className="text-foreground font-bold">100% AUTHENTIC</span> REPO DATA
-            </div>
           </div>
         </div>
 
@@ -340,20 +331,11 @@ export default function HolographicCapabilitiesGrid() {
           })}
         </div>
 
-        {/* Grid Footer Telemetry & Sub-Bass Soundboard Trigger */}
+        {/* Grid Footer Telemetry */}
         <div className="flex flex-col sm:flex-row items-center justify-between font-mono text-xs text-muted border-t border-hairline pt-6 gap-4">
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-foreground" />
-            <span>DISPLACEMENT ALGORITHM: PHANTOM LAND GLSL UV WARPING</span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => sound.playDrone(2.5)}
-              className="px-3 py-1.5 border border-hairline hover:border-foreground hover:text-foreground transition-colors uppercase font-mono"
-            >
-              TRIGGER 55Hz SUB-BASS DRONE
-            </button>
+            <span>DISPLACEMENT ALGORITHM: GLSL UV WARPING</span>
           </div>
         </div>
       </div>

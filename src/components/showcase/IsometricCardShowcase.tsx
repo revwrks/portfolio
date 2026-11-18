@@ -17,147 +17,83 @@ interface ArchitectureCardData {
 const CARDS_DATA: ArchitectureCardData[] = [
   {
     id: 1,
-    title: "Monolithic Deconstruction",
-    category: "Architecture",
-    phase: "Discovery & Topology",
-    gradient: ["#2d3748", "#1a202c"],
-    metric: "P99 < 12ms",
-    summary: "Refactoring legacy monolithic structures into event-driven reactive micro-frontends.",
+    title: "Garuda TopUp Engine",
+    category: "Fintech & SaaS",
+    phase: "Asynchronous Webhooks",
+    gradient: ["#1e293b", "#0f172a"],
+    metric: "Sub-Second Webhooks",
+    summary:
+      "High-concurrency digital gaming & subscription vault with automated double-entry mutation ledgers and webhook idempotency.",
   },
   {
     id: 2,
-    title: "Distributed State Mesh",
-    category: "Architecture",
-    phase: "State Topology",
-    gradient: ["#4a5568", "#2d3748"],
-    metric: "0.2ms Sync",
-    summary: "CRDT-backed peer consensus engine eliminating server roundtrips across client nodes.",
+    title: "Digi-Art Canvas Studio",
+    category: "Creative Engineering",
+    phase: "Canvas & Web Audio DSP",
+    gradient: ["#312e81", "#1e1b4b"],
+    metric: "0ms Audio Latency",
+    summary:
+      "In-browser touch-friendly illustration studio featuring procedural Web Audio synthesizer and Google Images API proxy.",
   },
   {
     id: 3,
-    title: "Structural Schematics",
-    category: "Architecture",
-    phase: "Design Refinement",
-    gradient: ["#c59b6d", "#5c3d2e"],
-    metric: "100% Deterministic",
-    summary: "Formal specification verification preventing race conditions before code generation.",
+    title: "Chorus Studio ERP",
+    category: "Enterprise Software",
+    phase: "Academic ERP & Batch PDF",
+    gradient: ["#14532d", "#052e16"],
+    metric: "-80% Admin Overhead",
+    summary:
+      "Comprehensive academy operations platform automating bulk PDF evaluation reports, backing track streaming, and audit trails.",
   },
   {
     id: 4,
-    title: "Neural Routing Gateway",
-    category: "Architecture",
-    phase: "Network Edge",
-    gradient: ["#dd6b20", "#9c4221"],
-    metric: "50k req/sec",
-    summary: "Context-aware dynamic edge proxy with sub-millisecond TLS handshake termination.",
+    title: "Tamboer Gadget POS",
+    category: "Systems Engineering",
+    phase: "Retail POS & Hardware Stock",
+    gradient: ["#7c2d12", "#431407"],
+    metric: "Active Retail POS",
+    summary:
+      "Production point-of-sale platform managing real-time inventory deduction, technician hardware repair tracking, and margin analysis.",
   },
   {
     id: 5,
-    title: "Sub-Millisecond Cache",
-    category: "Architecture",
-    phase: "Memory Hierarchy",
-    gradient: ["#d69e2e", "#744210"],
-    metric: "99.8% Hit Ratio",
-    summary: "Multi-tiered L1/L2 Redis & WebAssembly in-memory cache with zero serialization tax.",
+    title: "Chorus Concert 2026",
+    category: "Cinematic Media",
+    phase: "Multicam Video Direction",
+    gradient: ["#581c87", "#3b0764"],
+    metric: "2-Hour Continuous Show",
+    summary:
+      "Director and lead camera operator for a continuous 2-hour vocal showcase, executing stage blocking, lighting, and audio mastering.",
   },
   {
     id: 6,
-    title: "Asynchronous Telemetry",
-    category: "Architecture",
-    phase: "Observability",
-    gradient: ["#38a169", "#22543d"],
-    metric: "1.2M events/s",
-    summary: "Zero-overhead ring-buffer tracing dispatching structured spans to ClickHouse.",
+    title: "Krida Dharma Choir Video",
+    category: "Creative Production",
+    phase: "Narrative Music Video",
+    gradient: ["#831843", "#500724"],
+    metric: "Award-Winning Choir",
+    summary:
+      "Directed and edited award-winning choral performance video, translating classical repertoire into narrative lighting and rhythm.",
   },
   {
     id: 7,
-    title: "High-Concurrency Queue",
-    category: "Architecture",
-    phase: "Message Fabric",
-    gradient: ["#319795", "#234e52"],
-    metric: "Zero Drop Rate",
-    summary: "Persistent partition-replicated WAL with backpressure-driven consumer pooling.",
+    title: "Wallet Mutation Ledger",
+    category: "Distributed Systems",
+    phase: "Double-Entry Balance Proof",
+    gradient: ["#2d3748", "#171923"],
+    metric: "Zero Balance Drift",
+    summary:
+      "Cryptographically verified transaction logging preventing race conditions and double-spending across concurrent payment webhooks.",
   },
   {
     id: 8,
-    title: "WebGL Rendering Engine",
-    category: "Architecture",
-    phase: "Client Graphics",
-    gradient: ["#3182ce", "#2a4365"],
+    title: "Revworks Digital Lab",
+    category: "Interactive 3D",
+    phase: "Three.js & Audio DSP",
+    gradient: ["#0f172a", "#020617"],
     metric: "60 FPS Locked",
-    summary: "Custom Three.js shader pipelines featuring GPU instancing and frustum culling.",
-  },
-  {
-    id: 9,
-    title: "Materials & 3D Shading",
-    category: "Architecture",
-    phase: "Visual Synthesis",
-    gradient: ["#4299e1", "#1a365d"],
-    metric: "PBR Specular",
-    summary: "Physically based microfacet BRDF shading with real-time screen-space reflections.",
-  },
-  {
-    id: 10,
-    title: "Spatial Audio Synthesis",
-    category: "Architecture",
-    phase: "Acoustic DSP",
-    gradient: ["#805ad5", "#44337a"],
-    metric: "48kHz Zero Latency",
-    summary: "Pure procedural Web Audio API nodes delivering tactile micro-feedback without assets.",
-  },
-  {
-    id: 11,
-    title: "Continuous Validation",
-    category: "Architecture",
-    phase: "Quality Gates",
-    gradient: ["#d53f8c", "#702459"],
-    metric: "99.9% Test Pass",
-    summary: "Deterministic e2e Playwright assertions and pass@k evaluation benchmarking.",
-  },
-  {
-    id: 12,
-    title: "Zero-Trust Encryption",
-    category: "Architecture",
-    phase: "Security Layer",
-    gradient: ["#e53e3e", "#742a2a"],
-    metric: "Ed25519 Native",
-    summary: "Hardware-enclave backed cryptographic verification for every client payload.",
-  },
-  {
-    id: 13,
-    title: "Documentation & Permitting",
-    category: "Architecture",
-    phase: "Compliance & Specs",
-    gradient: ["#4a5568", "#171923"],
-    metric: "ISO 27001",
-    summary: "Automated living architectural decision records (ADR) synchronized directly to git.",
-  },
-  {
-    id: 14,
-    title: "Atomic Deployments",
-    category: "Architecture",
-    phase: "Infrastructure",
-    gradient: ["#718096", "#2d3748"],
-    metric: "0s Downtime",
-    summary: "Blue-green container mesh with automated rollback upon anomalous latency spikes.",
-  },
-  {
-    id: 15,
-    title: "Global CDN Rehydration",
-    category: "Architecture",
-    phase: "Distribution",
-    gradient: ["#a0aec0", "#4a5568"],
-    metric: "32 PoPs Live",
-    summary: "Anycast edge cache clusters serving pre-rendered HTML snapshots in under 15ms.",
-  },
-  {
-    id: 16,
-    title: "Production Scale Mastery",
-    category: "Architecture",
-    phase: "Operational Peak",
-    gradient: ["#cbd5e0", "#2d3748"],
-    metric: "10M MAU Ready",
-    summary: "Autoscaling stateless clusters orchestrated across multi-region Kubernetes pods.",
+    summary:
+      "Reverse-engineered 8 brutalist archetypes with Three.js 3D isometric conveyor, shaders, and procedural audio synthesizer.",
   },
 ];
 
@@ -285,11 +221,11 @@ export default function IsometricCardShowcase() {
 
   // State for React UI
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(8); // Default to Card 9: "Materials & 3D Shading"
+  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
 
   // Refs for 60fps render loop to avoid re-mounting Three.js
-  const selectedCardIndexRef = useRef(8);
+  const selectedCardIndexRef = useRef(0);
   const hoveredCardIndexRef = useRef<number | null>(null);
   const mouseRef = useRef(new THREE.Vector2(-1000, -1000));
   const raycasterRef = useRef(new THREE.Raycaster());
@@ -315,7 +251,8 @@ export default function IsometricCardShowcase() {
 
     // Architectural isometric camera view: low FOV for axonometric rigor
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0, 10.5);
+    const isMobile = width < 768;
+    camera.position.set(0, 0, isMobile ? (width < 450 ? 16.5 : 14.0) : 10.5);
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({
@@ -367,10 +304,13 @@ export default function IsometricCardShowcase() {
 
     // Resize Handler
     const handleResize = () => {
-      if (!containerRef.current || !rendererRef.current || !cameraRef.current) return;
+      if (!containerRef.current || !rendererRef.current || !cameraRef.current)
+        return;
       const w = containerRef.current.clientWidth;
       const h = window.innerHeight;
       cameraRef.current.aspect = w / h;
+      const isMob = w < 768;
+      cameraRef.current.position.z = isMob ? (w < 450 ? 16.5 : 14.0) : 10.5;
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(w, h);
     };
@@ -391,7 +331,9 @@ export default function IsometricCardShowcase() {
       // Raycasting for interactive hover
       if (cameraRef.current && sceneRef.current) {
         raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
-        const intersects = raycasterRef.current.intersectObjects(cardMeshesRef.current);
+        const intersects = raycasterRef.current.intersectObjects(
+          cardMeshesRef.current,
+        );
         if (intersects.length > 0) {
           const topHit = intersects[0].object as THREE.Mesh;
           const hitIdx = topHit.userData.index;
@@ -435,47 +377,50 @@ export default function IsometricCardShowcase() {
         // Gliding offset so selected card stays centered in viewport
         const glideOffset = trackGliding * (activeIdx * 0.7);
 
-        const currentX = (THREE.MathUtils.lerp(0, fannedX, fanAmount) - glideOffset) * tiltAmount;
-        const currentY = (THREE.MathUtils.lerp(0, fannedY, fanAmount) - glideOffset * 0.5) * tiltAmount;
+        const currentX =
+          (THREE.MathUtils.lerp(0, fannedX, fanAmount) - glideOffset) *
+          tiltAmount;
+        const currentY =
+          (THREE.MathUtils.lerp(0, fannedY, fanAmount) - glideOffset * 0.5) *
+          tiltAmount;
         const currentZ = THREE.MathUtils.lerp(stackZ, fannedZ, fanAmount);
 
-        // Step 6: Interactive Selection Elevation
+        // Step 6: Interactive Selection Elevation (scaled by fanAmount so initial stack stays completely flush and straight)
         let elevationY = 0;
         let elevationZ = 0;
         let scaleTarget = 1.0;
 
         if (isSelected) {
-          elevationY = 0.85;
-          elevationZ = 0.6;
-          scaleTarget = 1.06;
+          elevationY = 0.85 * fanAmount;
+          elevationZ = 0.6 * fanAmount;
+          scaleTarget = 1.0 + 0.06 * fanAmount;
         } else if (isHovered) {
-          elevationY = 0.35;
-          elevationZ = 0.25;
-          scaleTarget = 1.02;
+          elevationY = 0.35 * fanAmount;
+          elevationZ = 0.25 * fanAmount;
+          scaleTarget = 1.0 + 0.02 * fanAmount;
         }
 
         mesh.position.x = currentX;
         mesh.position.y = currentY + elevationY;
         mesh.position.z = currentZ + elevationZ;
 
-        mesh.rotation.x = isSelected ? targetRotX * 0.8 : targetRotX;
-        mesh.rotation.y = isSelected ? targetRotY * 0.8 : targetRotY;
-        mesh.rotation.z = isSelected ? targetRotZ * 0.8 : targetRotZ;
+        // Keep rotation locked to isometric conveyor grid (no crooked angle on selected card)
+        mesh.rotation.x = targetRotX;
+        mesh.rotation.y = targetRotY;
+        mesh.rotation.z = targetRotZ;
 
         mesh.scale.setScalar(scaleTarget);
 
         const mat = mesh.material as THREE.MeshStandardMaterial;
-        if (p < 0.12 && idx > 0) {
-          mat.opacity = 0;
-        } else if (p >= 0.12 && p < 0.35 && idx > 0) {
-          mat.opacity = THREE.MathUtils.lerp(0, 0.95, (p - 0.12) / 0.23);
-        } else {
-          mat.opacity = isSelected ? 1.0 : isHovered ? 0.95 : 0.78;
-        }
+        mat.opacity = isSelected ? 1.0 : isHovered ? 0.95 : 0.82;
       });
 
       if (cameraRef.current) {
-        cameraRef.current.position.x = THREE.MathUtils.lerp(0, -0.8, tiltAmount);
+        cameraRef.current.position.x = THREE.MathUtils.lerp(
+          0,
+          -0.8,
+          tiltAmount,
+        );
         cameraRef.current.position.y = THREE.MathUtils.lerp(0, 0.4, tiltAmount);
       }
 
@@ -501,7 +446,7 @@ export default function IsometricCardShowcase() {
         if (rawProgress > 0.65) {
           const activeIndex = Math.min(
             CARDS_DATA.length - 1,
-            Math.floor(((rawProgress - 0.65) / 0.35) * (CARDS_DATA.length - 1))
+            Math.floor(((rawProgress - 0.65) / 0.35) * (CARDS_DATA.length - 1)),
           );
           if (activeIndex !== selectedCardIndexRef.current) {
             selectedCardIndexRef.current = activeIndex;
@@ -555,18 +500,18 @@ export default function IsometricCardShowcase() {
       id="architecture-showcase"
     >
       {/* Sticky Fullscreen 3D Viewport */}
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex flex-col justify-between p-6 md:p-12 pointer-events-none">
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex flex-col justify-between p-3 sm:p-6 md:p-12 pointer-events-none">
         {/* Top Header Telemetry & Stage Indicators */}
-        <div className="flex items-start justify-between w-full z-20 pointer-events-auto border-b border-white/10 pb-4">
+        <div className="flex items-start justify-between w-full z-20 pointer-events-auto border-b border-white/10 pb-3 sm:pb-4">
           <div>
-            <div className="flex items-center gap-3">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              <p className="font-mono text-xs uppercase tracking-widest text-zinc-400">
-                ACT 03 // ARCHITECTURAL CONVEYOR
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <p className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-zinc-400">
+                ACT 03 // PROJECT SHOWCASE
               </p>
             </div>
-            <h2 className="font-heading text-2xl md:text-4xl font-extrabold uppercase mt-1 tracking-tight text-white">
-              AI System Architecture
+            <h2 className="font-heading text-xl sm:text-2xl md:text-4xl font-extrabold uppercase mt-0.5 sm:mt-1 tracking-tight text-white">
+              Production Projects
             </h2>
           </div>
 
@@ -574,9 +519,18 @@ export default function IsometricCardShowcase() {
           <div className="hidden md:flex flex-col items-end gap-1.5 font-mono text-xs text-zinc-400">
             <div className="flex items-center gap-4">
               <span>
-                STEP: {scrollProgress < 0.2 ? "01/06 (FLAT DECK)" : scrollProgress < 0.4 ? "02/06 (ISOMETRIC TILT)" : scrollProgress < 0.7 ? "03-04/06 (FANNING TRACK)" : "05-06/06 (ACTIVE SELECTION)"}
+                STEP:{" "}
+                {scrollProgress < 0.2
+                  ? "01/06 (FLAT DECK)"
+                  : scrollProgress < 0.4
+                    ? "02/06 (ISOMETRIC TILT)"
+                    : scrollProgress < 0.7
+                      ? "03-04/06 (FANNING TRACK)"
+                      : "05-06/06 (ACTIVE SELECTION)"}
               </span>
-              <span className="text-white font-bold">{(scrollProgress * 100).toFixed(1)}%</span>
+              <span className="text-white font-bold">
+                {(scrollProgress * 100).toFixed(1)}%
+              </span>
             </div>
             <div className="w-48 h-1 bg-white/10 border border-white/10 overflow-hidden rounded-full">
               <div
@@ -598,32 +552,34 @@ export default function IsometricCardShowcase() {
         </div>
 
         {/* Bottom Interactive HUD & Inkwell Pill Selector */}
-        <div className="relative z-20 pointer-events-auto w-full max-w-4xl mx-auto flex flex-col items-center gap-3 text-center pb-2">
+        <div className="relative z-20 pointer-events-auto w-full max-w-4xl mx-auto flex flex-col items-center gap-2 sm:gap-3 text-center pb-1 sm:pb-2">
           {/* Main Selected Card Telemetry Display */}
           <div className="transition-all duration-300 transform">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-zinc-400 mb-0.5">
-              AI IS CHANGING THE WAY WE APPROACH
+            <p className="font-mono text-[9px] sm:text-[11px] uppercase tracking-widest text-emerald-400 mb-0.5">
+              PAST PRODUCTION PROJECT // {activeCard.phase}
             </p>
-            <h3 className="font-heading text-2xl md:text-4xl font-black uppercase tracking-tight text-white">
-              {activeCard.category}
+            <h3 className="font-heading text-lg sm:text-2xl md:text-4xl font-black uppercase tracking-tight text-white line-clamp-1">
+              {activeCard.title}
             </h3>
           </div>
 
           {/* Interactive Phase Selector Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3">
             <button
-              onClick={() => handleSelectCard(Math.max(0, selectedCardIndex - 1))}
+              onClick={() =>
+                handleSelectCard(Math.max(0, selectedCardIndex - 1))
+              }
               disabled={selectedCardIndex === 0}
-              className="px-3 py-1 rounded-full border border-white/20 font-mono text-xs hover:border-white disabled:opacity-30 transition-colors text-white"
+              className="px-2.5 sm:px-3 py-1 rounded-full border border-white/20 font-mono text-[10px] sm:text-xs hover:border-white disabled:opacity-30 transition-colors text-white"
             >
               PREV
             </button>
 
-            <div className="flex items-center gap-2 px-4 py-1 rounded-full border-2 border-white bg-[#121215] shadow-lg">
-              <span className="w-5 h-5 rounded-full bg-white text-black font-mono text-xs font-bold flex items-center justify-center">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 rounded-full border-2 border-white bg-[#121215] shadow-lg">
+              <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white text-black font-mono text-[10px] sm:text-xs font-bold flex items-center justify-center">
                 {activeCard.id}
               </span>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
+              <span className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">
                 {activeCard.title}
               </span>
             </div>
@@ -634,20 +590,24 @@ export default function IsometricCardShowcase() {
             </div>
 
             <button
-              onClick={() => handleSelectCard(Math.min(CARDS_DATA.length - 1, selectedCardIndex + 1))}
+              onClick={() =>
+                handleSelectCard(
+                  Math.min(CARDS_DATA.length - 1, selectedCardIndex + 1),
+                )
+              }
               disabled={selectedCardIndex === CARDS_DATA.length - 1}
-              className="px-3 py-1 rounded-full border border-white/20 font-mono text-xs hover:border-white disabled:opacity-30 transition-colors text-white"
+              className="px-2.5 sm:px-3 py-1 rounded-full border border-white/20 font-mono text-[10px] sm:text-xs hover:border-white disabled:opacity-30 transition-colors text-white"
             >
               NEXT
             </button>
           </div>
 
-          <p className="font-mono text-xs text-zinc-400 max-w-xl leading-relaxed">
+          <p className="hidden sm:block font-mono text-xs text-zinc-400 max-w-xl leading-relaxed">
             {activeCard.summary}
           </p>
 
           {/* 1-16 carousel pill buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 no-scrollbar">
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto max-w-full pb-1 no-scrollbar px-2">
             {CARDS_DATA.map((c, i) => (
               <button
                 key={c.id}

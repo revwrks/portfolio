@@ -29,6 +29,15 @@ export const AestheticPreloader: React.FC<AestheticPreloaderProps> = ({
   const bottomHudRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [isDismissed, setIsDismissed] = useState(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  // Initialize layers on mount: Layer 2 starts completely below the mask (+135%)
+  useEffect(() => {
+    if (titleOutRef.current) {
+      gsap.set(titleOutRef.current.children, { yPercent: 135 });
+    }
+  }, []);
 
   // 1. High-Speed Numerical Ticker (Photoyoshi shuffleNumberCounter: +3 every 10ms)
   useEffect(() => {
@@ -47,64 +56,67 @@ export const AestheticPreloader: React.FC<AestheticPreloaderProps> = ({
 
         // 2. Play GSAP Exit Animation once loader reaches 100
         const tl = gsap.timeline({
-          delay: 0.25,
+          delay: 0.2,
           onComplete: () => {
             setIsDismissed(true);
-            if (onComplete) onComplete();
+            if (onCompleteRef.current) onCompleteRef.current();
           },
         });
 
-        // Letters slide into mask
+        // Step A: Layer 1 slides UP completely out of view (-135% clears all tight leading overflow)
         if (titleInRef.current && titleOutRef.current) {
           tl.to(titleInRef.current.children, {
-            y: "-100%",
-            duration: 0.6,
-            ease: "power2.in",
-            stagger: 0.03,
+            yPercent: -135,
+            duration: 0.55,
+            ease: "power2.inOut",
+            stagger: 0.02,
           });
-          tl.to(
+
+          // Step B: Layer 2 rises from below with 0.1s delay relative to Layer 1
+          tl.fromTo(
             titleOutRef.current.children,
+            { yPercent: 135 },
             {
-              y: "0%",
-              duration: 0.7,
-              ease: "power3.out",
-              stagger: 0.03,
+              yPercent: 0,
+              duration: 0.55,
+              ease: "power2.inOut",
+              stagger: 0.02,
             },
-            "<0.15"
+            "<0.1"
           );
         }
 
-        // Photo expands / lifts
+        // Step C: Photo expands / lifts gently after typography settles
         if (photoWrapRef.current) {
           tl.to(
             photoWrapRef.current,
             {
               scale: 1.04,
               opacity: 0,
-              duration: 0.6,
+              duration: 0.55,
               ease: "power2.inOut",
             },
-            "<"
+            "+=0.1",
           );
         }
 
-        // Entire preloader dissolves
+        // Step D: Entire preloader dissolves into the site
         if (containerRef.current) {
           tl.to(
             containerRef.current,
             {
               opacity: 0,
-              duration: 0.8,
+              duration: 0.7,
               ease: "power2.inOut",
             },
-            "-=0.3"
+            "-=0.25",
           );
         }
       }
     }, 10.101);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, []);
 
   if (isDismissed) return null;
 
@@ -141,10 +153,7 @@ export const AestheticPreloader: React.FC<AestheticPreloaderProps> = ({
             className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
           >
             {characters.map((char, i) => (
-              <span
-                key={`out-${i}`}
-                className="inline-block transform-gpu translate-y-[100%]"
-              >
+              <span key={`out-${i}`} className="inline-block transform-gpu">
                 {char}
               </span>
             ))}

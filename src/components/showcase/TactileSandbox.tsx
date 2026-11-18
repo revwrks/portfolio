@@ -14,18 +14,90 @@ interface TechBadge {
 }
 
 const REAL_TECH_BADGES: TechBadge[] = [
-  { id: "laravel", name: "Laravel & PHP", category: "Backend Engine", level: "Production", borderColor: "border-orange-500/40" },
-  { id: "canvas", name: "HTML5 Canvas", category: "Graphics Studio", level: "Native", borderColor: "border-blue-500/40" },
-  { id: "audio", name: "Web Audio API", category: "Acoustic DSP", level: "Procedural", borderColor: "border-purple-500/40" },
-  { id: "nextjs", name: "Next.js 16 & React 19", category: "Fullstack", level: "Senior", borderColor: "border-foreground/30" },
-  { id: "ts", name: "TypeScript", category: "Type System", level: "Strict", borderColor: "border-sky-500/40" },
-  { id: "mysql", name: "MySQL & Ledgers", category: "Database", level: "ACID Safe", borderColor: "border-emerald-500/40" },
-  { id: "webhooks", name: "Async Webhooks", category: "Fintech Pipe", level: "Sub-second", borderColor: "border-amber-500/40" },
-  { id: "figma", name: "Figma & Google UX", category: "Design System", level: "Certified", borderColor: "border-fuchsia-500/40" },
-  { id: "video", name: "Video Direction", category: "Cinematography", level: "Lead Op", borderColor: "border-rose-500/40" },
-  { id: "tailwind", name: "Tailwind CSS v4", category: "Brutalist Tokens", level: "Architect", borderColor: "border-teal-500/40" },
-  { id: "netlify", name: "Netlify & Vercel", category: "Cloud Edge", level: "Deployed", borderColor: "border-cyan-500/40" },
-  { id: "docker", name: "Docker & Linux", category: "DevOps", level: "Infrastructure", borderColor: "border-indigo-500/40" },
+  {
+    id: "laravel",
+    name: "Laravel & PHP",
+    category: "Backend Engine",
+    level: "Production",
+    borderColor: "border-orange-500/40",
+  },
+  {
+    id: "canvas",
+    name: "HTML5 Canvas",
+    category: "Graphics Studio",
+    level: "Native",
+    borderColor: "border-blue-500/40",
+  },
+  {
+    id: "audio",
+    name: "Web Audio API",
+    category: "Acoustic DSP",
+    level: "Procedural",
+    borderColor: "border-purple-500/40",
+  },
+  {
+    id: "nextjs",
+    name: "Next.js 16 & React 19",
+    category: "Fullstack",
+    level: "Senior",
+    borderColor: "border-foreground/30",
+  },
+  {
+    id: "ts",
+    name: "TypeScript",
+    category: "Type System",
+    level: "Strict",
+    borderColor: "border-sky-500/40",
+  },
+  {
+    id: "mysql",
+    name: "MySQL & Ledgers",
+    category: "Database",
+    level: "ACID Safe",
+    borderColor: "border-emerald-500/40",
+  },
+  {
+    id: "webhooks",
+    name: "Async Webhooks",
+    category: "Fintech Pipe",
+    level: "Sub-second",
+    borderColor: "border-amber-500/40",
+  },
+  {
+    id: "figma",
+    name: "Figma & Google UX",
+    category: "Design System",
+    level: "Certified",
+    borderColor: "border-fuchsia-500/40",
+  },
+  {
+    id: "video",
+    name: "Video Direction",
+    category: "Cinematography",
+    level: "Lead Op",
+    borderColor: "border-rose-500/40",
+  },
+  {
+    id: "tailwind",
+    name: "Tailwind CSS v4",
+    category: "Brutalist Tokens",
+    level: "Architect",
+    borderColor: "border-teal-500/40",
+  },
+  {
+    id: "netlify",
+    name: "Netlify & Vercel",
+    category: "Cloud Edge",
+    level: "Deployed",
+    borderColor: "border-cyan-500/40",
+  },
+  {
+    id: "docker",
+    name: "Docker & Linux",
+    category: "DevOps",
+    level: "Infrastructure",
+    borderColor: "border-indigo-500/40",
+  },
 ];
 
 /**
@@ -50,7 +122,7 @@ export const TactileSandbox: React.FC = () => {
             ACT 06 // INTERACTIVE PLAYGROUND
           </span>
           <h2 className="font-heading text-3xl md:text-5xl font-black uppercase tracking-tight text-foreground">
-            Tactile Tech Stack Sandbox
+            Tech Stack Sandbox
           </h2>
         </div>
         <div className="flex items-center gap-2">
@@ -100,9 +172,10 @@ export const TactileSandbox: React.FC = () => {
             }}
             onMouseEnter={() => playElasticPop(520)}
             onDragStart={() => playMechanicalClick(950)}
-            className={`cursor-grab active:cursor-grabbing px-4 py-2.5 bg-background border ${badge.borderColor} shadow-brutalist flex items-center gap-2.5 transition-shadow hover:shadow-2xl z-10`}
+            style={{ touchAction: "none" }}
+            className={`cursor-grab active:cursor-grabbing px-3 sm:px-4 py-2 sm:py-2.5 bg-[#121215] border ${badge.borderColor} flex items-center gap-2 sm:gap-2.5 transition-shadow hover:shadow-2xl z-10 select-none`}
           >
-            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-emerald-400" />
             <span className="font-mono text-xs md:text-sm font-bold tracking-tight text-foreground">
               {badge.name}
             </span>

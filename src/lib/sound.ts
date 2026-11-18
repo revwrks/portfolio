@@ -35,74 +35,27 @@ export function toggleSound(forceState?: boolean): boolean {
   } else {
     soundEnabled = !soundEnabled;
   }
-
-  if (!soundEnabled) {
-    stopAmbientDrone();
-  } else {
-    startAmbientDrone();
-  }
-
   return soundEnabled;
 }
 
 /**
- * 55Hz Cinematic Sub-Bass Ambient Drone (Phantom Land style)
- * Creates a subtle, subconscious cyberpunk architectural depth.
+ * 55Hz Cinematic Sub-Bass Ambient Drone
+ * Disabled as per user request — user will provide their own custom BGM.
  */
-export function startAmbientDrone(volume: number = 0.015) {
-  if (!soundEnabled || typeof window === "undefined") return;
-  try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    if (ambientOsc) {
-      stopAmbientDrone();
-    }
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(55, ctx.currentTime); // 55Hz deep fundamental
-
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(110, ctx.currentTime);
-
-    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 3.0); // Soft 3s fade in
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    ambientOsc = osc;
-    ambientGain = gain;
-  } catch {
-    // Ignore audio context errors gracefully
-  }
+export function startAmbientDrone(_volume?: number) {
+  // Intentionally disabled
 }
 
 export function stopAmbientDrone() {
   if (!ambientGain || !ambientOsc) return;
   try {
-    const ctx = getAudioContext();
-    if (ctx && ambientGain) {
-      ambientGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
-      setTimeout(() => {
-        if (ambientOsc) {
-          ambientOsc.stop();
-          ambientOsc.disconnect();
-          ambientOsc = null;
-          ambientGain = null;
-        }
-      }, 850);
-    }
+    ambientOsc.stop();
+    ambientOsc.disconnect();
   } catch {
-    ambientOsc = null;
-    ambientGain = null;
+    // Ignore cleanup error
   }
+  ambientOsc = null;
+  ambientGain = null;
 }
 
 /**

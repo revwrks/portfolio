@@ -152,18 +152,18 @@ export const PORTFOLIO_DATA = {
       tagline:
         "Interactive HTML5 canvas illustration studio and real-time gamified educational platform.",
       description:
-        "Full-scale educational web application deployed on Netlify. Features an in-browser touch-friendly digital illustration studio, Web Audio API synthesizer engine, and orientation-adaptive image reference search.",
+        "Full-scale educational web application. Features an in-browser touch-friendly digital illustration studio, Web Audio API synthesizer engine, and orientation-adaptive image reference search.",
       metrics: [
         "0ms external audio latency",
         "Touch & Stylus friendly",
-        "Production deployed on Netlify",
+        "Open-source Canvas Engine",
       ],
       techStack: [
         "HTML5 Canvas",
         "Web Audio API",
         "JavaScript",
         "Google Images API",
-        "PHP / Netlify",
+        "PHP",
       ],
       highlights: [
         "Engineered browser-native drawing engine with Simple Pen, Sketch Pencil, and Soft Watercolor brushes.",
@@ -172,7 +172,6 @@ export const PORTFOLIO_DATA = {
         "Gamified Kahoot-style quiz engine with streak multipliers and real-time local leaderboards.",
       ],
       links: {
-        live: "https://digi-art-netlify.netlify.app",
         github: "https://github.com/revwrks/digi-art",
       },
       featured: true,

@@ -13,10 +13,17 @@ import { ArrowUpRight } from "lucide-react";
  */
 export const BrutalistProjectTable: React.FC = () => {
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+  const [expandedProjectId, setExpandedProjectId] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const rowRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const projects = PORTFOLIO_DATA.projects;
+
+  const handleRowClick = (project: Project) => {
+    playMechanicalClick(1300);
+    // Toggle expanded project specs drawer
+    setExpandedProjectId((prev) => (prev === project.id ? null : project.id));
+  };
 
   const handleMouseMove = (e: React.MouseEvent, id: string) => {
     const el = rowRefs.current[id];
@@ -66,6 +73,7 @@ export const BrutalistProjectTable: React.FC = () => {
         {projects.map((project: Project, idx: number) => {
           const isHovered = hoveredProjectId === project.id;
           const displayIdx = (idx + 1).toString().padStart(2, "0");
+          const primaryLink = project.links?.live || project.links?.github;
 
           return (
             <div
@@ -79,13 +87,18 @@ export const BrutalistProjectTable: React.FC = () => {
               }}
               onMouseMove={(e) => handleMouseMove(e, project.id)}
               onMouseLeave={() => setHoveredProjectId(null)}
-              onClick={() => playMechanicalClick(1300)}
+              onClick={() => handleRowClick(project)}
               data-project-row
-              className="group relative py-6 lg:py-8 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center transition-colors hover:bg-white/[0.02] cursor-pointer"
+              className={`group relative py-6 lg:py-8 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center transition-colors hover:bg-white/[0.02] cursor-pointer ${
+                isHovered ? "z-50" : "z-10"
+              }`}
             >
               {/* Col 1: Numerical ID */}
-              <div className="col-span-1 font-mono text-xs text-zinc-500 group-hover:text-emerald-400 transition-colors">
-                /{displayIdx}
+              <div className="col-span-1 font-mono text-xs text-zinc-500 group-hover:text-emerald-400 transition-colors flex items-center justify-between lg:block">
+                <span>/{displayIdx}</span>
+                <span className="text-[10px] text-zinc-500 uppercase font-mono lg:hidden">
+                  {expandedProjectId === project.id ? "[COLLAPSE]" : "[DETAILS]"}
+                </span>
               </div>
 
               {/* Col 2: Project Title & Tagline */}
@@ -121,42 +134,157 @@ export const BrutalistProjectTable: React.FC = () => {
                 )}
               </div>
 
-              {/* Col 5: Circular Magnetic Arrow Icon */}
+              {/* Col 5: Circular Magnetic Arrow Icon / Action Link */}
               <div className="col-span-1 flex justify-end">
-                <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-500/10 transition-all duration-300 group-hover:rotate-45">
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
-                </div>
+                {primaryLink ? (
+                  <a
+                    href={primaryLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playMechanicalClick(1400);
+                    }}
+                    title={`Open ${project.links?.live ? "Live Demo" : "Source Code"}: ${primaryLink}`}
+                    aria-label={`Open ${project.title} external link`}
+                    className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-500/10 hover:!bg-emerald-400 hover:!border-emerald-400 hover:scale-110 transition-all duration-300 group-hover:rotate-45"
+                  >
+                    <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 hover:!text-black transition-colors" />
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRowClick(project);
+                    }}
+                    title="Toggle Project Specification Details"
+                    aria-label={`Toggle details for ${project.title}`}
+                    className={`w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-emerald-400 group-hover:bg-emerald-500/10 hover:!border-emerald-400 hover:!bg-emerald-500/20 transition-all duration-300 ${
+                      expandedProjectId === project.id ? "rotate-90 border-emerald-400 bg-emerald-500/10" : "group-hover:rotate-45"
+                    }`}
+                  >
+                    <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+                  </button>
+                )}
               </div>
 
-              {/* Floating 3D Kinetic Hover Portal (Cappen Perspective Tilt) */}
+              {/* Expanded Project Detail Drawer (Shows on click/tap on desktop & mobile) */}
+              {expandedProjectId === project.id && (
+                <div
+                  className="col-span-1 lg:col-span-12 mt-2 p-5 bg-[#121215] border border-emerald-500/40 rounded-sm shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-white/10 gap-2">
+                    <div className="flex items-center gap-3">
+                      <span className="mono-hud text-[11px] text-emerald-400 font-bold uppercase tracking-wider">
+                        [{project.category.toUpperCase()} SPECIFICATION]
+                      </span>
+                      {project.metrics?.[0] && (
+                        <span className="mono-hud text-[10px] text-zinc-400">
+                          INVARIANT: {project.metrics[0]}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[10px] font-mono text-zinc-500">
+                      ID: {project.id}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-zinc-300 leading-relaxed font-sans max-w-4xl">
+                    {project.description}
+                  </p>
+
+                  {project.highlights && project.highlights.length > 0 && (
+                    <div className="mt-4 pt-3 border-t border-white/5">
+                      <span className="mono-hud text-[10px] text-zinc-400 uppercase block mb-2">
+                        Key Architectural Highlights:
+                      </span>
+                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono text-zinc-300">
+                        {project.highlights.map((highlight, hIdx) => (
+                          <li key={hIdx} className="flex items-start gap-2">
+                            <span className="text-emerald-400 font-bold">▹</span>
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div className="mt-5 pt-3 border-t border-white/10 flex flex-wrap items-center gap-3">
+                    {project.links?.live && (
+                      <a
+                        href={project.links.live}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => playMechanicalClick(1400)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-sm bg-emerald-500/10 border border-emerald-500/40 text-xs font-mono text-emerald-400 hover:bg-emerald-400 hover:text-black transition-colors"
+                      >
+                        <span>VISIT LIVE DEMO</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    {project.links?.github && (
+                      <a
+                        href={project.links.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => playMechanicalClick(1400)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-sm bg-white/5 border border-white/15 text-xs font-mono text-zinc-300 hover:border-emerald-400 hover:text-white transition-colors"
+                      >
+                        <span>SOURCE CODE (GITHUB)</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    {!project.links?.live && !project.links?.github && (
+                      <span className="text-xs font-mono text-zinc-500 italic">
+                        Proprietary commercial production — repository access restricted.
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedProjectId(null)}
+                      className="ml-auto text-xs font-mono text-zinc-500 hover:text-zinc-300 transition-colors"
+                    >
+                      [CLOSE DETAILS]
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Floating 3D Kinetic Hover Portal (Cappen Perspective Tilt, floating cleanly above row without obstructing data) */}
               {isHovered && (
                 <div
-                  className="hidden lg:block absolute z-30 pointer-events-none transition-transform duration-150 ease-out"
+                  className="hidden lg:block absolute z-[100] pointer-events-none transition-transform duration-150 ease-out"
                   style={{
-                    right: "12%",
-                    top: "-20%",
+                    right: "8%",
+                    bottom: "calc(100% + 10px)",
                     transform: `perspective(1000px) rotateX(${
-                      mousePos.y * -14
-                    }deg) rotateY(${mousePos.x * 14}deg) translateZ(30px)`,
+                      mousePos.y * -10
+                    }deg) rotateY(${mousePos.x * 10}deg) translateZ(40px)`,
                   }}
                 >
-                  <div className="w-72 p-4 bg-[#18181b]/95 border border-emerald-500/40 rounded shadow-2xl backdrop-blur-md">
+                  <div className="w-80 p-4 bg-[#141417]/95 border border-emerald-500/60 rounded shadow-[0_20px_50px_rgba(0,0,0,0.9)] backdrop-blur-md">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
-                      <span className="mono-hud text-[9px] text-emerald-400">
+                      <span className="mono-hud text-[9px] text-emerald-400 font-bold">
                         [PREVIEW PORTAL]
                       </span>
-                      <span className="mono-hud text-[9px] text-zinc-400">
-                        {project.category.toUpperCase()}
+                      <span className="mono-hud text-[9px] text-zinc-400 uppercase">
+                        {project.category}
                       </span>
                     </div>
                     <p className="text-xs text-zinc-300 leading-relaxed font-sans">
                       {project.description}
                     </p>
                     {project.highlights?.[0] && (
-                      <div className="mt-3 pt-2 border-t border-white/10 text-[10px] text-zinc-400 font-mono">
+                      <div className="mt-3 pt-2 border-t border-white/10 text-[10px] text-emerald-400/90 font-mono">
                         KEY: {project.highlights[0]}
                       </div>
                     )}
+                    <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-zinc-500">
+                      <span>{primaryLink ? "CLICK [↗] TO OPEN LINK" : "CLICK ROW FOR FULL SPEC"}</span>
+                      <span className="text-emerald-400">ACTIVE</span>
+                    </div>
                   </div>
                 </div>
               )}
