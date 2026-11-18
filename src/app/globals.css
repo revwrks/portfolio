@@ -1,139 +1,218 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #0d0c0a;
-  --foreground: #f7f4ec;
+  /* High-Precision Clean Brutalist Color System */
+  --sand-bg: #ece8e1;
+  --sand-surface: #f4f1ea;
+  --sand-card: #fbf9f6;
+  --sand-ink: #1a1918;
+  --sand-muted: #736f68;
+  --sand-border: rgba(26, 25, 24, 0.12);
+  --sand-border-strong: rgba(26, 25, 24, 0.28);
+
+  /* Matte Carbon Dark Mode System */
+  --carbon-bg: #09090b;
+  --carbon-surface: #121215;
+  --carbon-card: #18181b;
+  --carbon-ink: #f4f4f5;
+  --carbon-muted: #82828e;
+  --carbon-border: rgba(255, 255, 255, 0.08);
+  --carbon-border-strong: rgba(255, 255, 255, 0.2);
+
+  /* Primary Active Theme Tokens (Default: Matte Carbon Brutalist) */
+  --bg-primary: var(--carbon-bg);
+  --bg-surface: var(--carbon-surface);
+  --bg-card: var(--carbon-card);
+  --text-primary: var(--carbon-ink);
+  --text-muted: var(--carbon-muted);
+  --border-hairline: var(--carbon-border);
+  --border-strong: var(--carbon-border-strong);
+
+  /* Accent Signals */
+  --signal-green: #10b981;
+  --signal-orange: #f97316;
+  --signal-cyan: #06b6d4;
   
-  /* Astryx Luxe Warm Espresso & Champagne Brass Tokens */
-  --astryx-surface-0: #0d0c0a;
-  --astryx-surface-1: #161411;
-  --astryx-surface-2: #1e1b16;
-  --astryx-surface-3: #27231c;
-  --astryx-border: #2e2921;
-  --astryx-border-strong: #453e32;
-  --astryx-border-bright: #695e4d;
-  
-  --astryx-gold: #d4af37;
-  --astryx-gold-light: #e8cb74;
-  --astryx-gold-dark: #aa8c2c;
-  
-  --muted: #aba392;
+  --grid-gap: 1px;
+}
+
+[data-theme="sand"] {
+  --bg-primary: var(--sand-bg);
+  --bg-surface: var(--sand-surface);
+  --bg-card: var(--sand-card);
+  --text-primary: var(--sand-ink);
+  --text-muted: var(--sand-muted);
+  --border-hairline: var(--sand-border);
+  --border-strong: var(--sand-border-strong);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --color-surface: var(--bg-surface);
+  --color-card: var(--bg-card);
+  --color-hairline: var(--border-hairline);
+  --color-muted: var(--text-muted);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', Consolas, monospace;
   --font-serif: 'Newsreader', 'Playfair Display', Georgia, Cambria, serif;
   --font-cinzel: 'Cinzel', serif;
   --font-syne: 'Syne', sans-serif;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Handled smoothly by Lenis */
   color-scheme: dark;
+  background-color: var(--bg-primary);
+}
+
+html[data-theme="sand"] {
+  color-scheme: light;
 }
 
 body {
-  background-color: var(--background);
-  background: radial-gradient(ellipse at 50% -5%, #221b13 0%, #0d0c0a 75%);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: clip;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Accessibility Focus Ring (WCAG 2.1 AA) */
-:focus-visible {
-  outline: 2px solid var(--astryx-gold);
-  outline-offset: 2px;
+/* 1px Architectural Hairline Grid Utilities */
+.hairline-border {
+  border-width: 1px;
+  border-color: var(--border-hairline);
+}
+
+.hairline-b {
+  border-bottom-width: 1px;
+  border-color: var(--border-hairline);
+}
+
+.hairline-t {
+  border-top-width: 1px;
+  border-color: var(--border-hairline);
+}
+
+.hairline-r {
+  border-right-width: 1px;
+  border-color: var(--border-hairline);
+}
+
+.hairline-l {
+  border-left-width: 1px;
+  border-color: var(--border-hairline);
+}
+
+/* Architectural Grid Frame Overlay */
+.grid-frame {
+  position: relative;
+  background-size: 100% 100%;
+}
+
+.grid-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid var(--border-hairline);
+  z-index: 10;
+}
+
+/* Technical Monospace Micro-Labels */
+.mono-hud {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 /* Selection */
 ::selection {
-  background-color: rgba(212, 175, 55, 0.35);
+  background-color: rgba(255, 255, 255, 0.25);
   color: #ffffff;
 }
 
-/* Infinite Marquee Animation (Buttery Smooth 60fps) */
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
+html[data-theme="sand"] ::selection {
+  background-color: rgba(26, 25, 24, 0.2);
+  color: #1a1918;
+}
+
+/* Accessibility Focus Ring (WCAG 2.1 AA) */
+:focus-visible {
+  outline: 2px solid var(--signal-cyan);
+  outline-offset: 2px;
+}
+
+/* Custom Minimalist Hairline Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Lenis Smooth Scroll System */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Print Stylesheet: Pure Single-Column B&W ATS Resume */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'Times New Roman', Times, serif !important;
   }
-  100% {
-    transform: translateX(-50%);
+
+  .no-print,
+  canvas,
+  .l-splash,
+  .shutter-mask,
+  button,
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  .ats-print-container {
+    display: block !important;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
   }
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 28s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-/* Metallic Light Shimmer Sweep */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-150%) skewX(-20deg);
-  }
-  100% {
-    transform: translateX(250%) skewX(-20deg);
-  }
-}
-
-.animate-shimmer {
-  animation: shimmer 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-/* Stagger Animation Presets */
-.stagger-1 { animation-delay: 50ms; }
-.stagger-2 { animation-delay: 120ms; }
-.stagger-3 { animation-delay: 190ms; }
-.stagger-4 { animation-delay: 260ms; }
-
-/* Elegant Stage Fade-Slide Animation */
-@keyframes stageEnter {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-stage-enter {
-  animation: stageEnter 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Astryx Sleek Minimalist Contained Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
-}
-
-/* Reduced Motion Support */
+/* Reduced Motion Safety */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
