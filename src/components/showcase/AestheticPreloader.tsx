@@ -130,7 +130,20 @@ export const AestheticPreloader: React.FC<AestheticPreloaderProps> = ({
       aria-label="Loading screen"
     >
       {/* Top Header: Colossal Split Typography */}
-      <div className="w-full flex justify-center pt-2 md:pt-4 overflow-hidden">
+      <div className="w-full flex flex-col items-center justify-center pt-2 md:pt-4 overflow-hidden">
+        <div className="flex items-center gap-2.5 mb-2">
+          <Image
+            src="/REVWORKS-LOGO.png"
+            alt="REVWORKS Emblem"
+            width={24}
+            height={24}
+            className="w-5 h-5 md:w-6 md:h-6 object-contain brightness-0 opacity-75"
+            priority
+          />
+          <span className="mono-hud text-[10px] md:text-xs tracking-[0.25em] text-[#1a1918]/70 font-mono uppercase font-bold">
+            IMPRINT // 2026
+          </span>
+        </div>
         <h1 className="relative text-[16vw] md:text-[14vw] font-bold tracking-tight leading-[0.75] uppercase overflow-hidden">
           {/* Incoming Character Layer */}
           <div

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/REVWORKS-LOGO.png" alt="REVWORKS Logo" width="100" />
+</p>
+
 # REVWORKS // Digital Engineering & Creative Technology
 
 ```text

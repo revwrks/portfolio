@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -341,12 +342,20 @@ export default function Home() {
           <a
             href="#hero"
             onClick={() => sound.playClick()}
-            className="font-bold tracking-wider uppercase text-white hover:opacity-80 transition-opacity flex items-center gap-2 text-xs sm:text-sm"
+            className="font-bold tracking-wider uppercase text-white hover:opacity-80 transition-opacity flex items-center gap-2.5 text-xs sm:text-sm group"
           >
-            <span className="w-2 h-2 bg-emerald-400 inline-block animate-pulse" />
+            <Image
+              src="/REVWORKS-LOGO.png"
+              alt="REVWORKS Emblem"
+              width={20}
+              height={20}
+              className="w-5 h-5 object-contain group-hover:scale-110 transition-transform"
+              priority
+            />
             <span>{personal.brandName}</span>
           </a>
           <div className="hidden sm:flex items-center gap-2 text-zinc-400 text-[11px] border-l border-white/10 pl-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>SYS: OPTIMAL</span>
           </div>
         </div>
@@ -471,7 +480,14 @@ export default function Home() {
           {/* Main CTA Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-8 gap-6">
             <div>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-3 mb-3">
+                <Image
+                  src="/REVWORKS-LOGO.png"
+                  alt="REVWORKS Emblem"
+                  width={28}
+                  height={28}
+                  className="w-7 h-7 object-contain"
+                />
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <p className="font-mono text-xs uppercase tracking-widest text-zinc-400">
                   INITIATE TRANSMISSION // CONTACT &amp; COLLABORATION
@@ -593,7 +609,14 @@ export default function Home() {
 
           {/* Bottom Copyright & Quick Links */}
           <div className="flex flex-col sm:flex-row items-center justify-between font-mono text-xs text-zinc-500 border-t border-white/10 pt-6 gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/REVWORKS-LOGO.png"
+                alt="REVWORKS Logo"
+                width={18}
+                height={18}
+                className="w-4 h-4 object-contain opacity-60 hover:opacity-100 transition-opacity"
+              />
               <span>&copy; 2026 {personal.brandName}. ALL RIGHTS RESERVED.</span>
               <span className="hidden sm:inline">&bull;</span>
               <span className="hidden sm:inline">PURE CODE &bull; ZERO TRACKERS.</span>
