@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mahendra Pujo Prianto | Creative Technologist & Fullstack Engineer",
-  description: "Portfolio of Mahendra Pujo Prianto — Fullstack Software Engineer & Creative Technologist specializing in fintech transaction systems, interactive canvas engines, and cinematic video direction.",
+  description:
+    "Portfolio of Mahendra Pujo Prianto — Fullstack Software Engineer & Creative Technologist specializing in fintech transaction systems, interactive canvas engines, and cinematic video direction.",
   keywords: [
     "Mahendra Pujo Prianto",
     "Fullstack Engineer",
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     "MySQL",
     "Google UX Design",
     "Meta Database Engineer",
-    "Indonesia"
+    "Indonesia",
   ],
   authors: [{ name: "Mahendra Pujo Prianto" }],
   creator: "Mahendra Pujo Prianto",
@@ -34,14 +35,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://revwrks.vercel.app",
-    title: "Mahendra Pujo Prianto — Creative Technologist & Fullstack Engineer",
-    description: "High-throughput backend architectures, interactive canvas engines, and cinematic visual media.",
+    title: "Mahendra - Creative Technologist & Fullstack Engineer",
+    description:
+      "High-throughput backend architectures, interactive canvas engines, and cinematic visual media.",
     siteName: "Mahendra Pujo Prianto Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mahendra Pujo Prianto — Creative Technologist & Fullstack Engineer",
-    description: "High-throughput backend architectures, interactive canvas engines, and cinematic visual media.",
+    title: "Mahendra - Creative Technologist & Fullstack Engineer",
+    description:
+      "High-throughput backend architectures, interactive canvas engines, and cinematic visual media.",
   },
 };
 
@@ -51,11 +54,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
+    >
       <body className="min-h-screen bg-[#09090b] text-[#fafafa] flex flex-col font-sans selection:bg-blue-500/20 selection:text-blue-200">
-        <ToastProvider>
-          {children}
-        </ToastProvider>
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );
